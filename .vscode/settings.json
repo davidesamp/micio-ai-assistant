@@ -1,0 +1,24 @@
+{
+    "eslint.alwaysShowStatus": true,
+    "javascript.validate.enable": false,
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "files.associations": {
+        "yarn.lock": "yaml",
+        ".eslintrc": "json"
+    },
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit",
+        "source.fixAll.stylelint": "explicit"
+    },
+    "deno.enable": false,
+    "editor.tabSize": 2,
+    "jest.autoRun": {
+        "watch": false
+    },
+    "jest.enableSnapshotUpdateMessages": false,
+    "stylelint.validate": [
+        "css",
+        "scss"
+    ]
+}

@@ -1,0 +1,26 @@
+.Container {
+  padding: 24;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  .Texarea {
+    margin-top: auto;
+  }
+}
+
+.EmptyStateContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    width: 200px;
+    height: 200px;
+  }
+
+  .Info {
+    
+  }
+}

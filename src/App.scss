@@ -1,0 +1,11 @@
+.Container {
+    display: flex;
+    flex-direction: column;
+}
+
+.Body {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    height: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+}   

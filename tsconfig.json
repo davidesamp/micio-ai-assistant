@@ -1,0 +1,48 @@
+{
+    "ts-node": {
+        "compilerOptions": {
+            "module": "commonjs"
+        }
+    },
+    "compilerOptions": {
+        "outDir": "build",
+        "module": "esnext",
+        "target": "es5",
+        "lib": [
+            "dom",
+            "ESNext",
+            "ESNext.Array"
+        ],
+        "sourceMap": true,
+        "allowJs": false,
+        "allowSyntheticDefaultImports": true,
+        "jsx": "react",
+        "declaration": false,
+        "moduleResolution": "node",
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "noImplicitAny": true,
+        "inlineSourceMap": false,
+        "strictNullChecks": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "strict": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": false,
+        "baseUrl": "./",
+        "paths": {
+            "@/*": [
+                "src/*"
+            ]
+        },
+    },
+    "include": [
+        "src",
+        "webpack.config.ts",
+        "*.config.js",
+    ]
+}
