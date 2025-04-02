@@ -1,21 +1,15 @@
 import { Select } from 'antd'
 import React from 'react'
 import { AIProvider } from '@/model/ui'
-import { useMicioStore } from '@/store'
 
 interface TopBarProps {
   onProviderChange: (provider: AIProvider) => void
 }
 
 const TopBar = ({ onProviderChange }: TopBarProps) => {
-  const {
-    ui: { currentAiProvider },
-  } = useMicioStore()
-
   const handleProviderChange = (provider: AIProvider) => {
     onProviderChange(provider as AIProvider)
   }
-
 
   const items = [
     {
@@ -32,7 +26,6 @@ const TopBar = ({ onProviderChange }: TopBarProps) => {
     },
   ]
 
-  console.log('selectedProvider', currentAiProvider)
   return (
     <div>
       <Select

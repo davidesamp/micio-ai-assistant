@@ -14,7 +14,7 @@ const useGenerateContent = () => {
       actions: { setAiProvider }
     },
     chat: {
-      actions: { addMessage }
+      actions: { addMessage, resetMessages }
     }
   } = useMicioStore()
 
@@ -39,6 +39,7 @@ const useGenerateContent = () => {
   const initAIProvider = (selectedProvider: AIProvider) => {  
     initProviderFactory[selectedProvider]()
     setAiProvider(selectedProvider)
+    resetMessages()
   }
 
   const generate = async (statement: string) => {

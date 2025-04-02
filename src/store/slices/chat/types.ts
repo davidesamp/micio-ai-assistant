@@ -13,6 +13,7 @@ interface Actions {
   setDeepSeekInstance: (instance: OpenAI) => void
   setMistralInstance: (instance: Mistral) => void
   addMessage: (payload: addMessagePayload) => void
+  resetMessages: () => void
 }
 
 export interface DefaultChatValues {

@@ -10,8 +10,10 @@ const uiInitialValues: DefaultUIValues = {
 export const ui = lens<UIStoreSlice, Store>(set => ({
   ...uiInitialValues,
   actions: {
-    setAiProvider: (provider: AIProvider) => set(draft => {
-      draft.currentAiProvider = provider
-    })
+    setAiProvider: (provider: AIProvider) => {
+      set(draft => {
+        draft.currentAiProvider = provider
+      })
+    }
   }
 }))

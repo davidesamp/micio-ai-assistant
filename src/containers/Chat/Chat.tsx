@@ -66,7 +66,7 @@ const Chat = () => {
                 </Card>
               </List.Item>
             )}
-            locale={{ emptyText: 'No messages yet' }}
+            locale={{ emptyText: <Title level={5}>No message yet</Title> }}
             style={{ marginBottom: 20 }}
           />
           {isGenerating && < Spin indicator={<LoadingOutlined spin />} size="large" />}

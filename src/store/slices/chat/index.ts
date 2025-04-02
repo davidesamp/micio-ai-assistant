@@ -52,6 +52,11 @@ export const chat = lens<ChatStoreSlice, Store>((set, get) => ({
       set((draft) => {
         draft.mistralInstance = instance
       })
+    },
+    resetMessages: () => {
+      set((draft) => {
+        draft.messages = []
+      })
     }
   }
 }))

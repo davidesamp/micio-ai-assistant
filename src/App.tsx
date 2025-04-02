@@ -1,9 +1,6 @@
 import React, { useState } from 'react'
 import {
-  DesktopOutlined,
-  FileOutlined,
   PieChartOutlined,
-  TeamOutlined,
   UserOutlined,
 } from '@ant-design/icons'
 import { Layout, Menu, theme } from 'antd'
@@ -31,15 +28,12 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem('Option 1', '1', <PieChartOutlined />),
-  getItem('Option 2', '2', <DesktopOutlined />),
-  getItem('User', 'sub1', <UserOutlined />, [
-    getItem('Tom', '3'),
-    getItem('Bill', '4'),
-    getItem('Alex', '5'),
+  getItem('Sample Chat', '1', <PieChartOutlined />),
+  getItem('Sample Chat with childs', 'sub1', <UserOutlined />, [
+    getItem('child 1', '3'),
+    getItem('child 2', '4'),
+    getItem('child 3', '5'),
   ]),
-  getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-  getItem('Files', '9', <FileOutlined />),
 ]
 
 
@@ -56,6 +50,8 @@ const App = () => {
     initAIProvider(provider)
   }
 
+  
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
@@ -66,7 +62,7 @@ const App = () => {
         <Header style={{ padding: 0, background: colorBgContainer }} >
           <TopBar onProviderChange={handleProviderChange} />
         </Header>
-        <Content style={{ margin: '0 16px' }}>
+        <Content>
           <Chat />
         </Content>
         <Footer style={{ textAlign: 'center' }}>

@@ -6,8 +6,9 @@ import { ui } from './slices/ui'
 import { Store } from './types'
 
 export const useMicioStore: () => Store = create<Store>()(
-  withLenses(
-    immer(() => ({
+  immer(
+    // @ts-expect-error TODO fix this type error
+    withLenses(() => ({
       ui,
       chat
     })),
