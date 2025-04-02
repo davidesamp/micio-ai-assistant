@@ -54,10 +54,8 @@ const Chat = () => {
         background: colorBgContainer,
         borderRadius: borderRadiusLG,
       }}
-      id="test"
       className={styles.Container}
     >
-      
           <List
             dataSource={messages}
             renderItem={msg => (

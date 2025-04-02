@@ -55,6 +55,13 @@ const config: ConfigBuilder = (_, _1) => {
                     ],
                 },
                 {
+                    test: /\.css$/,
+                    use: [
+                        'style-loader',
+                        'css-loader',
+                    ],
+                },
+                {
                     test: /\.(gif|png)$/,
                     use: [
                         {

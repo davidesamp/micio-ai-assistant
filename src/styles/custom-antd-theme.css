@@ -1,0 +1,49 @@
+/* Custom Ant Design Theme Overrides */
+
+.input-placeholder,
+.ant-input::placeholder,
+.ant-input-number-input::placeholder,
+.ant-select-selector,
+.ant-select-selection-item,
+.ant-select-selection-search-input,
+.ant-input-textarea>.ant-input,
+.ant-input-number-input,
+.ant-input-number,
+.ant-input,
+.ant-input-textarea,
+.ant-list-empty-text,
+/* Target empty list text */
+.ant-select-selection-placeholder {
+  /* Target Select placeholder */
+  color: white !important;
+}
+
+.ant-select-selector,
+.ant-select-selection-item,
+.ant-select-selection-search-input {
+  caret-color: white !important;
+}
+
+.ant-input-number-input,
+.ant-input-number,
+.ant-input,
+.ant-input-textarea,
+.ant-select-selector {
+  background-color: #121212 !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.ant-select-selector:hover,
+.ant-input:hover,
+.ant-input-number:hover,
+.ant-input-textarea:hover {
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.ant-select-focused .ant-select-selector,
+.ant-input-focused,
+.ant-input-number-focused,
+.ant-input-textarea-focused {
+  border-color: #D11141 !important;
+  box-shadow: 0 0 0 2px rgba(209, 17, 65, 0.2) !important;
+}
