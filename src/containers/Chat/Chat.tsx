@@ -2,6 +2,7 @@ import { LoadingOutlined } from '@ant-design/icons'
 import { theme, Input, List, Card, Spin } from 'antd'
 import { Typography } from 'antd'
 import React, { useState } from 'react'
+import ReactMarkdown from 'react-markdown'
 import PlaceholderImage from '../../icons/micio-ai-pink.png'
 import { useMicioStore } from '../../store'
 import styles from './Chat.module.scss'
@@ -42,7 +43,7 @@ const Chat = () => {
   }
 
   const cardBodyUI = (content: Message) => content.type === ContentTypes.TEXT ? (
-    <p>{content.message}</p>
+    <ReactMarkdown>{content.message}</ReactMarkdown>
   ): (
       <ImageRenderer imageDataBase64={content.message}/>
   )
