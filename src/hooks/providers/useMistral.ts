@@ -1,5 +1,5 @@
 import { Mistral } from '@mistralai/mistralai'
-import { ContentTypes } from '@/model/chat'
+import { ContentTypes, GeneratedContent } from '@/model/chat'
 import { useMicioStore } from '@/store'
 
 const useMistral = () => {
@@ -22,7 +22,7 @@ const useMistral = () => {
     console.log('Mistral initialized')
   }
 
-  const generateContent = async (statement: string) => {
+  const generateContent = async (statement: string): Promise<GeneratedContent[]> => {
     if (!mistralInstance) {
       throw new Error('Mistral instance is not initialized.')
     }
@@ -35,7 +35,7 @@ const useMistral = () => {
       throw new Error('No choices returned in the chat response.')
     }
     const generatedMessage = chatResponse.choices[0].message.content as string
-    return { content: generatedMessage, type: ContentTypes.TEXT }
+    return [{ content: generatedMessage, type: ContentTypes.TEXT }]
   }
 
   return {

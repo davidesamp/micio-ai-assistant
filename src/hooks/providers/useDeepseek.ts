@@ -1,5 +1,5 @@
 import OpenAI from 'openai'
-import { ContentTypes } from '@/model/chat'
+import { ContentTypes, GeneratedContent } from '@/model/chat'
 import { useMicioStore } from '@/store'
 
 const useDeepSeek = () => {
@@ -24,7 +24,7 @@ const init = () =>  {
   console.log('DeepSeek initialized')
 }
 
-  const generateContent = async (statement: string) => {
+  const generateContent = async (statement: string): Promise<GeneratedContent[]> => {
     if (!deepSeekInstance) {
       throw new Error('DeepSeek instance is not initialized.')
     }
@@ -38,7 +38,7 @@ const init = () =>  {
     })
 
     const generatedMessage = completion.choices[0].message.content
-    return { content: generatedMessage ?? '', type: ContentTypes.TEXT }
+    return [{ content: generatedMessage ?? '', type: ContentTypes.TEXT }]
   }
 
 

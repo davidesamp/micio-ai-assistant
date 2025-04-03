@@ -1,5 +1,9 @@
 /* Custom Ant Design Theme Overrides */
 
+body {
+  margin:0;
+}
+
 .input-placeholder,
 .ant-input::placeholder,
 .ant-input-number-input::placeholder,

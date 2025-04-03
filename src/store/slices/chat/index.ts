@@ -12,6 +12,7 @@ const chatInitialValues: DefaultChatValues = {
   deepSeekInstance: null,
   mistralInstance: null,
   geminiInstance: null,
+  currentChat: null,
 }
 
 export const chat = lens<ChatStoreSlice, Store>((set, get) => ({
@@ -20,22 +21,21 @@ export const chat = lens<ChatStoreSlice, Store>((set, get) => ({
     addMessage: ({ statement, generatedContent }) => {
       const question: Message = {
         id: uuidv4(),
-        sender: 'robot',
+        sender: 'model',
         message: statement,
         type: ContentTypes.TEXT,
       }
 
-      const { type, content } = generatedContent
-
-      const receivedMessage: Message = {
+      const receivedMessages: Message[] = generatedContent.map((message) => ({
         id: uuidv4(),
         sender: 'user',
-        message: content,
-        type: type,
-      }
+        message: message.content,
+        type: message.type,
+      }))
+
       const currentMessages = get().messages
       set((draft) => {
-        draft.messages = [...currentMessages, question, receivedMessage]
+        draft.messages = [...currentMessages, question, ...receivedMessages]
       })
     },
     setGeminiInstance: (instance: GoogleGenAI) => {
@@ -51,6 +51,11 @@ export const chat = lens<ChatStoreSlice, Store>((set, get) => ({
     setMistralInstance: (instance: Mistral) => {
       set((draft) => {
         draft.mistralInstance = instance
+      })
+    },
+    setCurrentChat: (chat) => {
+      set((draft) => {
+        draft.currentChat = chat
       })
     },
     resetMessages: () => {

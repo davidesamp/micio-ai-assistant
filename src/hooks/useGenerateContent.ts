@@ -3,6 +3,7 @@ import { useState } from 'react'
 import useDeepSeek from './providers/useDeepseek'
 import useGemini from './providers/useGemini'
 import useMistral from './providers/useMistral'
+import { GeneratedContent } from '@/model/chat'
 import { AIProvider } from '@/model/ui'
 import { useMicioStore } from '@/store'
 
@@ -48,7 +49,7 @@ const useGenerateContent = () => {
     }
     setIsGenerating(true)
     try {
-      const generatedContent = await generateContentFactory[currentAiProvider](statement)
+      const generatedContent: GeneratedContent[] = await generateContentFactory[currentAiProvider](statement)
       if (generatedContent) {
         addMessage({ statement, generatedContent })
       }

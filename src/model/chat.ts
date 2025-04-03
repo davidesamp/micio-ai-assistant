@@ -1,6 +1,6 @@
 export interface GeneratedContent {
   content: string;
-  type: 'text' | 'image';
+  type: ContentTypes;
 }
 
 export enum ContentTypes {

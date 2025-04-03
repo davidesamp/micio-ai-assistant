@@ -1,15 +1,16 @@
-import { GoogleGenAI } from '@google/genai'
+import { Chat, GoogleGenAI } from '@google/genai'
 import { Mistral } from '@mistralai/mistralai'
 import OpenAI from 'openai'
-import { ContentTypes, Message } from '../../../model/chat'
+import { GeneratedContent, Message } from '../../../model/chat'
 
 interface addMessagePayload {
   statement: string
-  generatedContent: { content: string; type: ContentTypes }
+  generatedContent: GeneratedContent[]
 }
 
 interface Actions {
   setGeminiInstance: (instance: GoogleGenAI) => void
+  setCurrentChat: (chat: Chat) => void
   setDeepSeekInstance: (instance: OpenAI) => void
   setMistralInstance: (instance: Mistral) => void
   addMessage: (payload: addMessagePayload) => void
@@ -21,6 +22,7 @@ export interface DefaultChatValues {
   geminiInstance: GoogleGenAI | null
   deepSeekInstance: OpenAI | null 
   mistralInstance: Mistral | null 
+  currentChat: Chat | null
 }
 
 export interface ChatStoreSlice extends DefaultChatValues {
