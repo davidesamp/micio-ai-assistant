@@ -21,7 +21,11 @@ const useGenerateContent = () => {
 
   const [isGenerating, setIsGenerating] = useState(false)
 
-  const { init: initGemini, generateContent: generateGeminiContent } = useGemini()
+  const { 
+    init: initGemini,
+    generateContent: generateGeminiContent,
+    changeModel: changeGeminiModel
+  } = useGemini()
   const { init: initDeepSeek, generateContent: generateDeepSeekContent } = useDeepSeek()
   const { init: initMistral, generateContent: generateMistralContent } = useMistral()
 
@@ -35,6 +39,12 @@ const useGenerateContent = () => {
     [AIProvider.GEMINI]: generateGeminiContent,
     [AIProvider.DEEPSEEK]: generateDeepSeekContent,
     [AIProvider.MISTRAL]: generateMistralContent
+  }
+
+  const changeModelFactory = {
+    [AIProvider.GEMINI]: changeGeminiModel,
+    [AIProvider.DEEPSEEK]: () => {},
+    [AIProvider.MISTRAL]: () => {}
   }
 
   const initAIProvider = (selectedProvider: AIProvider) => {  
@@ -58,12 +68,20 @@ const useGenerateContent = () => {
     } finally {
       setIsGenerating(false)
     }
-  } 
+  }
+  
+  const changeModel = (model: string) => {
+    if (!currentAiProvider) {
+      throw new Error('AI provider is not initialized.')
+    }
+    changeModelFactory[currentAiProvider](model)
+  }
 
   return {
     initAIProvider,
     isGenerating,
     generate,
+    changeModel
   }
 }
 

@@ -1,0 +1,30 @@
+.Container {
+  display: flex;
+  align-items: center;
+  padding: 0 3rem;
+
+  .SettingsIcon {
+    margin-left: auto;
+    cursor: pointer;
+  }
+}
+
+.PopoverContent {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 1rem;
+  width: 400px;
+  max-height: 250px;
+  overflow-y: auto;
+
+  .PopoverItem {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #626161;
+    }
+  }
+}

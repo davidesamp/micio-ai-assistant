@@ -75,7 +75,7 @@ const Chat = () => {
             value={statement}
             onChange={(e) => setStatement(e.target.value)}
             onPressEnter={handleKeyDown}
-            autoSize={{ minRows: 4, maxRows: 6 }} // Auto-expands but limits height
+            autoSize={{ minRows: 2, maxRows: 18 }} // Auto-expands but limits height
             placeholder="Ask something"
           />
     </div> ) : (

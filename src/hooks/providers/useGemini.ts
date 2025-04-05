@@ -6,8 +6,8 @@ const useGemini = () => {
 
 const {
  chat: {
-  currentChat,
-  actions: { setCurrentChat }
+  currentChat, geminiInstance,
+  actions: { setCurrentChat, setGeminiInstance }
  }
 } = useMicioStore()
 
@@ -26,9 +26,28 @@ const {
       },
     })
 
+    setGeminiInstance(genAI)  
     setCurrentChat(chatSession)
     console.log('Gemini initialized')
   }
+
+  const changeModel = (model: string) => {
+    if (!geminiInstance) {
+      throw new Error('Current gemini instance is not initialized.')
+    }
+
+    const currentHistory = currentChat?.getHistory()
+    const newChatSession = geminiInstance.chats.create({
+      history: currentHistory, 
+      model: 'gemini-2.0-flash-exp-image-generation',
+      config: {
+        responseModalities: ['Text', 'Image'],
+      },
+    })
+    setCurrentChat(newChatSession)
+    console.log(`Model changed to ${model}`)
+  }
+
 
   const generateContent = async (statement: string): Promise<GeneratedContent[]> => {
     if(!currentChat) {
@@ -59,6 +78,7 @@ const {
   return {
     init,
     generateContent,
+    changeModel
   }
 }
 
