@@ -31,6 +31,7 @@ const useGenerateContent = () => {
   const { 
     init: initDeepSeek, 
     generateContent: generateDeepSeekContent,
+    changeModel: changeDeepSeekModel
   } = useDeepSeek()
 
   const { 
@@ -53,7 +54,7 @@ const useGenerateContent = () => {
 
   const changeModelFactory = {
     [AIProvider.GEMINI]: changeGeminiModel,
-    [AIProvider.DEEPSEEK]: () => {},
+    [AIProvider.DEEPSEEK]: changeDeepSeekModel,
     [AIProvider.MISTRAL]: changeMistralModel
   }
 
