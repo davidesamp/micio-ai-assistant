@@ -1,4 +1,5 @@
 import { Mistral } from '@mistralai/mistralai'
+import { Model } from '@/model/ai'
 import { ContentTypes, GeneratedContent } from '@/model/chat'
 import { useMicioStore } from '@/store'
 
@@ -18,8 +19,8 @@ const useMistral = () => {
 
   const {
     chat: {
-      mistralInstance, messages,
-      actions: { setMistralInstance }
+      mistralInstance, messages, selectedModel,
+      actions: { setMistralInstance, setModel }
     }
   } = useMicioStore()
 
@@ -34,9 +35,18 @@ const useMistral = () => {
     console.log('Mistral initialized')
   }
 
+  const changeModel = (model: Model) => {
+    setModel(model)
+    console.log(`Mistral Model changed to ${model.name}`)
+  }
+
   const generateContent = async (statement: string): Promise<GeneratedContent[]> => {
     if (!mistralInstance) {
       throw new Error('Mistral instance is not initialized.')
+    }
+
+    if(!selectedModel) {
+      throw new Error('Mistral model is not set.')
     }
 
     const createHistory: MistralMessage[] = messages.filter(msg => msg.sender === 'model').map(msg => ({
@@ -45,7 +55,7 @@ const useMistral = () => {
     })).concat({ role: MistralRoles.USER, content: statement })
 
     const chatResponse = await mistralInstance.chat.complete({
-      model: 'mistral-large-latest',
+      model: selectedModel.name,
       messages: [...createHistory]
     })
     if (!chatResponse.choices || chatResponse.choices.length === 0) {
@@ -57,7 +67,8 @@ const useMistral = () => {
 
   return {
     init,
-    generateContent
+    generateContent,
+    changeModel
   }
 }
 

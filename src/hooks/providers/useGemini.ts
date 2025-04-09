@@ -1,4 +1,5 @@
 import { GoogleGenAI } from '@google/genai'
+import { Model } from '@/model/ai'
 import { ContentTypes, GeneratedContent } from '@/model/chat'
 import { useMicioStore } from '@/store'
 import { GeminiModalitiesByModel } from '@/utils/restrictions'
@@ -7,8 +8,8 @@ const useGemini = () => {
 
 const {
  chat: {
-  currentChat, geminiInstance,
-  actions: { setCurrentChat, setGeminiInstance, resetMessages }
+  currentChat, geminiInstance, selectedModel,
+  actions: { setCurrentChat, setGeminiInstance, resetMessages, setModel }
  }
 } = useMicioStore()
 
@@ -21,7 +22,7 @@ const {
     const genAI = new GoogleGenAI({ apiKey: googleGeminiKey })
     const chatSession = genAI.chats.create({
       history: [], // Initialize empty chat history
-      model: 'gemini-2.0-flash-exp-image-generation',
+      model: selectedModel?.name || 'gemini-2.0-flash-exp-image-generation', // Default model
       config: {
         responseModalities: ['Text', 'Image'],
       },
@@ -32,7 +33,7 @@ const {
     console.log('Gemini initialized')
   }
 
-  const changeModel = (model: string) => {
+  const changeModel = (model: Model) => {
     if (!geminiInstance) {
       throw new Error('Current gemini instance is not initialized.')
     }
@@ -40,15 +41,16 @@ const {
     // const currentHistory = currentChat?.getHistory()
     const newChatSession = geminiInstance.chats.create({
       history: [], 
-      model: model,
+      model: model.name,
       config: {
         //@ts-expect-error type with existing model
         responseModalities: GeminiModalitiesByModel[model],
       },
     })
     setCurrentChat(newChatSession)
+    setModel(model)
     resetMessages()
-    console.log(`Model changed to ${model}`)
+    console.log(`Model changed to ${model.name}`)
   }
 
 

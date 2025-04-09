@@ -5,6 +5,7 @@ import OpenAI from 'openai'
 import { v4 as uuidv4 } from 'uuid'
 import { ChatStoreSlice, DefaultChatValues } from './types'
 import { ContentTypes, Message } from '@/model/chat'
+import { AIProvider } from '@/model/ui'
 import { Store } from '@/store/types'
 
 const chatInitialValues: DefaultChatValues = {
@@ -13,6 +14,8 @@ const chatInitialValues: DefaultChatValues = {
   mistralInstance: null,
   geminiInstance: null,
   currentChat: null,
+  //TODO init based on user selection
+  selectedModel: { name: 'gemini-2.0-flash-exp-image-generation', provider: AIProvider.GEMINI }, 
 }
 
 export const chat = lens<ChatStoreSlice, Store>((set, get) => ({
@@ -56,6 +59,11 @@ export const chat = lens<ChatStoreSlice, Store>((set, get) => ({
     setCurrentChat: (chat) => {
       set((draft) => {
         draft.currentChat = chat
+      })
+    },
+    setModel: (model) => {
+      set((draft) => {
+        draft.selectedModel = model
       })
     },
     resetMessages: () => {
