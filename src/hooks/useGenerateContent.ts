@@ -3,6 +3,7 @@ import { useState } from 'react'
 import useDeepSeek from './providers/useDeepseek'
 import useGemini from './providers/useGemini'
 import useMistral from './providers/useMistral'
+import { Model } from '@/model/ai'
 import { GeneratedContent } from '@/model/chat'
 import { AIProvider } from '@/model/ui'
 import { useMicioStore } from '@/store'
@@ -26,8 +27,18 @@ const useGenerateContent = () => {
     generateContent: generateGeminiContent,
     changeModel: changeGeminiModel
   } = useGemini()
-  const { init: initDeepSeek, generateContent: generateDeepSeekContent } = useDeepSeek()
-  const { init: initMistral, generateContent: generateMistralContent } = useMistral()
+
+  const { 
+    init: initDeepSeek, 
+    generateContent: generateDeepSeekContent,
+    changeModel: changeDeepSeekModel
+  } = useDeepSeek()
+
+  const { 
+    init: initMistral, 
+    generateContent: generateMistralContent,
+    changeModel: changeMistralModel
+  } = useMistral()
 
   const initProviderFactory = {
     [AIProvider.GEMINI]: initGemini,
@@ -43,8 +54,8 @@ const useGenerateContent = () => {
 
   const changeModelFactory = {
     [AIProvider.GEMINI]: changeGeminiModel,
-    [AIProvider.DEEPSEEK]: () => {},
-    [AIProvider.MISTRAL]: () => {}
+    [AIProvider.DEEPSEEK]: changeDeepSeekModel,
+    [AIProvider.MISTRAL]: changeMistralModel
   }
 
   const initAIProvider = (selectedProvider: AIProvider) => {  
@@ -70,7 +81,7 @@ const useGenerateContent = () => {
     }
   }
   
-  const changeModel = (model: string) => {
+  const changeModel = (model: Model) => {
     if (!currentAiProvider) {
       throw new Error('AI provider is not initialized.')
     }
