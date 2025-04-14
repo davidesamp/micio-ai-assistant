@@ -1,8 +1,8 @@
-
 import { useState } from 'react'
 import useDeepSeek from './providers/useDeepseek'
 import useGemini from './providers/useGemini'
 import useMistral from './providers/useMistral'
+import useOpenAi from './providers/useOpenAi'
 import { Model } from '@/model/ai'
 import { GeneratedContent } from '@/model/chat'
 import { AIProvider } from '@/model/ui'
@@ -37,17 +37,23 @@ const useGenerateContent = () => {
     changeModel: changeMistralModel
   } = useMistral()
 
+  const { 
+    generateContent: generateOpenAiContent,
+    changeModel: changeOpenAiModel
+  } = useOpenAi()
 
   const generateContentFactory = {
     [AIProvider.GEMINI]: generateGeminiContent,
     [AIProvider.DEEPSEEK]: generateDeepSeekContent,
-    [AIProvider.MISTRAL]: generateMistralContent
+    [AIProvider.MISTRAL]: generateMistralContent,
+    [AIProvider.OPENAI]: generateOpenAiContent
   }
 
   const changeModelFactory = {
     [AIProvider.GEMINI]: changeGeminiModel,
     [AIProvider.DEEPSEEK]: changeDeepSeekModel,
-    [AIProvider.MISTRAL]: changeMistralModel
+    [AIProvider.MISTRAL]: changeMistralModel,
+    [AIProvider.OPENAI]: changeOpenAiModel
   }
 
   const generate = async (statement: string) => {
