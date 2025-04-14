@@ -66,5 +66,11 @@ export default [
             "quotes": ["error", "single"],
             "semi": ["error", "never"]
         },
+        globals: {
+            "window": true,
+            "document": true,
+            "localStorage": true,
+            "fetch": true,
+        }
     },
 ];

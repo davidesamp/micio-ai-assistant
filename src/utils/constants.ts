@@ -24,3 +24,6 @@ export type DeepSeekModels = Extract<typeof ModelsList[number], { provider: AIPr
 export type MistralModels = Extract<typeof ModelsList[number], { provider: AIProvider.MISTRAL }>;
 export type OpenAIModels = Extract<typeof ModelsList[number], { provider: AIProvider.OPENAI }>;
 
+
+export const localstorage_prefix = 'MICIO-AI';
+

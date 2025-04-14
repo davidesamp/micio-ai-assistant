@@ -4,13 +4,17 @@ import useGemini from './providers/useGemini'
 import useMistral from './providers/useMistral'
 import useOpenAi from './providers/useOpenAi'
 import { Model } from '@/model/ai'
-import { GeneratedContent } from '@/model/chat'
+import { GeneratedContent, Message } from '@/model/chat'
 import { AIProvider } from '@/model/ui'
 import { useMicioStore } from '@/store'
+import { setChatHistory } from '@/utils/localStorage'
 
 const useGenerateContent = () => {
 
   const {
+    chat: {
+      selectedModel,
+    },
     ui: {
       currentAiProvider,
       actions: { setAiProvider }
@@ -71,6 +75,7 @@ const useGenerateContent = () => {
     } finally {
       setIsGenerating(false)
     }
+    if (selectedModel) setChatHistory(selectedModel, statement)
   }
   
   const changeModel = (model: Model) => {
@@ -79,10 +84,16 @@ const useGenerateContent = () => {
     resetMessages()
   }
 
+  const restoreChat = (model: Model, messages: Message[]) => {
+    console.log('Restoring chat with model:', model.name)
+    console.log('Restoring chat with messages:', messages)
+  }
+
   return {
     isGenerating,
     generate,
-    changeModel
+    changeModel,
+    restoreChat
   }
 }
 
