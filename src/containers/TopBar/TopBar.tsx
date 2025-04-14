@@ -43,6 +43,10 @@ const TopBar = () => {
       <div>
         {getModelsListByProvider(AIProvider.GEMINI)}
       </div>
+      <Title level={4}>OpenAI</Title>
+      <div>
+        {getModelsListByProvider(AIProvider.OPENAI)}
+      </div>
       <Title level={4}>DeepSeek</Title>
       <div>
         {getModelsListByProvider(AIProvider.DEEPSEEK)}

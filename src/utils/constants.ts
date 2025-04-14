@@ -14,9 +14,13 @@ export const ModelsList: Model[] = [
   {name: 'deepseek-reasoner', provider: AIProvider.DEEPSEEK},
   {name: 'mistral-small-latest', provider: AIProvider.MISTRAL},
   {name: 'open-mistral-nemo', provider: AIProvider.MISTRAL},
+  {name: 'gpt-4-turbo-preview', provider: AIProvider.OPENAI},
+  {name: 'gpt-4', provider: AIProvider.OPENAI},
+  {name: 'gpt-3.5-turbo', provider: AIProvider.OPENAI}
 ]
 
 export type GeminiModels = Extract<typeof ModelsList[number], { provider: AIProvider.GEMINI }>;
 export type DeepSeekModels = Extract<typeof ModelsList[number], { provider: AIProvider.DEEPSEEK }>;
 export type MistralModels = Extract<typeof ModelsList[number], { provider: AIProvider.MISTRAL }>;
+export type OpenAIModels = Extract<typeof ModelsList[number], { provider: AIProvider.OPENAI }>;
 

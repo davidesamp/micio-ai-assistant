@@ -15,7 +15,7 @@ const useOpenAi = () => {
   const [openAiInstance, setOpenAiInstance] = useState<OpenAI | null>(null)
 
   const init = () => {
-    const openAiKey = process.env.OPENAI_KEY
+    const openAiKey = process.env.OPEN_AI_KEY
     if (!openAiKey) {
       throw new Error('OPENAI_KEY environment variable is not set.')
     }
