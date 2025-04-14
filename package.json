@@ -13,6 +13,9 @@
     "assistant",
     "micio"
   ],
+  "lint-staged": {
+    "*.{ts,tsx}": "eslint"
+  },
   "author": "Davide Gaggero",
   "license": "ISC",
   "dependencies": {
@@ -40,6 +43,7 @@
     "@babel/preset-env": "^7.26.9",
     "@babel/preset-react": "^7.26.3",
     "@babel/preset-typescript": "^7.26.0",
+    "@commitlint/config-conventional": "^19.8.0",
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.23.0",
     "@types/dotenv-webpack": "^7.0.8",
@@ -63,7 +67,9 @@
     "file-loader": "^6.2.0",
     "globals": "^16.0.0",
     "html-webpack-plugin": "^5.6.3",
+    "husky": "^9.1.7",
     "jiti": "^2.4.2",
+    "lint-staged": "^15.5.1",
     "mini-css-extract-plugin": "^2.9.2",
     "sass": "^1.85.1",
     "sass-loader": "^16.0.5",
