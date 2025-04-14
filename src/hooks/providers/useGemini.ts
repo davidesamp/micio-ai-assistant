@@ -1,4 +1,5 @@
 import { GoogleGenAI } from '@google/genai'
+import { useState } from 'react'
 import { Model } from '@/model/ai'
 import { ContentTypes, GeneratedContent } from '@/model/chat'
 import { useMicioStore } from '@/store'
@@ -6,13 +7,14 @@ import { GeminiModalitiesByModel } from '@/utils/restrictions'
 
 const useGemini = () => {
 
-const {
- chat: {
-  currentChat, geminiInstance, selectedModel,
-  actions: { setCurrentChat, setGeminiInstance, resetMessages, setModel }
- }
-} = useMicioStore()
+  const {
+  chat: {
+    currentChat,
+    actions: { setCurrentChat, resetMessages, setModel }
+  }
+  } = useMicioStore()
 
+  const [geminiInstance, setGeminiInstance] = useState<GoogleGenAI | null>(null)
 
   const init = () =>  {
     const googleGeminiKey = process.env.GOOGLE_GEMINI_KEY
@@ -20,26 +22,22 @@ const {
       throw new Error('GOOGLE_GEMINI_KEY environment variable is not set.')
     }
     const genAI = new GoogleGenAI({ apiKey: googleGeminiKey })
-    const chatSession = genAI.chats.create({
-      history: [], // Initialize empty chat history
-      model: selectedModel?.name || 'gemini-2.0-flash-exp-image-generation', // Default model
-      config: {
-        responseModalities: ['Text', 'Image'],
-      },
-    })
 
-    setGeminiInstance(genAI)  
-    setCurrentChat(chatSession)
-    console.log('Gemini initialized')
+    return genAI
   }
 
   const changeModel = (model: Model) => {
+    let instance: GoogleGenAI | null = null
     if (!geminiInstance) {
-      throw new Error('Current gemini instance is not initialized.')
+      instance = init()
+      console.log('Gemini instance initialized')
+      setGeminiInstance(instance)
+    } else {
+      instance = geminiInstance
     }
 
     // const currentHistory = currentChat?.getHistory()
-    const newChatSession = geminiInstance.chats.create({
+    const newChatSession = instance.chats.create({
       history: [], 
       model: model.name,
       config: {
@@ -81,7 +79,6 @@ const {
   }
 
   return {
-    init,
     generateContent,
     changeModel
   }

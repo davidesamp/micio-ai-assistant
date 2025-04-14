@@ -3,9 +3,17 @@
   align-items: center;
   padding: 0 3rem;
 
-  .SettingsIcon {
+  .SettingsContainer {
     margin-left: auto;
-    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+
+    .SettingsIcon {
+      cursor: pointer;
+      margin-top: 1rem;
+    }
   }
 }
 
@@ -26,5 +34,9 @@
     &:hover {
       background-color: #626161;
     }
+  }
+
+  .Selected {
+    background-color: #626161;
   }
 }

@@ -1,4 +1,5 @@
 import OpenAI from 'openai'
+import { useState } from 'react'
 import { Model } from '@/model/ai'
 import { ContentTypes, GeneratedContent } from '@/model/chat'
 import { useMicioStore } from '@/store'
@@ -7,11 +8,13 @@ const useDeepSeek = () => {
 
   const {
   chat: {
-    deepSeekInstance, selectedModel,
-    actions: { setDeepSeekInstance, setModel }
+    selectedModel,
+    actions: { setModel }
   }
   } = useMicioStore()
 
+
+  const [deepSeekInstance, setDeepSeekInstance] = useState<OpenAI | null>(null)
 
   const init = () =>  {
     const deepSeekKey = process.env.DEEP_SEEK_KEY
@@ -20,9 +23,7 @@ const useDeepSeek = () => {
       dangerouslyAllowBrowser: true,
       apiKey: deepSeekKey
     })
-
-    setDeepSeekInstance(openai)
-    console.log('DeepSeek initialized')
+    return openai
   }
 
  const changeModel = (model: Model) => {
@@ -32,15 +33,21 @@ const useDeepSeek = () => {
 
 
   const generateContent = async (statement: string): Promise<GeneratedContent[]> => {
+    let instance: OpenAI | null = null
+
     if (!deepSeekInstance) {
-      throw new Error('DeepSeek instance is not initialized.')
+      instance = init()
+      console.log('Deepsek instance initialized')
+      setDeepSeekInstance(instance)
+    } else {
+      instance = deepSeekInstance
     }
 
     if (!selectedModel) {
       throw new Error('DeepSeek model is not set.')
     }
 
-    const completion = await deepSeekInstance.chat.completions.create({
+    const completion = await instance.chat.completions.create({
       messages: [
         { role: 'system', content: 'You are a helpful assistant.' },
         { role: 'user', content: statement },
@@ -54,7 +61,6 @@ const useDeepSeek = () => {
 
 
   return {
-    init,
     generateContent,
     changeModel,
   }

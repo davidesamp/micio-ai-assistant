@@ -1,8 +1,9 @@
 import {
   SettingOutlined,
 } from '@ant-design/icons'
-import { Popover, Select } from 'antd'
+import { Popover } from 'antd'
 import { Typography } from 'antd'
+import cx from 'classnames'
 import React from 'react'
 import styles from './TopBar.module.scss'
 import useGenerateContent from '@/hooks/useGenerateContent'
@@ -10,13 +11,13 @@ import { AIProvider } from '@/model/ui'
 import { useMicioStore } from '@/store'
 import {  ModelsList } from '@/utils/constants'
 
-interface TopBarProps {
-  onProviderChange: (provider: AIProvider) => void
-}
 
-const TopBar = ({ onProviderChange }: TopBarProps) => {
+const TopBar = () => {
 
   const {
+    chat: {
+      selectedModel
+    },
     ui: { currentAiProvider },
   } = useMicioStore()
 
@@ -24,31 +25,15 @@ const TopBar = ({ onProviderChange }: TopBarProps) => {
 
   const { Title } = Typography
 
-  const handleProviderChange = (provider: AIProvider) => {
-    onProviderChange(provider as AIProvider)
-  }
-
-  const items = [
-    {
-      value: 'Gemini',
-      key: AIProvider.GEMINI,
-    },
-    {
-      value: 'Deepseek',
-      key: AIProvider.DEEPSEEK,
-    },
-    {
-      value: 'Mistral',
-      key: AIProvider.MISTRAL,
-    },
-  ]
-
-
-
   const getModelsListByProvider = (provider: AIProvider) => {
     const models = ModelsList.filter((model) => model.provider === provider)
     return models.map((model) => (
-      <p onClick={() => changeModel(model)} className={styles.PopoverItem} key={model.name}>{model.name}</p>
+      <p 
+        onClick={() => changeModel(model)} 
+        className={cx(styles.PopoverItem, {[styles.Selected]: selectedModel?.name === model.name})} 
+        key={model.name}>
+          {model.name}
+      </p>
     ))
   }
 
@@ -71,24 +56,17 @@ const TopBar = ({ onProviderChange }: TopBarProps) => {
 
   return (
     <div className={styles.Container}>
-      <Select
-        placeholder="Select AI Provider"
-        style={{ width: 200 }}
-        onChange={handleProviderChange}
-      >
-        {items.map((item) => (
-          <Select.Option key={item.key} value={item.key}>
-            {item.value}
-          </Select.Option>
-        ))}
-
-      </Select>
       {currentAiProvider && (
-        <Popover placement="bottomLeft" content={popoverContent} trigger="click" showArrow={false}>
-          <div className={styles.SettingsIcon}>
-            <SettingOutlined />
+        <div className={styles.SettingsContainer}>
+          <Title level={5} className={styles.ProviderTitle}>
+            {selectedModel?.name || 'Select a model'}
+          </Title>
+          <Popover placement="bottomLeft" content={popoverContent} trigger="click" showArrow={false}>
+            <div className={styles.SettingsIcon}>
+              <SettingOutlined/>
+            </div>
+          </Popover>
           </div>
-        </Popover>
       )}
       
     </div>

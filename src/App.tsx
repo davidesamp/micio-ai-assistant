@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   PieChartOutlined,
   UserOutlined,
@@ -36,7 +36,6 @@ const items: MenuItem[] = [
   ]),
 ]
 
-
 const App = () => {
   const { Header, Content, Footer, Sider } = Layout
   const [collapsed, setCollapsed] = useState(false)
@@ -44,13 +43,21 @@ const App = () => {
     token: { colorBgContainer },
   } = theme.useToken()
 
-  const { initAIProvider } = useGenerateContent()
+  const { changeModel } = useGenerateContent()
 
-  const handleProviderChange = (provider: AIProvider) => {
-    initAIProvider(provider)
-  }
+  const handleInitCasualModel = useCallback(() => {
+    if (process.env.GOOGLE_GEMINI_KEY) {
+      changeModel({ name: 'gemini-2.0-flash-exp-image-generation', provider: AIProvider.GEMINI })
+    } else if (process.env.MISTRAL_KEY) {
+      changeModel({ name: 'mistral-small-latest', provider: AIProvider.MISTRAL })
+    } else if (process.env.DEEPSEEK_KEY) {
+      changeModel({ name: 'deepseek-chat', provider: AIProvider.DEEPSEEK })
+    } 
+  }, [])
 
-  
+  useEffect(() => {
+    handleInitCasualModel()
+  }, [handleInitCasualModel])
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -60,7 +67,7 @@ const App = () => {
       </Sider>
       <Layout>
         <Header style={{ padding: 0, background: colorBgContainer }} >
-          <TopBar onProviderChange={handleProviderChange} />
+          <TopBar />
         </Header>
         <Content>
           <Chat />

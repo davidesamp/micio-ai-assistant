@@ -1,4 +1,5 @@
 import { Mistral } from '@mistralai/mistralai'
+import { useState } from 'react'
 import { Model } from '@/model/ai'
 import { ContentTypes, GeneratedContent } from '@/model/chat'
 import { useMicioStore } from '@/store'
@@ -19,10 +20,12 @@ const useMistral = () => {
 
   const {
     chat: {
-      mistralInstance, messages, selectedModel,
-      actions: { setMistralInstance, setModel }
+      messages, selectedModel,
+      actions: { setModel }
     }
   } = useMicioStore()
+
+  const [mistralInstance, setMistralInstance] = useState<Mistral | null>(null)
 
 
   const init = () =>  {
@@ -31,8 +34,7 @@ const useMistral = () => {
         throw new Error('MISTRAL_KEY environment variable is not set.')
     }
     const client = new Mistral({ apiKey: mistralKey })
-    setMistralInstance(client)
-    console.log('Mistral initialized')
+    return client
   }
 
   const changeModel = (model: Model) => {
@@ -41,8 +43,14 @@ const useMistral = () => {
   }
 
   const generateContent = async (statement: string): Promise<GeneratedContent[]> => {
+
+    let instance: Mistral | null = null 
     if (!mistralInstance) {
-      throw new Error('Mistral instance is not initialized.')
+      instance = init()
+      console.log('Mistral instance initialized')
+      setMistralInstance(instance)
+    } else {
+      instance = mistralInstance
     }
 
     if(!selectedModel) {
@@ -54,7 +62,7 @@ const useMistral = () => {
       content: msg.message as string
     })).concat({ role: MistralRoles.USER, content: statement })
 
-    const chatResponse = await mistralInstance.chat.complete({
+    const chatResponse = await instance.chat.complete({
       model: selectedModel.name,
       messages: [...createHistory]
     })
@@ -66,7 +74,6 @@ const useMistral = () => {
   }
 
   return {
-    init,
     generateContent,
     changeModel
   }

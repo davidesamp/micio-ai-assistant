@@ -21,6 +21,7 @@
     "@mistralai/mistralai": "^1.5.2",
     "antd": "^5.24.4",
     "buffer": "^6.0.3",
+    "classnames": "^2.5.1",
     "crypto-browserify": "^3.12.1",
     "eslint": "^9.22.0",
     "graceful-fs": "^4.2.11",
