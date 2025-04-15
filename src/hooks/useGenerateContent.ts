@@ -7,14 +7,10 @@ import { Model } from '@/model/ai'
 import { GeneratedContent, Message } from '@/model/chat'
 import { AIProvider } from '@/model/ui'
 import { useMicioStore } from '@/store'
-import { setChatHistory } from '@/utils/localStorage'
 
 const useGenerateContent = () => {
 
   const {
-    chat: {
-      selectedModel,
-    },
     ui: {
       currentAiProvider,
       actions: { setAiProvider }
@@ -75,7 +71,6 @@ const useGenerateContent = () => {
     } finally {
       setIsGenerating(false)
     }
-    if (selectedModel) setChatHistory(selectedModel, statement)
   }
   
   const changeModel = (model: Model) => {

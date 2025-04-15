@@ -8,6 +8,7 @@ import jsxA11y from "eslint-plugin-jsx-a11y";
 import imports from "eslint-plugin-import";
 import unusedImports from "eslint-plugin-unused-imports";
 import prettier from "eslint-plugin-prettier";
+import { env } from "process";
 
 export default [
     js.configs.recommended,
@@ -24,6 +25,13 @@ export default [
             parser: tsparser,
             parserOptions: {
                 project: ["./tsconfig.json"],
+            },
+            globals: {
+                "window": true,
+                "document": true,
+                "localStorage": true,
+                "fetch": true,
+                "console": true,
             },
         },
         plugins: {
@@ -66,11 +74,6 @@ export default [
             "quotes": ["error", "single"],
             "semi": ["error", "never"]
         },
-        globals: {
-            "window": true,
-            "document": true,
-            "localStorage": true,
-            "fetch": true,
-        }
+        
     },
 ];

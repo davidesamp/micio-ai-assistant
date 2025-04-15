@@ -31,7 +31,7 @@ const Sidebar = () => {
   const chats = getChatList() 
 
   const items: MenuItem[] = Object.keys(chats).map(key => getItem(
-    chats[key][0],
+    chats[key][0].message, //The first message is the name of the chat
     key,
     <UserOutlined />,
   ))

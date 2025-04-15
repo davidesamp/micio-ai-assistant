@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { ChatStoreSlice, DefaultChatValues } from './types'
 import { ContentTypes, Message } from '@/model/chat'
 import { Store } from '@/store/types'
+import { setChatHistory } from '@/utils/localStorage'
 
 const chatInitialValues: DefaultChatValues = {
   messages: [],
@@ -29,9 +30,14 @@ export const chat = lens<ChatStoreSlice, Store>((set, get) => ({
       }))
 
       const currentMessages = get().messages
+      const newList = [...currentMessages, question, ...receivedMessages]
       set((draft) => {
-        draft.messages = [...currentMessages, question, ...receivedMessages]
+        draft.messages = newList
       })
+
+      const selectedModel = get().selectedModel
+
+      if (selectedModel) setChatHistory(selectedModel, newList)
     },
     setCurrentChat: (chat) => {
       set((draft) => {
