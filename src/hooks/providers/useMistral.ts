@@ -1,13 +1,18 @@
 import { Mistral } from '@mistralai/mistralai'
 import { useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 import { Model } from '@/model/ai'
-import { ContentTypes, GeneratedContent } from '@/model/chat'
+import { ContentTypes, Message } from '@/model/chat'
 import { useMicioStore } from '@/store'
 
 enum MistralRoles {
+  // eslint-disable-next-line no-unused-vars
   USER = 'user',
+  // eslint-disable-next-line no-unused-vars
   ASSISTANT = 'assistant',
+  // eslint-disable-next-line no-unused-vars
   SYSTEM = 'system',
+  // eslint-disable-next-line no-unused-vars
   TOOL = 'tool'
 }
 
@@ -21,7 +26,7 @@ const useMistral = () => {
   const {
     chat: {
       messages, selectedModel,
-      actions: { setModel }
+      actions: { setModel, newAddMessage }
     }
   } = useMicioStore()
 
@@ -42,7 +47,7 @@ const useMistral = () => {
     console.log(`Mistral Model changed to ${model.name}`)
   }
 
-  const generateContent = async (statement: string): Promise<GeneratedContent[]> => {
+  const generateContent = async (statement: string) => {
 
     let instance: Mistral | null = null 
     if (!mistralInstance) {
@@ -56,21 +61,29 @@ const useMistral = () => {
     if(!selectedModel) {
       throw new Error('Mistral model is not set.')
     }
+    
+    const textMessageId = uuidv4()
 
     const createHistory: MistralMessage[] = messages.filter(msg => msg.sender === 'model').map(msg => ({
       role: MistralRoles.ASSISTANT,
       content: msg.message as string
     })).concat({ role: MistralRoles.USER, content: statement })
 
-    const chatResponse = await instance.chat.complete({
+    const result = await instance.chat.stream({
       model: selectedModel.name,
-      messages: [...createHistory]
+      messages: [...createHistory],
     })
-    if (!chatResponse.choices || chatResponse.choices.length === 0) {
-      throw new Error('No choices returned in the chat response.')
+
+    for await (const chunk of result) {
+      const streamText = chunk.data.choices[0].delta.content
+      const response: Message = {
+        id: textMessageId,
+        sender: 'user',
+        message: streamText as string,
+        type: ContentTypes.TEXT,
+      }
+      newAddMessage(response)
     }
-    const generatedMessage = chatResponse.choices[0].message.content as string
-    return [{ content: generatedMessage, type: ContentTypes.TEXT }]
   }
 
   return {

@@ -1,10 +1,11 @@
 import { useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 import useDeepSeek from './providers/useDeepseek'
 import useGemini from './providers/useGemini'
 import useMistral from './providers/useMistral'
 import useOpenAi from './providers/useOpenAi'
 import { Model } from '@/model/ai'
-import { GeneratedContent, Message } from '@/model/chat'
+import { ContentTypes, Message } from '@/model/chat'
 import { AIProvider } from '@/model/ui'
 import { useMicioStore } from '@/store'
 
@@ -16,7 +17,7 @@ const useGenerateContent = () => {
       actions: { setAiProvider }
     },
     chat: {
-      actions: { addMessage, resetMessages }
+      actions: { resetMessages, newAddMessage }
     }
   } = useMicioStore()
 
@@ -62,10 +63,15 @@ const useGenerateContent = () => {
     }
     setIsGenerating(true)
     try {
-      const generatedContent: GeneratedContent[] = await generateContentFactory[currentAiProvider](statement)
-      if (generatedContent) {
-        addMessage({ statement, generatedContent })
+      const question: Message = {
+        id: uuidv4(),
+        sender: 'model',
+        message: statement,
+        type: ContentTypes.TEXT,
       }
+      newAddMessage(question)
+      console.log('Generating content with provider:', currentAiProvider)
+      await generateContentFactory[currentAiProvider](statement)
     } catch (error) {
       console.error('Error generating content:', error)
     } finally {

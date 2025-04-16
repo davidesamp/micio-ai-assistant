@@ -1,7 +1,8 @@
 import OpenAI from 'openai'
 import { useState } from 'react'
 import { Model } from '@/model/ai'
-import { ContentTypes, GeneratedContent } from '@/model/chat'
+import { v4 as uuidv4 } from 'uuid'
+import { ContentTypes, Message } from '@/model/chat'
 import { useMicioStore } from '@/store'
 
 const useDeepSeek = () => {
@@ -9,7 +10,7 @@ const useDeepSeek = () => {
   const {
   chat: {
     selectedModel,
-    actions: { setModel }
+      actions: { setModel, newAddMessage }
   }
   } = useMicioStore()
 
@@ -32,7 +33,7 @@ const useDeepSeek = () => {
   }
 
 
-  const generateContent = async (statement: string): Promise<GeneratedContent[]> => {
+  const generateContent = async (statement: string) => {
     let instance: OpenAI | null = null
 
     if (!deepSeekInstance) {
@@ -53,10 +54,21 @@ const useDeepSeek = () => {
         { role: 'user', content: statement },
       ],
       model: selectedModel.name,
+      stream: true,
     })
 
-    const generatedMessage = completion.choices[0].message.content
-    return [{ content: generatedMessage ?? '', type: ContentTypes.TEXT }]
+    const textMessageId = uuidv4()
+
+    for await (const chunk of completion) {
+      const token = chunk.choices[0]?.delta?.content || ''
+      const response: Message = {
+        id: textMessageId,
+        sender: 'user',
+        message: token,
+        type: ContentTypes.TEXT,
+      }
+      newAddMessage(response)
+    }
   }
 
 
