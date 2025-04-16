@@ -39,6 +39,27 @@ export const chat = lens<ChatStoreSlice, Store>((set, get) => ({
 
       if (selectedModel) setChatHistory(selectedModel, newList)
     },
+    newAddMessage: (passedMessage) => {
+      const currentMessages = get().messages
+      const findMessage = currentMessages.find((msg) => msg.id === passedMessage.id)
+      if (findMessage) {
+        let currentText = findMessage.message
+        const newText = currentText += passedMessage.message
+        const updatedMessages = currentMessages.map((msg) =>
+          msg.id === passedMessage.id ? { ...msg, message: newText } : msg
+        )
+        set((draft) => {
+          draft.messages = updatedMessages
+        })
+      } else {
+        const newList = [...currentMessages, passedMessage]
+        set((draft) => {
+          draft.messages = newList
+        })
+      }
+     
+
+    },
     setCurrentChat: (chat) => {
       set((draft) => {
         draft.currentChat = chat

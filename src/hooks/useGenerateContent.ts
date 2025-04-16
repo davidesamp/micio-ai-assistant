@@ -4,7 +4,7 @@ import useGemini from './providers/useGemini'
 import useMistral from './providers/useMistral'
 import useOpenAi from './providers/useOpenAi'
 import { Model } from '@/model/ai'
-import { GeneratedContent, Message } from '@/model/chat'
+import { Message } from '@/model/chat'
 import { AIProvider } from '@/model/ui'
 import { useMicioStore } from '@/store'
 
@@ -16,7 +16,7 @@ const useGenerateContent = () => {
       actions: { setAiProvider }
     },
     chat: {
-      actions: { addMessage, resetMessages }
+      actions: { resetMessages }
     }
   } = useMicioStore()
 
@@ -62,10 +62,7 @@ const useGenerateContent = () => {
     }
     setIsGenerating(true)
     try {
-      const generatedContent: GeneratedContent[] = await generateContentFactory[currentAiProvider](statement)
-      if (generatedContent) {
-        addMessage({ statement, generatedContent })
-      }
+      await generateContentFactory[currentAiProvider](statement)
     } catch (error) {
       console.error('Error generating content:', error)
     } finally {

@@ -10,6 +10,7 @@ interface addMessagePayload {
 interface Actions {
   setCurrentChat: (chat: Chat) => void
   addMessage: (payload: addMessagePayload) => void
+  newAddMessage: (payload: Message) => void
   setModel: (model: Model) => void
   resetMessages: () => void
 }

@@ -1,7 +1,8 @@
 import { GoogleGenAI } from '@google/genai'
 import { useState } from 'react'
 import { Model } from '@/model/ai'
-import { ContentTypes, GeneratedContent } from '@/model/chat'
+import { v4 as uuidv4 } from 'uuid'
+import { ContentTypes, Message } from '@/model/chat'
 import { useMicioStore } from '@/store'
 import { GeminiModalitiesByModel } from '@/utils/restrictions'
 
@@ -10,7 +11,7 @@ const useGemini = () => {
   const {
   chat: {
     currentChat,
-    actions: { setCurrentChat, resetMessages, setModel }
+    actions: { setCurrentChat, resetMessages, setModel, newAddMessage }
   }
   } = useMicioStore()
 
@@ -52,30 +53,51 @@ const useGemini = () => {
   }
 
 
-  const generateContent = async (statement: string): Promise<GeneratedContent[]> => {
-    if(!currentChat) {
+  const generateContent = async (statement: string) => {
+    if (!currentChat) {
       throw new Error('Current chat session is not initialized.')
     }
 
-    const response = await currentChat.sendMessage({
+    const question: Message = {
+      id: uuidv4(),
+      sender: 'model',
+      message: statement,
+      type: ContentTypes.TEXT,
+    }
+    newAddMessage(question)
+
+    const resultStream = await currentChat.sendMessageStream({
       message: statement
     })
 
-    let generatedContents: GeneratedContent[] = []
-    for (const part of response.candidates?.[0]?.content?.parts || []) {
-      // Based on the part type, either show the text or save the image
-      if (part.text) {
-        generatedContents.push({ content: part.text, type: ContentTypes.TEXT })
-      } else if (part.inlineData) {
-        const imageData = part.inlineData.data
-        if (!imageData) {
-          throw new Error('Image data is undefined.')
+    const textMessageId = uuidv4()
+    const imageMessageId = uuidv4()
+
+    for await (const chunk of resultStream) {
+      for (const part of chunk.candidates?.[0]?.content?.parts || []) {
+        if (part.text) {
+          const response: Message = {
+            id: textMessageId,
+            sender: 'user',
+            message: part.text,
+            type: ContentTypes.TEXT,
+          }
+          newAddMessage(response)
+        } else if (part.inlineData) {
+          const imageData = part.inlineData.data
+          if (!imageData) {
+            throw new Error('Image data is undefined.')
+          }
+          const responseImage: Message = {
+            id: imageMessageId,
+            sender: 'user',
+            message: imageData,
+            type: ContentTypes.IMAGE,
+          }
+          newAddMessage(responseImage)
         }
-        generatedContents.push({ content: imageData, type: ContentTypes.IMAGE })
       }
     }
-
-    return generatedContents
   }
 
   return {
