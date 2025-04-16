@@ -32,6 +32,7 @@ export default [
                 "localStorage": true,
                 "fetch": true,
                 "console": true,
+                "process": true,
             },
         },
         plugins: {
