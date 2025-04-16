@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect } from 'react'
 import { Layout, theme } from 'antd'
+import React, { useCallback, useEffect } from 'react'
 import './App.scss'
 import Chat from './containers/Chat/Chat'
+import Sidebar from './containers/Sidebar/Sidebar'
 import TopBar from './containers/TopBar/TopBar'
 import useGenerateContent from './hooks/useGenerateContent'
 import { AIProvider } from './model/ui'
-import Sidebar from './containers/Sidebar/Sidebar'
 
 const App = () => {
   const { Header, Content, Footer } = Layout

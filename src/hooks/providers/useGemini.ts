@@ -1,7 +1,7 @@
 import { GoogleGenAI } from '@google/genai'
 import { useState } from 'react'
-import { Model } from '@/model/ai'
 import { v4 as uuidv4 } from 'uuid'
+import { Model } from '@/model/ai'
 import { ContentTypes, Message } from '@/model/chat'
 import { useMicioStore } from '@/store'
 import { GeminiModalitiesByModel } from '@/utils/restrictions'
@@ -52,19 +52,10 @@ const useGemini = () => {
     console.log(`Model changed to ${model.name}`)
   }
 
-
   const generateContent = async (statement: string) => {
     if (!currentChat) {
       throw new Error('Current chat session is not initialized.')
     }
-
-    const question: Message = {
-      id: uuidv4(),
-      sender: 'model',
-      message: statement,
-      type: ContentTypes.TEXT,
-    }
-    newAddMessage(question)
 
     const resultStream = await currentChat.sendMessageStream({
       message: statement

@@ -1,16 +1,13 @@
 import { Chat } from '@google/genai'
-import { GeneratedContent, Message } from '../../../model/chat'
+import { Message } from '../../../model/chat'
 import { Model } from '@/model/ai'
 
-interface addMessagePayload {
-  statement: string
-  generatedContent: GeneratedContent[]
-}
-
 interface Actions {
+  // eslint-disable-next-line no-unused-vars
   setCurrentChat: (chat: Chat) => void
-  addMessage: (payload: addMessagePayload) => void
+  // eslint-disable-next-line no-unused-vars
   newAddMessage: (payload: Message) => void
+  // eslint-disable-next-line no-unused-vars
   setModel: (model: Model) => void
   resetMessages: () => void
 }

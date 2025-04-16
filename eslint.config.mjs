@@ -45,16 +45,7 @@ export default [
             prettier,
         },
         rules: {
-            // TypeScript Rules
-            "@typescript-eslint/no-unused-vars": [
-                "warn", { 
-                    argsIgnorePattern: "^_", 
-                    ignoreRestSiblings: true, 
-                    caughtErrorsIgnorePattern: "^_",
-                    args: "after-used",
-                    varsIgnorePattern: "^_" 
-                }
-            ],
+            // TypeScript Rules            
             "@typescript-eslint/no-explicit-any": "warn",
             "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
 
@@ -68,6 +59,7 @@ export default [
             "import/order": ["warn", { alphabetize: { order: "asc" } }],
             // "import/no-unresolved": "error",
             "unused-imports/no-unused-imports": "warn",
+            'no-unused-vars': ['error', { vars: 'all', args: 'after-used', ignoreRestSiblings: true }],
 
             // Accessibility (JSX A11y)
             "jsx-a11y/anchor-is-valid": "warn",

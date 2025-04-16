@@ -47,14 +47,6 @@ const useOpenAi = () => {
       throw new Error('OpenAI model is not set.')
     }
 
-    const question: Message = {
-      id: uuidv4(),
-      sender: 'model',
-      message: statement,
-      type: ContentTypes.TEXT,
-    }
-    newAddMessage(question)
-
     const textMessageId = uuidv4()
     const completion = await instance.chat.completions.create({
       messages: [

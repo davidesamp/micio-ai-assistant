@@ -6,9 +6,13 @@ import { ContentTypes, Message } from '@/model/chat'
 import { useMicioStore } from '@/store'
 
 enum MistralRoles {
+  // eslint-disable-next-line no-unused-vars
   USER = 'user',
+  // eslint-disable-next-line no-unused-vars
   ASSISTANT = 'assistant',
+  // eslint-disable-next-line no-unused-vars
   SYSTEM = 'system',
+  // eslint-disable-next-line no-unused-vars
   TOOL = 'tool'
 }
 
@@ -57,15 +61,7 @@ const useMistral = () => {
     if(!selectedModel) {
       throw new Error('Mistral model is not set.')
     }
-
-    const question: Message = {
-      id: uuidv4(),
-      sender: 'model',
-      message: statement,
-      type: ContentTypes.TEXT,
-    }
-    newAddMessage(question)
-
+    
     const textMessageId = uuidv4()
 
     const createHistory: MistralMessage[] = messages.filter(msg => msg.sender === 'model').map(msg => ({
@@ -76,10 +72,10 @@ const useMistral = () => {
     const result = await instance.chat.stream({
       model: selectedModel.name,
       messages: [...createHistory],
-    });
+    })
 
     for await (const chunk of result) {
-      const streamText = chunk.data.choices[0].delta.content;
+      const streamText = chunk.data.choices[0].delta.content
       const response: Message = {
         id: textMessageId,
         sender: 'user',
