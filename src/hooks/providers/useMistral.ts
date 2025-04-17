@@ -71,6 +71,7 @@ const useMistral = () => {
 
     const result = await instance.chat.stream({
       model: selectedModel.name,
+      stream: true,
       messages: [...createHistory],
     })
 
@@ -78,7 +79,7 @@ const useMistral = () => {
       const streamText = chunk.data.choices[0].delta.content
       const response: Message = {
         id: textMessageId,
-        sender: 'user',
+        sender: 'model',
         message: streamText as string,
         type: ContentTypes.TEXT,
       }

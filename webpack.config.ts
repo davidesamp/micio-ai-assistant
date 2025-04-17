@@ -73,6 +73,10 @@ const config: ConfigBuilder = (_, _1) => {
                         },
                     ],
                 },
+                {
+                    test: /\.svg$/,
+                    use: ['@svgr/webpack'],
+                },
             ],
         },
         plugins: [

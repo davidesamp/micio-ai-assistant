@@ -1,7 +1,7 @@
 import OpenAI from 'openai'
 import { useState } from 'react'
-import { Model } from '@/model/ai'
 import { v4 as uuidv4 } from 'uuid'
+import { Model } from '@/model/ai'
 import { ContentTypes, Message } from '@/model/chat'
 import { useMicioStore } from '@/store'
 
@@ -50,7 +50,7 @@ const useDeepSeek = () => {
 
     const completion = await instance.chat.completions.create({
       messages: [
-        { role: 'system', content: 'You are a helpful assistant.' },
+        { role: 'system', content: `You are a helpful assistant and toady is ${new Date()}` },
         { role: 'user', content: statement },
       ],
       model: selectedModel.name,
@@ -63,7 +63,7 @@ const useDeepSeek = () => {
       const token = chunk.choices[0]?.delta?.content || ''
       const response: Message = {
         id: textMessageId,
-        sender: 'user',
+        sender: 'model',
         message: token,
         type: ContentTypes.TEXT,
       }

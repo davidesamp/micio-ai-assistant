@@ -65,7 +65,7 @@ const useGenerateContent = () => {
     try {
       const question: Message = {
         id: uuidv4(),
-        sender: 'model',
+        sender: 'user',
         message: statement,
         type: ContentTypes.TEXT,
       }

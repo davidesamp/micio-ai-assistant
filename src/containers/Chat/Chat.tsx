@@ -1,5 +1,4 @@
-import { LoadingOutlined } from '@ant-design/icons'
-import { theme, Input, List, Card, Spin } from 'antd'
+import { theme, Input, List, Card } from 'antd'
 import { Typography } from 'antd'
 import React, { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
@@ -8,6 +7,9 @@ import { useMicioStore } from '../../store'
 import styles from './Chat.module.scss'
 import ImageRenderer from '@/components/ImageRenderer/ImageRenderer'
 import useGenerateContent from '@/hooks/useGenerateContent'
+// import CatLogo from '@/icons/cat-logo.svg'
+import CatLogoSpin from '@/icons/cat-logo-spin.svg'
+import CatLogo from '@/icons/cat-logo.svg'
 import { ContentTypes, Message } from '@/model/chat'
 
 const { TextArea } = Input
@@ -60,15 +62,26 @@ const Chat = () => {
           <List
             dataSource={messages}
             renderItem={msg => (
-              <List.Item key={msg.id}>
-                <Card variant="borderless" style={{ width: 1000 }}>
-                  {cardBodyUI(msg)}
-                </Card>
-              </List.Item>
+              <div className={styles.ListItemContainer}>
+                {isGenerating && msg.sender === 'model' && (
+                  <div className={styles.LoaderContainer}>
+                    <CatLogoSpin />
+                  </div>
+                )}
+                {!isGenerating && msg.sender === 'model' && (
+                  <CatLogo />
+                )}
+                <List.Item key={msg.id}>
+                  <Card variant="borderless" style={{ width: 1000 }}>
+                    {cardBodyUI(msg)}
+                  </Card>
+                </List.Item>
+              </div>  
+            
             )}
             style={{ marginBottom: 20 }}
           />
-          {isGenerating && < Spin indicator={<LoadingOutlined spin />} size="large" />}
+        
           <TextArea
             className={styles.TextArea}
             value={statement}

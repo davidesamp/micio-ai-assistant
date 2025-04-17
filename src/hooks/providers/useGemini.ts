@@ -42,6 +42,7 @@ const useGemini = () => {
       history: [], 
       model: model.name,
       config: {
+        systemInstruction: `You are a helpful assistant and today is ${new Date()}`,
         //@ts-expect-error type with existing model
         responseModalities: GeminiModalitiesByModel[model],
       },
@@ -69,7 +70,7 @@ const useGemini = () => {
         if (part.text) {
           const response: Message = {
             id: textMessageId,
-            sender: 'user',
+            sender: 'model',
             message: part.text,
             type: ContentTypes.TEXT,
           }
@@ -81,7 +82,7 @@ const useGemini = () => {
           }
           const responseImage: Message = {
             id: imageMessageId,
-            sender: 'user',
+            sender: 'model',
             message: imageData,
             type: ContentTypes.IMAGE,
           }

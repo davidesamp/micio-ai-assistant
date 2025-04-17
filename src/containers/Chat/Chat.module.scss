@@ -8,6 +8,28 @@
     width: 80%;
     margin: auto 10rem 3rem 10rem;
   }
+
+  .ListItemContainer {
+    display: flex;
+    gap: 2rem;
+
+    svg {
+        width: 3rem;
+        height: 3rem;
+        fill: white;
+        animation: rotate 1s linear infinite;
+      }
+      
+      circle {
+        stroke: white;
+      }
+
+      .LoaderContainer {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+      }
+  }
 }
 
 .EmptyStateContainer {

@@ -50,7 +50,7 @@ const useOpenAi = () => {
     const textMessageId = uuidv4()
     const completion = await instance.chat.completions.create({
       messages: [
-        { role: 'system', content: 'You are a helpful assistant.' },
+        { role: 'system', content: `You are a helpful assistant and toady is ${new Date()}` },
         { role: 'user', content: statement },
       ],
       model: selectedModel.name,
@@ -61,7 +61,7 @@ const useOpenAi = () => {
       const token = chunk.choices[0]?.delta?.content || ''
       const response: Message = {
         id: textMessageId,
-        sender: 'user',
+        sender: 'model',
         message: token,
         type: ContentTypes.TEXT,
       }
