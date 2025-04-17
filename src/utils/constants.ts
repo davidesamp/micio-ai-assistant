@@ -5,7 +5,6 @@ export const ModelsList: Model[] = [
   {name: 'gemini-2.5-pro-preview-03-25', provider: AIProvider.GEMINI},
   {name: 'gemini-2.0-flash', provider: AIProvider.GEMINI},
   {name: 'gemini-2.0-flash-lite', provider: AIProvider.GEMINI},
-  {name: 'gemini-2.0-flash-exp-image-generation', provider: AIProvider.GEMINI},
   {name: 'gemini-1.5-flash', provider: AIProvider.GEMINI},
   {name: 'gemini-1.5-flash-8b', provider: AIProvider.GEMINI},
   {name: 'gemini-1.5-pro', provider: AIProvider.GEMINI},
@@ -25,5 +24,5 @@ export type MistralModels = Extract<typeof ModelsList[number], { provider: AIPro
 export type OpenAIModels = Extract<typeof ModelsList[number], { provider: AIProvider.OPENAI }>;
 
 
-export const localstorage_prefix = 'MICIO-AI';
+export const localstorage_prefix = 'MICIO-AI'
 

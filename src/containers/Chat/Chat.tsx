@@ -1,5 +1,6 @@
 import { theme, Input, List, Card } from 'antd'
 import { Typography } from 'antd'
+import cx from 'classnames'
 import React, { useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import PlaceholderImage from '../../icons/micio-ai-pink.png'
@@ -7,7 +8,6 @@ import { useMicioStore } from '../../store'
 import styles from './Chat.module.scss'
 import ImageRenderer from '@/components/ImageRenderer/ImageRenderer'
 import useGenerateContent from '@/hooks/useGenerateContent'
-// import CatLogo from '@/icons/cat-logo.svg'
 import CatLogoSpin from '@/icons/cat-logo-spin.svg'
 import CatLogo from '@/icons/cat-logo.svg'
 import { ContentTypes, Message } from '@/model/chat'
@@ -17,7 +17,7 @@ const { TextArea } = Input
 
 const Chat = () => {
   const {
-    token: { colorBgContainer, borderRadiusLG },
+    token: { colorBgContainer, borderRadiusLG, colorBgContainerDisabled },
   } = theme.useToken()
 
   const { 
@@ -52,8 +52,7 @@ const Chat = () => {
 
   return currentAiProvider ? (
     <div
-      style={{
-        
+      style={{        
         background: colorBgContainer,
         borderRadius: borderRadiusLG,
       }}
@@ -69,10 +68,21 @@ const Chat = () => {
                   </div>
                 )}
                 {!isGenerating && msg.sender === 'model' && (
-                  <CatLogo />
+                  <CatLogo className={styles.CatLogo} />
                 )}
-                <List.Item key={msg.id}>
-                  <Card variant="borderless" style={{ width: 1000 }}>
+                <List.Item 
+                  key={msg.id} 
+                  className={cx({
+                  [styles.User]: msg.sender === 'user',
+                })}>
+                  <Card 
+                    style={{
+                      background: msg.sender === 'user' ? colorBgContainerDisabled : colorBgContainer,
+                      borderRadius: borderRadiusLG,
+                    }}
+                    className={styles.Card}
+                    variant="outlined" 
+                    >
                     {cardBodyUI(msg)}
                   </Card>
                 </List.Item>
@@ -93,7 +103,7 @@ const Chat = () => {
     </div> ) : (
     <div className={styles.EmptyStateContainer}>
       <img src={PlaceholderImage} alt="Micio" />
-      <Title level={3}>Select an AI provider on the Top Left to start chatting</Title>
+      <Title level={3}>Select an AI provider to start chatting</Title>
     </div>
   )
 }

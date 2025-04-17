@@ -17,7 +17,7 @@ const App = () => {
 
   const handleInitCasualModel = useCallback(() => {
     if (process.env.GOOGLE_GEMINI_KEY) {
-      changeModel({ name: 'gemini-2.0-flash-exp-image-generation', provider: AIProvider.GEMINI })
+      changeModel({ name: 'gemini-2.0-flash', provider: AIProvider.GEMINI })
     } else if (process.env.MISTRAL_KEY) {
       changeModel({ name: 'mistral-small-latest', provider: AIProvider.MISTRAL })
     } else if (process.env.DEEPSEEK_KEY) {

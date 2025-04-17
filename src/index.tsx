@@ -28,6 +28,7 @@ root.render(
         colorSuccess: '#52c41a', // Keep default success (or customize)
         colorWarning: '#faad14', // Keep default warning (or customize)
         colorError: '#f5222d', // Keep default error (or customize)
+        fontFamily: 'Roboto, sans-serif', // Custom font family
       },
     }}
   > 
