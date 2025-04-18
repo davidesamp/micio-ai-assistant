@@ -8,7 +8,7 @@ import { useMicioStore } from '@/store'
 const useOpenAi = () => {
   const {
     chat: {
-      selectedModel,
+      selectedModel, messages,
       actions: { setModel, newAddMessage }
     }
   } = useMicioStore()
@@ -48,9 +48,14 @@ const useOpenAi = () => {
     }
 
     const textMessageId = uuidv4()
+    const chatHistory = messages.map((message) => ({
+      role: message.sender === 'user' ? 'user' : 'assistant' as 'user' | 'assistant',
+      content: message.message,
+    }))
     const completion = await instance.chat.completions.create({
       messages: [
-        { role: 'system', content: `You are a helpful assistant and toady is ${new Date()}` },
+        { role: 'system' as 'system', content: `You are a helpful assistant and today is ${new Date()}` },
+        ...chatHistory,
         { role: 'user', content: statement },
       ],
       model: selectedModel.name,

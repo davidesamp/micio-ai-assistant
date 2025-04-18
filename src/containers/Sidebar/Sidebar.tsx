@@ -1,13 +1,16 @@
-import { Menu, MenuProps, Typography } from 'antd'
-import Sider from 'antd/es/layout/Sider'
 import {
   UserOutlined,
 } from '@ant-design/icons'
+import { Menu, MenuProps, Typography } from 'antd'
+import Sider from 'antd/es/layout/Sider'
 import React, { useState } from 'react'
-import { getChatList } from '@/utils/localStorage'
+import useGenerateContent from '@/hooks/useGenerateContent'
+import { getChatHistory, getChatList } from '@/utils/localStorage'
 
 const Sidebar = () => {
    const [collapsed, setCollapsed] = useState(false)
+
+  const { restoreChat } = useGenerateContent()
 
    type MenuItem = Required<MenuProps>['items'][number];
 
@@ -31,13 +34,23 @@ const Sidebar = () => {
   const chats = getChatList() 
 
   const items: MenuItem[] = Object.keys(chats).map(key => getItem(
-    chats[key][0].message, //The first message is the name of the chat
+    chats[key].messages[0].message, //The first message is the name of the chat
     key,
     <UserOutlined />,
   ))
 
   const handleSelect: MenuProps['onSelect'] = (info) => {
     console.log('Selected item info --> ', info)
+    const selectedChat = getChatHistory(info.key)
+    if (selectedChat) {
+      console.log('Selected chat history --> ', selectedChat)
+      const {
+        messages,
+        model
+      } = selectedChat
+
+      restoreChat(model, messages)
+    }
   }
 
   return (

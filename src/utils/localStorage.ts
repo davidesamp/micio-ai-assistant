@@ -1,9 +1,9 @@
-import { Model } from '@/model/ai'
 import { localstorage_prefix } from './constants'
-import { Message } from '@/model/chat'
+import { Model } from '@/model/ai'
+import { Message, MicioChat } from '@/model/chat'
 
 
-const saveList = (key: string, list: Message[]) => {
+const saveList = (key: string, list: MicioChat) => {
   localStorage.setItem(key, JSON.stringify(list))
 }
 
@@ -11,8 +11,8 @@ const saveList = (key: string, list: Message[]) => {
 //   return JSON.parse(localStorage.getItem(key) || '[]');
 // }
 
-const getItemsWithPrefix = (prefix: string): Record<string, Message[]> => {
-  const result: Record<string, Message[]> = {}
+const getItemsWithPrefix = (prefix: string): Record<string, MicioChat> => {
+  const result: Record<string, MicioChat> = {}
 
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i)
@@ -29,10 +29,19 @@ const getItemsWithPrefix = (prefix: string): Record<string, Message[]> => {
   return result
 }
 
-export const setChatHistory = (model: Model, messages: Message[]) => {
-  // const retrievedMessageList = getList(`${localstorage_prefix}-${model.provider}-${model.name}`);
+export const setChatHistory = (model: Model, messages: Message[], chatUid: string) => {
   const finalList = [...messages]
-  saveList(`${localstorage_prefix}-${model.provider}-${model.name}`, finalList)
+  const chat: MicioChat = {
+    uuid: chatUid,
+    model: model,
+    messages: finalList
+  }
+  saveList(`${localstorage_prefix}-${chatUid}`, chat)
+}
+
+export const getChatHistory = (key: string): MicioChat | null => {
+  const toParseChat = localStorage.getItem(key)
+  return toParseChat ? JSON.parse(toParseChat) as MicioChat : null
 }
 
 

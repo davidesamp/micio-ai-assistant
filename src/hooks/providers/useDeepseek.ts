@@ -9,7 +9,7 @@ const useDeepSeek = () => {
 
   const {
   chat: {
-    selectedModel,
+    selectedModel, messages,
       actions: { setModel, newAddMessage }
   }
   } = useMicioStore()
@@ -48,9 +48,15 @@ const useDeepSeek = () => {
       throw new Error('DeepSeek model is not set.')
     }
 
+    const chatHistory = messages.map((message) => ({
+      role: message.sender === 'user' ? 'user' : 'assistant' as 'user' | 'assistant',
+      content: message.message,
+    }))
+
     const completion = await instance.chat.completions.create({
       messages: [
         { role: 'system', content: `You are a helpful assistant and toady is ${new Date()}` },
+        ...chatHistory,
         { role: 'user', content: statement },
       ],
       model: selectedModel.name,

@@ -7,6 +7,7 @@ const chatInitialValues: DefaultChatValues = {
   messages: [],
   currentChat: null,
   selectedModel: null, 
+  chatUid: null
 }
 
 export const chat = lens<ChatStoreSlice, Store>((set, get) => ({
@@ -32,11 +33,10 @@ export const chat = lens<ChatStoreSlice, Store>((set, get) => ({
 
 
         const selectedModel = get().selectedModel
+        const chatUid = get().chatUid
 
-        if (selectedModel) setChatHistory(selectedModel, newList)
+        if (selectedModel && chatUid) setChatHistory(selectedModel, newList, chatUid)
       }
-     
-
     },
     setCurrentChat: (chat) => {
       set((draft) => {
@@ -48,9 +48,19 @@ export const chat = lens<ChatStoreSlice, Store>((set, get) => ({
         draft.selectedModel = model
       })
     },
+    restoreMessages: (messages) => {
+      set((draft) => {
+        draft.messages = messages
+      })
+    },
     resetMessages: () => {
       set((draft) => {
         draft.messages = []
+      })
+    },
+    setChatUid: (chatId) => {
+      set((draft) => {
+        draft.chatUid = chatId
       })
     }
   }

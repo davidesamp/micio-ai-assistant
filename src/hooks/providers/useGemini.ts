@@ -27,7 +27,7 @@ const useGemini = () => {
     return genAI
   }
 
-  const changeModel = (model: Model) => {
+  const changeModel = (model: Model, chatMessages: Message[]) => {
     let instance: GoogleGenAI | null = null
     if (!geminiInstance) {
       instance = init()
@@ -39,7 +39,10 @@ const useGemini = () => {
 
     // const currentHistory = currentChat?.getHistory()
     const newChatSession = instance.chats.create({
-      history: [], 
+      history: chatMessages.map((message) => ({
+        role: message.sender === 'user' ? 'user' : 'model',
+        content: message.message,
+      })), 
       model: model.name,
       config: {
         systemInstruction: `You are a helpful assistant and today is ${new Date()}`,

@@ -17,7 +17,7 @@ const useGenerateContent = () => {
       actions: { setAiProvider }
     },
     chat: {
-      actions: { resetMessages, newAddMessage }
+      actions: { resetMessages, newAddMessage, setChatUid, restoreMessages }
     }
   } = useMicioStore()
 
@@ -79,15 +79,17 @@ const useGenerateContent = () => {
     }
   }
   
-  const changeModel = (model: Model) => {
+  const changeModel = (model: Model, chatMessages: Message[] = []) => {
     setAiProvider(model.provider)
-    changeModelFactory[model.provider](model)
+    changeModelFactory[model.provider](model, chatMessages)
+    const chatUuid = uuidv4()
+    setChatUid(chatUuid)
     resetMessages()
   }
 
   const restoreChat = (model: Model, messages: Message[]) => {
-    console.log('Restoring chat with model:', model.name)
-    console.log('Restoring chat with messages:', messages)
+    changeModel(model, messages)
+    restoreMessages(messages)
   }
 
   return {

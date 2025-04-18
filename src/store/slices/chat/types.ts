@@ -9,6 +9,10 @@ interface Actions {
   newAddMessage: (payload: Message) => void
   // eslint-disable-next-line no-unused-vars
   setModel: (model: Model) => void
+  // eslint-disable-next-line no-unused-vars
+  setChatUid: (chatId: string) => void
+  // eslint-disable-next-line no-unused-vars
+  restoreMessages: (messages: Message[]) => void
   resetMessages: () => void
 }
 
@@ -16,6 +20,7 @@ export interface DefaultChatValues {
   messages: Message[]
   currentChat: Chat | null
   selectedModel: Model | null
+  chatUid: string | null
 }
 
 export interface ChatStoreSlice extends DefaultChatValues {
