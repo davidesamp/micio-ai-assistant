@@ -17,6 +17,7 @@ const config: ConfigBuilder = (_, _1) => {
     return {
         mode: "development",
         entry: "./src/index.tsx",
+        devtool: "source-map", //TODO remove this in production
         output: {
             path: path.resolve(__dirname, "dist"),
             filename: "bundle.js",

@@ -57,7 +57,7 @@ const useGenerateContent = () => {
     [AIProvider.OPENAI]: changeOpenAiModel
   }
 
-  const generate = async (statement: string) => {
+  const generate = async (statement: string, file?: File) => {
     if (!currentAiProvider) {
       throw new Error('AI provider is not initialized.')
     }
@@ -71,7 +71,7 @@ const useGenerateContent = () => {
       }
       newAddMessage(question)
       console.log('Generating content with provider:', currentAiProvider)
-      await generateContentFactory[currentAiProvider](statement)
+      await generateContentFactory[currentAiProvider](statement, file)
     } catch (error) {
       console.error('Error generating content:', error)
     } finally {

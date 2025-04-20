@@ -1,3 +1,4 @@
+import { PlusOutlined } from '@ant-design/icons'
 import { theme, Input, List, Card } from 'antd'
 import { Typography } from 'antd'
 import cx from 'classnames'
@@ -33,10 +34,13 @@ const Chat = () => {
   const { Title } = Typography
 
   const { isGenerating, generate } = useGenerateContent()
+  
+  const [file, setFile] = useState<File | undefined>(undefined)
   const [localIsGenerating, setLocalIsGenerating] = useState(isGenerating)
 
   const [statement, setStatement] = useState('')
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
+  const inputFileRef = useRef<HTMLInputElement>(null)
 
   const scrollToBottom = () => {
     if (textAreaRef.current) {
@@ -54,8 +58,20 @@ const Chat = () => {
   const handleKeyDown = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault()
-      generate(statement)
+      generate(statement, file)
       setStatement('')
+    }
+  }
+
+  const handleLoadFile = () => {
+    if (inputFileRef.current) {
+      inputFileRef.current.click()
+    }
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0])
     }
   }
 
@@ -127,16 +143,20 @@ const Chat = () => {
             )}
             style={{ marginBottom: 20 }}
           />
-        
-          <TextArea
-            ref={textAreaRef}
-            className={styles.TextArea}
-            value={statement}
-            onChange={(e) => setStatement(e.target.value)}
-            onPressEnter={handleKeyDown}
-            autoSize={{ minRows: 2, maxRows: 18 }} // Auto-expands but limits height
-            placeholder="Ask something"
-          />
+          <div className={styles.TextAreaContainer}>
+            <PlusOutlined className={styles.PlusIcon} onClick={handleLoadFile}/>
+            <input accept="image/*" ref={inputFileRef} type="file" className={styles.FileInput} onChange={handleFileChange}/>
+            <TextArea
+              ref={textAreaRef}
+              className={styles.TextArea}
+              value={statement}
+              onChange={(e) => setStatement(e.target.value)}
+              onPressEnter={handleKeyDown}
+              autoSize={{ minRows: 2, maxRows: 18 }} // Auto-expands but limits height
+              placeholder="Ask something"
+            />
+          </div>
+         
     </div> ) : (
     <div className={styles.EmptyStateContainer}>
       <img src={PlaceholderImage} alt="Micio" />
