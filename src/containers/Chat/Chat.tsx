@@ -1,7 +1,7 @@
 import { theme, Input, List, Card } from 'antd'
 import { Typography } from 'antd'
 import cx from 'classnames'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism'
@@ -15,7 +15,6 @@ import CatLogo from '@/icons/cat-logo.svg'
 import { ContentTypes, Message } from '@/model/chat'
 
 const { TextArea } = Input
-
 
 const Chat = () => {
   const {
@@ -34,22 +33,29 @@ const Chat = () => {
   const { Title } = Typography
 
   const { isGenerating, generate } = useGenerateContent()
+  const [localIsGenerating, setLocalIsGenerating] = useState(isGenerating)
 
   const [statement, setStatement] = useState('')
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
   const scrollToBottom = () => {
     if (textAreaRef.current) {
-      textAreaRef.current.scrollTop = textAreaRef.current.scrollHeight
+      textAreaRef.current.focus()
     }
   }
+
+  useEffect(() => {
+    if(isGenerating !== localIsGenerating) {
+      setLocalIsGenerating(isGenerating)  
+      scrollToBottom()
+    }
+  }, [isGenerating, localIsGenerating])
 
   const handleKeyDown = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault()
       generate(statement)
       setStatement('')
-      scrollToBottom()
     }
   }
 

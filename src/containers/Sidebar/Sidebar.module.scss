@@ -1,0 +1,18 @@
+
+.SidebarHeader {
+  display: flex;
+  gap: 2rem;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 0;
+
+  .NewChatBtn {
+    display: flex;
+    gap: .5rem;
+    width: 100%;
+  }
+}
+
+.Menu {
+  border-top: 1px solid #c1bebe;
+}

@@ -79,16 +79,20 @@ const useGenerateContent = () => {
     }
   }
   
-  const changeModel = (model: Model, chatMessages: Message[] = []) => {
+  const changeModel = (model: Model, chatMessages: Message[] = [], chatUid?: string) => {
     setAiProvider(model.provider)
     changeModelFactory[model.provider](model, chatMessages)
-    const chatUuid = uuidv4()
-    setChatUid(chatUuid)
+    if(!chatUid) {
+      const newChatUid = uuidv4()
+      setChatUid(newChatUid)
+    } else  {
+      setChatUid(chatUid)
+    }
     resetMessages()
   }
 
-  const restoreChat = (model: Model, messages: Message[]) => {
-    changeModel(model, messages)
+  const restoreChat = (model: Model, messages: Message[], chatUid: string) => {
+    changeModel(model, messages, chatUid)
     restoreMessages(messages)
   }
 
