@@ -117,60 +117,59 @@ const Chat = () => {
       }}
       className={styles.Container}
     >
-          <List
-            dataSource={messages}
-            renderItem={msg => (
-              <div className={styles.ListItemContainer}>
-                {isGenerating && msg.sender === 'model' && (
-                  <div className={styles.LoaderContainer}>
-                    <CatLogoSpin />
-                  </div>
-                )}
-                {!isGenerating && msg.sender === 'model' && (
-                  <CatLogo className={styles.CatLogo} />
-                )}
-                <List.Item 
-                  key={msg.id} 
-                  className={cx({
-                  [styles.User]: msg.sender === 'user',
-                })}>
-                  <Card 
-                    style={{
-                      background: msg.sender === 'user' ? colorBgContainerDisabled : colorBgContainer,
-                      borderRadius: borderRadiusLG,
-                    }}
-                    className={styles.Card}
-                    variant="outlined" 
-                    >
-                    {cardBodyUI(msg)}
-                  </Card>
-                </List.Item>
-              </div>  
-            
-            )}
-            style={{ marginBottom: 20 }}
-          />
-          <div className={styles.FilePreviewContainer}>
-            {uploadedFiles.map((file, index) => (
-              <div key={index} className={styles.FilePreview}>
-                <img src={`data:${file.mimeType};base64,${file.data}`} alt={`Uploaded file ${index}`} className={styles.UploadedImage} />
+      <List
+        className={styles.ListContainer}
+        dataSource={messages}
+        renderItem={msg => (
+          <div className={styles.ListItemContainer}>
+            {isGenerating && msg.sender === 'model' && (
+              <div className={styles.LoaderContainer}>
+                <CatLogoSpin />
               </div>
-            ))}
+            )}
+            {!isGenerating && msg.sender === 'model' && (
+              <CatLogo className={styles.CatLogo} />
+            )}
+            <List.Item 
+              key={msg.id} 
+              className={cx({
+              [styles.User]: msg.sender === 'user',
+            })}>
+              <Card 
+                style={{
+                  background: msg.sender === 'user' ? colorBgContainerDisabled : colorBgContainer,
+                  borderRadius: borderRadiusLG,
+                }}
+                className={styles.Card}
+                variant="outlined" 
+                >
+                {cardBodyUI(msg)}
+              </Card>
+            </List.Item>
+          </div>  
+        
+        )}
+      />
+      <div className={styles.FilePreviewContainer}>
+        {uploadedFiles.map((file, index) => (
+          <div key={index} className={styles.FilePreview}>
+            <img src={`data:${file.mimeType};base64,${file.data}`} alt={`Uploaded file ${index}`} className={styles.UploadedImage} />
           </div>
-          <div className={styles.TextAreaContainer}>
-            <PlusOutlined className={styles.PlusIcon} onClick={handleLoadFile}/>
-            <input accept="image/*" ref={inputFileRef} type="file" className={styles.FileInput} onChange={handleFileChange}/>
-            <TextArea
-              ref={textAreaRef}
-              className={styles.TextArea}
-              value={statement}
-              onChange={(e) => setStatement(e.target.value)}
-              onPressEnter={handleKeyDown}
-              autoSize={{ minRows: 2, maxRows: 18 }} // Auto-expands but limits height
-              placeholder="Ask something"
-            />
-          </div>
-         
+        ))}
+      </div>
+      <div className={styles.TextAreaContainer}>
+        <PlusOutlined className={styles.PlusIcon} onClick={handleLoadFile}/>
+        <input accept="image/*" ref={inputFileRef} type="file" className={styles.FileInput} onChange={handleFileChange}/>
+        <TextArea
+          ref={textAreaRef}
+          className={styles.TextArea}
+          value={statement}
+          onChange={(e) => setStatement(e.target.value)}
+          onPressEnter={handleKeyDown}
+          autoSize={{ minRows: 2, maxRows: 18 }} // Auto-expands but limits height
+          placeholder="Ask something"
+        />
+      </div>
     </div> ) : (
     <div className={styles.EmptyStateContainer}>
       <img src={PlaceholderImage} alt="Micio" />
