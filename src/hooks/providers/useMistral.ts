@@ -2,7 +2,7 @@ import { Mistral } from '@mistralai/mistralai'
 import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { Model } from '@/model/ai'
-import { ContentTypes, Message } from '@/model/chat'
+import { ContentTypes, Message, UploadedFile } from '@/model/chat'
 import { useMicioStore } from '@/store'
 
 enum MistralRoles {
@@ -47,8 +47,7 @@ const useMistral = () => {
     console.log(`Mistral Model changed to ${model.name}`)
   }
 
-  const generateContent = async (statement: string) => {
-
+  const generateContent = async (statement: string, uploadedFiles?: UploadedFile[]) => {
     let instance: Mistral | null = null 
     if (!mistralInstance) {
       instance = init()
@@ -64,10 +63,23 @@ const useMistral = () => {
     
     const textMessageId = uuidv4()
 
+    let content = statement
+    if (uploadedFiles && uploadedFiles.length > 0) {
+      // For now, we'll just append the image URLs to the text content
+      // since Mistral's API doesn't support image content directly
+      const imageDescriptions = uploadedFiles.map((file, index) => 
+        `[Image ${index + 1}: ${file.mimeType}]`
+      ).join('\n')
+      content = `${imageDescriptions}\n\n${statement}`
+    }
+
     const createHistory: MistralMessage[] = messages.filter(msg => msg.sender === 'model').map(msg => ({
       role: MistralRoles.ASSISTANT,
       content: msg.message as string
-    })).concat({ role: MistralRoles.USER, content: statement })
+    })).concat({ 
+      role: MistralRoles.USER, 
+      content 
+    })
 
     const result = await instance.chat.stream({
       model: selectedModel.name,

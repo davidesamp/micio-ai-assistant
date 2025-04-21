@@ -1,21 +1,24 @@
+import { PlusOutlined } from '@ant-design/icons'
 import { theme, Input, List, Card } from 'antd'
 import { Typography } from 'antd'
 import cx from 'classnames'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { v4 as uuidv4 } from 'uuid'
 import PlaceholderImage from '../../icons/micio-ai-pink.png'
 import { useMicioStore } from '../../store'
 import styles from './Chat.module.scss'
+import { FilePreviewContainer } from '@/components/FilePreviewContainer/FilePreviewContainer'
 import ImageRenderer from '@/components/ImageRenderer/ImageRenderer'
 import useGenerateContent from '@/hooks/useGenerateContent'
 import CatLogoSpin from '@/icons/cat-logo-spin.svg'
 import CatLogo from '@/icons/cat-logo.svg'
-import { ContentTypes, Message } from '@/model/chat'
+import { ContentTypes, Message, UploadedFile } from '@/model/chat'
+import { fileToBase64 } from '@/utils/fileUtils'
 
 const { TextArea } = Input
-
 
 const Chat = () => {
   const {
@@ -34,23 +37,56 @@ const Chat = () => {
   const { Title } = Typography
 
   const { isGenerating, generate } = useGenerateContent()
+  
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
+  const [localIsGenerating, setLocalIsGenerating] = useState(isGenerating)
 
   const [statement, setStatement] = useState('')
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
+  const inputFileRef = useRef<HTMLInputElement>(null)
 
   const scrollToBottom = () => {
     if (textAreaRef.current) {
-      textAreaRef.current.scrollTop = textAreaRef.current.scrollHeight
+      textAreaRef.current.focus()
     }
   }
+
+  useEffect(() => {
+    if(isGenerating !== localIsGenerating) {
+      setLocalIsGenerating(isGenerating)  
+      scrollToBottom()
+    }
+  }, [isGenerating, localIsGenerating])
 
   const handleKeyDown = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault()
-      generate(statement)
+      generate(statement, uploadedFiles)
       setStatement('')
-      scrollToBottom()
     }
+  }
+
+  const handleLoadFile = () => {
+    if (inputFileRef.current) {
+      inputFileRef.current.click()
+    }
+  }
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const base64 = await fileToBase64(e.target.files[0])
+      const file: UploadedFile = {
+        data: base64,
+        mimeType: e.target.files[0].type,
+        uid: uuidv4(),
+      } 
+
+      setUploadedFiles((prevFiles) => [...prevFiles, file])
+    }
+  }
+
+  const handleDeleteUploadedFile = (uid: string) => {
+    setUploadedFiles((prevFiles) => prevFiles.filter((file) => file.uid !== uid))
   }
 
   const cardBodyUI = (content: Message) => content.type === ContentTypes.TEXT ? (
@@ -88,49 +124,54 @@ const Chat = () => {
       }}
       className={styles.Container}
     >
-          <List
-            dataSource={messages}
-            renderItem={msg => (
-              <div className={styles.ListItemContainer}>
-                {isGenerating && msg.sender === 'model' && (
-                  <div className={styles.LoaderContainer}>
-                    <CatLogoSpin />
-                  </div>
-                )}
-                {!isGenerating && msg.sender === 'model' && (
-                  <CatLogo className={styles.CatLogo} />
-                )}
-                <List.Item 
-                  key={msg.id} 
-                  className={cx({
-                  [styles.User]: msg.sender === 'user',
-                })}>
-                  <Card 
-                    style={{
-                      background: msg.sender === 'user' ? colorBgContainerDisabled : colorBgContainer,
-                      borderRadius: borderRadiusLG,
-                    }}
-                    className={styles.Card}
-                    variant="outlined" 
-                    >
-                    {cardBodyUI(msg)}
-                  </Card>
-                </List.Item>
-              </div>  
-            
+      <List
+        className={styles.ListContainer}
+        dataSource={messages}
+        renderItem={msg => (
+          <div className={styles.ListItemContainer}>
+            {isGenerating && msg.sender === 'model' && (
+              <div className={styles.LoaderContainer}>
+                <CatLogoSpin />
+              </div>
             )}
-            style={{ marginBottom: 20 }}
-          />
+            {!isGenerating && msg.sender === 'model' && (
+              <CatLogo className={styles.CatLogo} />
+            )}
+            <List.Item 
+              key={msg.id} 
+              className={cx({
+              [styles.User]: msg.sender === 'user',
+            })}>
+              <Card 
+                style={{
+                  background: msg.sender === 'user' ? colorBgContainerDisabled : colorBgContainer,
+                  borderRadius: borderRadiusLG,
+                }}
+                className={styles.Card}
+                variant="outlined" 
+                >
+                {cardBodyUI(msg)}
+              </Card>
+            </List.Item>
+          </div>  
         
-          <TextArea
-            ref={textAreaRef}
-            className={styles.TextArea}
-            value={statement}
-            onChange={(e) => setStatement(e.target.value)}
-            onPressEnter={handleKeyDown}
-            autoSize={{ minRows: 2, maxRows: 18 }} // Auto-expands but limits height
-            placeholder="Ask something"
-          />
+        )}
+      />
+      
+      <div className={styles.TextAreaContainer}>
+        <FilePreviewContainer uploadedFiles={uploadedFiles} onDeleteFile={handleDeleteUploadedFile}/>
+        <PlusOutlined className={styles.PlusIcon} onClick={handleLoadFile}/>
+        <input accept="image/*" ref={inputFileRef} type="file" className={styles.FileInput} onChange={handleFileChange}/>
+        <TextArea
+          ref={textAreaRef}
+          className={styles.TextArea}
+          value={statement}
+          onChange={(e) => setStatement(e.target.value)}
+          onPressEnter={handleKeyDown}
+          autoSize={{ minRows: 2, maxRows: 18 }} // Auto-expands but limits height
+          placeholder="Ask something"
+        />
+      </div>
     </div> ) : (
     <div className={styles.EmptyStateContainer}>
       <img src={PlaceholderImage} alt="Micio" />

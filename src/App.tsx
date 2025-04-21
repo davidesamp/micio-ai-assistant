@@ -33,7 +33,7 @@ const App = () => {
     <Layout style={{ minHeight: '100vh' }}>
       <Sidebar />
       <Layout>
-        <Header style={{ padding: 0, background: colorBgContainer }} >
+        <Header style={{ padding: 0, background: colorBgContainer, position: 'sticky', top: 0 }} >
           <TopBar />
         </Header>
         <Content>
