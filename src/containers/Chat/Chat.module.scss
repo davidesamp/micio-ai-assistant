@@ -4,22 +4,14 @@
   display: flex;
   flex-direction: column;
 
-  .FilePreviewContainer {
-    margin-top: auto;
-    display: flex;
-    gap: 1rem;
-
-    img {
-      width: 3rem;
-      height: 4rem;
-    }
-  }
-
   .TextAreaContainer {
     margin-top: auto;
     position: sticky;
     bottom: 0;
     background-color: #121212;
+    display: flex;
+    flex-direction: column;
+
     .PlusIcon {
       position: relative;
       left: 10%;
@@ -80,8 +72,6 @@
         }
       }
   }
-
- 
 }
 
 .EmptyStateContainer {

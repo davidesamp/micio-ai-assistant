@@ -29,4 +29,5 @@ export interface MicioChat {
 export interface UploadedFile {
   mimeType: string,
   data: string
+  uid: string
 }
