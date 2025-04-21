@@ -4,6 +4,17 @@
   display: flex;
   flex-direction: column;
 
+  .FilePreviewContainer {
+    margin-top: auto;
+    display: flex;
+    gap: 1rem;
+
+    img {
+      width: 3rem;
+      height: 4rem;
+    }
+  }
+
   .TextAreaContainer {
     margin-top: auto;
     .PlusIcon {

@@ -25,3 +25,8 @@ export interface MicioChat {
   model: Model;
   messages: Message[];
 }
+
+export interface UploadedFile {
+  mimeType: string,
+  data: string
+}

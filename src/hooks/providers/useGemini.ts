@@ -2,9 +2,8 @@ import { GoogleGenAI, Part } from '@google/genai'
 import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { Model } from '@/model/ai'
-import { ContentTypes, Message } from '@/model/chat'
+import { ContentTypes, Message, UploadedFile } from '@/model/chat'
 import { useMicioStore } from '@/store'
-import { fileToBase64 } from '@/utils/fileUtils'
 import { GeminiModalitiesByModel } from '@/utils/restrictions'
 
 const useGemini = () => {
@@ -57,21 +56,23 @@ const useGemini = () => {
     console.log(`Model changed to ${model.name}`)
   }
 
-  const generateContent = async (statement: string, file?: File) => {
+  const generateContent = async (statement: string, uploadedFiles?: UploadedFile[]) => {
     if (!currentChat) {
       throw new Error('Current chat session is not initialized.')
     }
 
     const parts: Part[] = []
 
-    if (file) {
-      const base64 = await fileToBase64(file)
-      parts.push({
-        inlineData: {
-          mimeType: file.type,
-          data: base64,
-        },
+    if (uploadedFiles) {
+      uploadedFiles.forEach((file) => {
+        parts.push({
+          inlineData: {
+            mimeType: file.mimeType,
+            data: file.data,
+          },
+        })
       })
+     
     }
 
     if (statement) {

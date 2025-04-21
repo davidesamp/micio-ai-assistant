@@ -13,7 +13,8 @@ import ImageRenderer from '@/components/ImageRenderer/ImageRenderer'
 import useGenerateContent from '@/hooks/useGenerateContent'
 import CatLogoSpin from '@/icons/cat-logo-spin.svg'
 import CatLogo from '@/icons/cat-logo.svg'
-import { ContentTypes, Message } from '@/model/chat'
+import { ContentTypes, Message, UploadedFile } from '@/model/chat'
+import { fileToBase64 } from '@/utils/fileUtils'
 
 const { TextArea } = Input
 
@@ -35,7 +36,7 @@ const Chat = () => {
 
   const { isGenerating, generate } = useGenerateContent()
   
-  const [file, setFile] = useState<File | undefined>(undefined)
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
   const [localIsGenerating, setLocalIsGenerating] = useState(isGenerating)
 
   const [statement, setStatement] = useState('')
@@ -58,7 +59,7 @@ const Chat = () => {
   const handleKeyDown = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault()
-      generate(statement, file)
+      generate(statement, uploadedFiles)
       setStatement('')
     }
   }
@@ -69,9 +70,15 @@ const Chat = () => {
     }
   }
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0])
+      const base64 = await fileToBase64(e.target.files[0])
+      const file: UploadedFile = {
+        data: base64,
+        mimeType: e.target.files[0].type,
+      } 
+
+      setUploadedFiles((prevFiles) => [...prevFiles, file])
     }
   }
 
@@ -143,6 +150,13 @@ const Chat = () => {
             )}
             style={{ marginBottom: 20 }}
           />
+          <div className={styles.FilePreviewContainer}>
+            {uploadedFiles.map((file, index) => (
+              <div key={index} className={styles.FilePreview}>
+                <img src={`data:${file.mimeType};base64,${file.data}`} alt={`Uploaded file ${index}`} className={styles.UploadedImage} />
+              </div>
+            ))}
+          </div>
           <div className={styles.TextAreaContainer}>
             <PlusOutlined className={styles.PlusIcon} onClick={handleLoadFile}/>
             <input accept="image/*" ref={inputFileRef} type="file" className={styles.FileInput} onChange={handleFileChange}/>

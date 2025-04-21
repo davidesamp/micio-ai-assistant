@@ -5,7 +5,7 @@ import useGemini from './providers/useGemini'
 import useMistral from './providers/useMistral'
 import useOpenAi from './providers/useOpenAi'
 import { Model } from '@/model/ai'
-import { ContentTypes, Message } from '@/model/chat'
+import { ContentTypes, Message, UploadedFile } from '@/model/chat'
 import { AIProvider } from '@/model/ui'
 import { useMicioStore } from '@/store'
 
@@ -57,7 +57,7 @@ const useGenerateContent = () => {
     [AIProvider.OPENAI]: changeOpenAiModel
   }
 
-  const generate = async (statement: string, file?: File) => {
+  const generate = async (statement: string, uploadedFiles?: UploadedFile[]) => {
     if (!currentAiProvider) {
       throw new Error('AI provider is not initialized.')
     }
@@ -71,7 +71,7 @@ const useGenerateContent = () => {
       }
       newAddMessage(question)
       console.log('Generating content with provider:', currentAiProvider)
-      await generateContentFactory[currentAiProvider](statement, file)
+      await generateContentFactory[currentAiProvider](statement, uploadedFiles)
     } catch (error) {
       console.error('Error generating content:', error)
     } finally {
