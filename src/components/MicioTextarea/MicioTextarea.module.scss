@@ -5,14 +5,14 @@
   .LeftButton,
   .RightButton {
     position: absolute;
+    z-index: 2;
     top: 50%;
-    transform: translateY(-50%);
     border: none;
     background: transparent;
-    cursor: pointer;
     color: #888;
+    cursor: pointer;
     font-size: 16px;
-    z-index: 2;
+    transform: translateY(-50%);
   }
 
   .LeftButton {
@@ -29,8 +29,8 @@
 
   .TextArea {
     width: 80%;
-    margin: 0 10rem 2rem 10rem;
-    padding: 1rem 0rem 1rem 4rem;
+    padding: 1rem 0 1rem 4rem;
+    margin: 0 10rem 2rem;
 
   }
 
