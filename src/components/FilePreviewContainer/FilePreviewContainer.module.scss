@@ -1,8 +1,8 @@
  .FilePreviewContainer {
-   margin-top: auto;
    display: flex;
-   gap: 1rem;
    padding: 0 10rem;
+   margin-top: auto;
+   gap: 1rem;
 
    img {
      width: 3rem;
@@ -10,11 +10,11 @@
    }
 
    .DeleteIcon {
-      cursor: pointer;
+      position: relative;
+      bottom: 4rem;
+      left: 5rem;
       width: 2rem;
       height: 2rem;
-      position: relative;
-      left: 5rem;
-      bottom: 4rem;
+      cursor: pointer;
    }
  }

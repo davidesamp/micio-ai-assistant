@@ -1,4 +1,4 @@
- @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+ @import 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap';
  
 
 .Container {
@@ -8,6 +8,6 @@
 
 .Body {
     display: grid;
-    grid-template-columns: auto 1fr;
     height: 100%;
+    grid-template-columns: auto 1fr;
 }   

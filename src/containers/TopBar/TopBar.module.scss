@@ -4,26 +4,26 @@
   padding: 0 3rem;
 
   .SettingsContainer {
-    margin-left: auto;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-left: auto;
     gap: 1rem;
 
     .SettingsIcon {
-      cursor: pointer;
       margin-top: 1rem;
+      cursor: pointer;
     }
   }
 }
 
 .PopoverContent {
   display: flex;
+  width: 400px;
+  max-height: 250px;
   flex-direction: column;
   padding: 1rem;
   gap: 1rem;
-  width: 400px;
-  max-height: 250px;
   overflow-y: auto;
 
   .PopoverItem {
