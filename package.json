@@ -36,6 +36,7 @@
     "classnames": "^2.5.1",
     "crypto-browserify": "^3.12.1",
     "eslint": "^9.22.0",
+    "firebase": "^11.6.0",
     "graceful-fs": "^4.2.11",
     "immer": "^10.1.1",
     "openai": "^4.87.3",

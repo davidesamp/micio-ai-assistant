@@ -1,18 +1,24 @@
-
 .SidebarHeader {
   display: flex;
-  gap: 2rem;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  padding: 1rem 0;
+  padding: 1rem;
+}
 
-  .NewChatBtn {
-    display: flex;
-    gap: .5rem;
-    width: 100%;
-  }
+.NewChatBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .Menu {
-  border-top: 1px solid #c1bebe;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+}
+
+.LoadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 64px);
 }
