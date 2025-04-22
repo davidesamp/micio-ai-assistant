@@ -67,6 +67,7 @@ const useGenerateContent = () => {
         id: uuidv4(),
         sender: 'user',
         message: statement,
+        files: uploadedFiles,
         type: ContentTypes.TEXT,
       }
       newAddMessage(question)

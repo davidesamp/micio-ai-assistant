@@ -11,10 +11,12 @@ interface MicioTextareaProps {
   onSend: () => void
   // eslint-disable-next-line no-unused-vars
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  textAreaRef: React.RefObject<HTMLTextAreaElement | null>
 }
 
 export const MicioTextarea = ({
   statement,
+  textAreaRef,
   onChange,
   onSend,
   onFileChange,
@@ -43,6 +45,7 @@ export const MicioTextarea = ({
       <Button className={styles.LeftButton} onClick={handleLoadFile} icon={<PlusOutlined />} />
       <input accept="image/*" ref={inputFileRef} type="file" className={styles.FileInput} onChange={onFileChange} />
       <TextArea
+        ref={textAreaRef}
         className={styles.TextArea}
         value={statement}
         onChange={handleChange}

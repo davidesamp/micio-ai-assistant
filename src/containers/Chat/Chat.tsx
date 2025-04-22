@@ -71,6 +71,7 @@ const Chat = () => {
       } 
 
       setUploadedFiles((prevFiles) => [...prevFiles, file])
+      textAreaRef.current?.focus()
     }
   }
 
@@ -104,6 +105,12 @@ const Chat = () => {
   ): (
       <ImageRenderer imageDataBase64={content.message}/>
   )
+
+  const uploadedFilesUI = (files: UploadedFile[]) => files.map((file) => (
+    <div key={file.uid}>
+      <img src={`data:${file.mimeType};base64,${file.data}`} alt={`Uploaded file ${file.uid}`} />
+    </div>
+  ))
 
   return currentAiProvider ? (
     <div
@@ -139,6 +146,12 @@ const Chat = () => {
                 className={styles.Card}
                 variant="outlined" 
                 >
+                {msg.files && msg.files.length > 0 && (
+                  <div className={styles.UploadedFilesContainer}>
+                    {uploadedFilesUI(msg.files)}
+                  </div>
+                  )
+                }
                 {cardBodyUI(msg)}
               </Card>
             </List.Item>
@@ -153,6 +166,7 @@ const Chat = () => {
           statement={statement}
           onChange={setStatement}
           onSend={handleSend}
+          textAreaRef={textAreaRef}
           onFileChange={handleFileChange}
         />
       </div>
