@@ -7,6 +7,7 @@ import cx from 'classnames'
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth'
 import React from 'react'
 import styles from './TopBar.module.scss'
+import { UserThumbnail } from '@/components/UserThumbnail/UserThumbnail'
 import useGenerateContent from '@/hooks/useGenerateContent'
 import { AIProvider } from '@/model/ui'
 import { useMicioStore } from '@/store'
@@ -17,6 +18,9 @@ const TopBar = () => {
   const {
     chat: {
       selectedModel
+    },
+    user: {
+      loggedUser
     },
     ui: { currentAiProvider },
   } = useMicioStore()
@@ -82,21 +86,29 @@ const TopBar = () => {
 
   return (
     <div className={styles.Container}>
-      <Button onClick={handleSignIn}>Sign in</Button>
-      <Button onClick={handleSignOut}>Sign Out</Button>
+     
       {currentAiProvider && (
         <Popover placement="bottomLeft" content={popoverContent} trigger="click" showArrow={false}>
-        <div className={styles.SettingsContainer}>
-          <Title level={5} className={styles.ProviderTitle}>
-            {selectedModel?.name || 'Select a model'}
-          </Title>
-            <div className={styles.SettingsIcon}>
-              <SettingOutlined/>
+          <div className={styles.SettingsContainer}>
+            <div>
+              <SettingOutlined />
             </div>
+            <Title level={5} className={styles.ProviderTitle}>
+              {selectedModel?.name || 'Select a model'}
+            </Title>
           </div>
-          </Popover>
+        </Popover>
       )}
-      
+      <div className={styles.Right}>
+        {!loggedUser && (
+          <Button onClick={handleSignIn}>Sign in</Button>
+        )}
+        <Button onClick={handleSignOut}>Sign Out</Button>
+        {loggedUser && (
+          <UserThumbnail user={loggedUser} />
+        )}
+      </div>
+     
     </div>
   )
 }
