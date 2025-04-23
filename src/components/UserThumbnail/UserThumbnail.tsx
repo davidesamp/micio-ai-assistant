@@ -1,3 +1,5 @@
+import { UserOutlined } from '@ant-design/icons'
+import { Avatar } from 'antd'
 import { User } from 'firebase/auth'
 import React from 'react'
 import styles from './UserThumbnail.module.scss'
@@ -12,7 +14,7 @@ export const UserThumbnail = ({ user }: UserThumbnailProps) => {
       {user.photoURL ? (
         <img src={user.photoURL} alt="User Thumbnail" />
       ) : (
-        <div>No image</div>
+          <Avatar className={styles.DefaultAvatar} icon={<UserOutlined />} />
       )}
     </div>
   )
