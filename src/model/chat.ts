@@ -16,6 +16,7 @@ export interface Message {
   id: string;
   sender: string
   message: string;
+  files?: UploadedFile[]
   type: ContentTypes;
 }
 

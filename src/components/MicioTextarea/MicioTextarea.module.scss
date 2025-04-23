@@ -1,0 +1,37 @@
+.Container {
+  position: relative;
+  width: 100%;
+
+  .LeftButton,
+  .RightButton {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    border: none;
+    background: transparent;
+    color: #888;
+    cursor: pointer;
+    font-size: 16px;
+    transform: translateY(-50%);
+  }
+
+  .LeftButton {
+    left: 14%;
+  }
+
+  .RightButton {
+    right: 10%;
+  }
+
+  .FileInput {
+    visibility: hidden;
+  }
+
+  .TextArea {
+    width: 80%;
+    padding: 1rem 0 1rem 4rem;
+    margin: 0 10rem 2rem;
+
+  }
+
+}

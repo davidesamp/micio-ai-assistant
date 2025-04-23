@@ -1,5 +1,4 @@
-import { PlusOutlined } from '@ant-design/icons'
-import { theme, Input, List, Card } from 'antd'
+import { theme, List, Card } from 'antd'
 import { Typography } from 'antd'
 import cx from 'classnames'
 import React, { useEffect, useRef, useState } from 'react'
@@ -12,13 +11,12 @@ import { useMicioStore } from '../../store'
 import styles from './Chat.module.scss'
 import { FilePreviewContainer } from '@/components/FilePreviewContainer/FilePreviewContainer'
 import ImageRenderer from '@/components/ImageRenderer/ImageRenderer'
+import { MicioTextarea } from '@/components/MicioTextarea/MicioTextarea'
 import useGenerateContent from '@/hooks/useGenerateContent'
 import CatLogoSpin from '@/icons/cat-logo-spin.svg'
 import CatLogo from '@/icons/cat-logo.svg'
 import { ContentTypes, Message, UploadedFile } from '@/model/chat'
 import { fileToBase64 } from '@/utils/fileUtils'
-
-const { TextArea } = Input
 
 const Chat = () => {
   const {
@@ -43,7 +41,6 @@ const Chat = () => {
 
   const [statement, setStatement] = useState('')
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
-  const inputFileRef = useRef<HTMLInputElement>(null)
 
   const scrollToBottom = () => {
     if (textAreaRef.current) {
@@ -58,18 +55,10 @@ const Chat = () => {
     }
   }, [isGenerating, localIsGenerating])
 
-  const handleKeyDown = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.key === 'Enter' && !event.shiftKey) {
-      event.preventDefault()
-      generate(statement, uploadedFiles)
-      setStatement('')
-    }
-  }
-
-  const handleLoadFile = () => {
-    if (inputFileRef.current) {
-      inputFileRef.current.click()
-    }
+  const handleSend = () => {
+    generate(statement, uploadedFiles)
+    setStatement('')
+    setUploadedFiles([])
   }
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,6 +71,7 @@ const Chat = () => {
       } 
 
       setUploadedFiles((prevFiles) => [...prevFiles, file])
+      textAreaRef.current?.focus()
     }
   }
 
@@ -115,6 +105,12 @@ const Chat = () => {
   ): (
       <ImageRenderer imageDataBase64={content.message}/>
   )
+
+  const uploadedFilesUI = (files: UploadedFile[]) => files.map((file) => (
+    <div key={file.uid}>
+      <img src={`data:${file.mimeType};base64,${file.data}`} alt={`Uploaded file ${file.uid}`} />
+    </div>
+  ))
 
   return currentAiProvider ? (
     <div
@@ -150,6 +146,12 @@ const Chat = () => {
                 className={styles.Card}
                 variant="outlined" 
                 >
+                {msg.files && msg.files.length > 0 && (
+                  <div className={styles.UploadedFilesContainer}>
+                    {uploadedFilesUI(msg.files)}
+                  </div>
+                  )
+                }
                 {cardBodyUI(msg)}
               </Card>
             </List.Item>
@@ -160,16 +162,12 @@ const Chat = () => {
       
       <div className={styles.TextAreaContainer}>
         <FilePreviewContainer uploadedFiles={uploadedFiles} onDeleteFile={handleDeleteUploadedFile}/>
-        <PlusOutlined className={styles.PlusIcon} onClick={handleLoadFile}/>
-        <input accept="image/*" ref={inputFileRef} type="file" className={styles.FileInput} onChange={handleFileChange}/>
-        <TextArea
-          ref={textAreaRef}
-          className={styles.TextArea}
-          value={statement}
-          onChange={(e) => setStatement(e.target.value)}
-          onPressEnter={handleKeyDown}
-          autoSize={{ minRows: 2, maxRows: 18 }} // Auto-expands but limits height
-          placeholder="Ask something"
+        <MicioTextarea
+          statement={statement}
+          onChange={setStatement}
+          onSend={handleSend}
+          textAreaRef={textAreaRef}
+          onFileChange={handleFileChange}
         />
       </div>
     </div> ) : (
