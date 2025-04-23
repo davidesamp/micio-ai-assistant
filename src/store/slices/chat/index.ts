@@ -10,7 +10,7 @@ const chatInitialValues: DefaultChatValues = {
   chatUid: null
 }
 
-export const chat = lens<ChatStoreSlice, Store>((set, get) => ({
+export const chat = lens<ChatStoreSlice, Store>((set, get, state) => ({
   ...chatInitialValues,
   actions: {
     newAddMessage: (passedMessage) => {
@@ -34,8 +34,8 @@ export const chat = lens<ChatStoreSlice, Store>((set, get) => ({
 
         const selectedModel = get().selectedModel
         const chatUid = get().chatUid
-
-        if (selectedModel && chatUid) setChatHistory(selectedModel, newList, chatUid)
+        const loggedUser = state.getState().user.loggedUser
+        if (selectedModel && chatUid && loggedUser) setChatHistory(selectedModel, newList, chatUid)
       }
     },
     setCurrentChat: (chat) => {

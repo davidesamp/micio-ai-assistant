@@ -3,10 +3,8 @@ import {
 } from '@ant-design/icons'
 import { Button, Menu, MenuProps, Typography, Spin } from 'antd'
 import Sider from 'antd/es/layout/Sider'
-import { onAuthStateChanged } from 'firebase/auth'
 import React, { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
-import { auth } from '../../firebase/config'
 import styles from './Sidebar.module.scss'
 import useGenerateContent from '@/hooks/useGenerateContent'
 import { useMicioStore } from '@/store'
@@ -22,6 +20,9 @@ const Sidebar = () => {
     chat: {
       actions: { setChatUid, resetMessages }
     },
+    user: {
+      loggedUser
+    }
   } = useMicioStore()
 
 
@@ -29,13 +30,10 @@ const Sidebar = () => {
   useEffect(() => {
     const loadChats = async () => {
       try {
-        onAuthStateChanged(auth, async (user) => {
-          if(user) {
-            const chatList = await getChatList()
-            setChats(chatList)
-          }
-        })
-       
+        if(loggedUser) {
+          const chatList = await getChatList()
+          setChats(chatList)
+        }
       } catch (error) {
         console.error('Error loading chats:', error)
       } finally {
@@ -44,7 +42,7 @@ const Sidebar = () => {
     }
 
     loadChats()
-  }, [])
+  }, [loggedUser])
 
   type MenuItem = Required<MenuProps>['items'][number]
 
