@@ -1,5 +1,6 @@
 import { lens } from '@dhmk/zustand-lens'
 import { ChatStoreSlice, DefaultChatValues } from './types'
+import { MicioChat } from '@/model/chat'
 import { Store } from '@/store/types'
 import { setChatHistory } from '@/utils/localStorage'
 
@@ -7,7 +8,8 @@ const chatInitialValues: DefaultChatValues = {
   messages: [],
   currentChat: null,
   selectedModel: null, 
-  chatUid: null
+  chatUid: null,
+  chatList: {}
 }
 
 export const chat = lens<ChatStoreSlice, Store>((set, get, state) => ({
@@ -30,9 +32,16 @@ export const chat = lens<ChatStoreSlice, Store>((set, get, state) => ({
           draft.messages = updatedMessages
         })
 
-        //TODO refactor this to use a single function
         if (passedMessage.isLastPart && selectedModel && chatUid && loggedUser) {
+          const chat: MicioChat = {
+            uuid: chatUid,
+            model: selectedModel,
+            messages: updatedMessages,
+            userId: loggedUser.uid,
+            createdAt: new Date()
+          }
           setChatHistory(selectedModel, updatedMessages, chatUid)
+          get().actions.updateChatList(chat)
         }
       } else {
         const newList = [...currentMessages, passedMessage]
@@ -40,9 +49,17 @@ export const chat = lens<ChatStoreSlice, Store>((set, get, state) => ({
           draft.messages = newList
         })
 
-
-        
-        if (selectedModel && chatUid && loggedUser) setChatHistory(selectedModel, newList, chatUid)
+        if (selectedModel && chatUid && loggedUser) {
+          const chat: MicioChat = {
+            uuid: chatUid,
+            model: selectedModel,
+            messages: newList,
+            userId: loggedUser.uid,
+            createdAt: new Date()
+          }
+          setChatHistory(selectedModel, newList, chatUid)
+          get().actions.updateChatList(chat)
+        }
       }
     },
     setCurrentChat: (chat) => {
@@ -68,6 +85,14 @@ export const chat = lens<ChatStoreSlice, Store>((set, get, state) => ({
     setChatUid: (chatId) => {
       set((draft) => {
         draft.chatUid = chatId
+      })
+    },
+    updateChatList: (chat) => {
+      set((draft) => {
+        if (!draft.chatList) {
+          draft.chatList = {}
+        }
+        draft.chatList[chat.uuid] = chat
       })
     }
   }

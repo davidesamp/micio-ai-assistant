@@ -12,27 +12,27 @@ import { getChatHistory, getChatList } from '@/utils/localStorage'
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false)
-  const [chats, setChats] = useState<Record<string, any>>({})
   const [loading, setLoading] = useState(true)
 
   const { restoreChat } = useGenerateContent()
   const {
     chat: {
-      actions: { setChatUid, resetMessages }
+      chatList,
+      actions: { setChatUid, resetMessages, updateChatList }
     },
     user: {
       loggedUser
     }
   } = useMicioStore()
 
-
-
   useEffect(() => {
     const loadChats = async () => {
       try {
         if(loggedUser) {
           const chatList = await getChatList()
-          setChats(chatList)
+          Object.values(chatList).forEach(chat => {
+            updateChatList(chat)
+          })
         }
       } catch (error) {
         console.error('Error loading chats:', error)
@@ -62,8 +62,8 @@ const Sidebar = () => {
     } as MenuItem
   }
 
-  const items: MenuItem[] = Object.keys(chats).map(key => getItem(
-    chats[key].messages[0].message, //The first message is the name of the chat
+  const items: MenuItem[] = Object.keys(chatList).map(key => getItem(
+    chatList[key].messages[0].message, //The first message is the name of the chat
     key,
     <UserOutlined />,
   ))
