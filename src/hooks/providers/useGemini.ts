@@ -87,6 +87,7 @@ const useGemini = () => {
     const imageMessageId = uuidv4()
 
     for await (const chunk of resultStream) {
+      const isLastChunk = chunk.candidates?.[0]?.finishReason !== undefined
       for (const part of chunk.candidates?.[0]?.content?.parts || []) {
         if (part.text) {
           const response: Message = {
@@ -94,6 +95,7 @@ const useGemini = () => {
             sender: 'model',
             message: part.text,
             type: ContentTypes.TEXT,
+            isLastPart: isLastChunk
           }
           newAddMessage(response)
         } else if (part.inlineData) {
@@ -106,6 +108,7 @@ const useGemini = () => {
             sender: 'model',
             message: imageData,
             type: ContentTypes.IMAGE,
+            isLastPart: isLastChunk
           }
           newAddMessage(responseImage)
         }

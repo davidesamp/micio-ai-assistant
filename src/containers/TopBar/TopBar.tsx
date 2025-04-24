@@ -1,11 +1,13 @@
 import {
   SettingOutlined,
 } from '@ant-design/icons'
-import { Popover } from 'antd'
+import { Button, Popover } from 'antd'
 import { Typography } from 'antd'
 import cx from 'classnames'
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth'
 import React from 'react'
 import styles from './TopBar.module.scss'
+import { UserThumbnail } from '@/components/UserThumbnail/UserThumbnail'
 import useGenerateContent from '@/hooks/useGenerateContent'
 import { AIProvider } from '@/model/ui'
 import { useMicioStore } from '@/store'
@@ -13,10 +15,12 @@ import {  ModelsList } from '@/utils/constants'
 
 
 const TopBar = () => {
-
   const {
     chat: {
       selectedModel
+    },
+    user: {
+      loggedUser
     },
     ui: { currentAiProvider },
   } = useMicioStore()
@@ -24,6 +28,9 @@ const TopBar = () => {
   const { changeModel } = useGenerateContent()
 
   const { Title } = Typography
+
+  const auth = getAuth()
+  const provider = new GoogleAuthProvider()
 
   const getModelsListByProvider = (provider: AIProvider) => {
     const models = ModelsList.filter((model) => model.provider === provider)
@@ -35,6 +42,25 @@ const TopBar = () => {
           {model.name}
       </p>
     ))
+  }
+
+  const handleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider)
+      const user = result.user
+      console.log('User signed in:', user)
+    } catch (error) {
+      console.error('Sign-in error:', error)
+    }
+  }
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth)
+      console.log('User signed out successfully')
+    } catch (error) {
+      console.error('Error signing out:', error)
+    }
   }
 
   const popoverContent = (
@@ -60,19 +86,29 @@ const TopBar = () => {
 
   return (
     <div className={styles.Container}>
+     
       {currentAiProvider && (
-        <div className={styles.SettingsContainer}>
-          <Title level={5} className={styles.ProviderTitle}>
-            {selectedModel?.name || 'Select a model'}
-          </Title>
-          <Popover placement="bottomLeft" content={popoverContent} trigger="click" showArrow={false}>
-            <div className={styles.SettingsIcon}>
-              <SettingOutlined/>
+        <Popover placement="bottomLeft" content={popoverContent} trigger="click" showArrow={false}>
+          <div className={styles.SettingsContainer}>
+            <div>
+              <SettingOutlined />
             </div>
-          </Popover>
+            <Title level={5} className={styles.ProviderTitle}>
+              {selectedModel?.name || 'Select a model'}
+            </Title>
           </div>
+        </Popover>
       )}
-      
+      <div className={styles.Right}>
+        {!loggedUser && (
+          <Button onClick={handleSignIn}>Sign in</Button>
+        )}
+        <Button onClick={handleSignOut}>Sign Out</Button>
+        {loggedUser && (
+          <UserThumbnail user={loggedUser} />
+        )}
+      </div>
+     
     </div>
   )
 }

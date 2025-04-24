@@ -1,49 +1,69 @@
 import {
-  UserOutlined, PlusOutlined
+  UserOutlined, PlusOutlined, LoadingOutlined
 } from '@ant-design/icons'
-import { Button, Menu, MenuProps, Typography } from 'antd'
+import { Button, Menu, MenuProps, Typography, Spin } from 'antd'
 import Sider from 'antd/es/layout/Sider'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import styles from './Sidebar.module.scss'
 import useGenerateContent from '@/hooks/useGenerateContent'
 import { useMicioStore } from '@/store'
 import { getChatHistory, getChatList } from '@/utils/localStorage'
 
-
 const Sidebar = () => {
-   const [collapsed, setCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   const { restoreChat } = useGenerateContent()
   const {
     chat: {
-      actions: { setChatUid, resetMessages }
+      chatList,
+      actions: { setChatUid, resetMessages, updateChatList }
     },
+    user: {
+      loggedUser
+    }
   } = useMicioStore()
 
-   type MenuItem = Required<MenuProps>['items'][number];
+  useEffect(() => {
+    const loadChats = async () => {
+      try {
+        if(loggedUser) {
+          const chatList = await getChatList()
+          Object.values(chatList).forEach(chat => {
+            updateChatList(chat)
+          })
+        }
+      } catch (error) {
+        console.error('Error loading chats:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadChats()
+  }, [loggedUser])
+
+  type MenuItem = Required<MenuProps>['items'][number]
 
   const { Title } = Typography
 
   const getItem =(
-     label: React.ReactNode,
-     key: React.Key,
-     icon?: React.ReactNode,
-     children?: MenuItem[],
-   ): MenuItem => {
-     return {
-       key,
-       icon,
-       children,
-       label,
-     } as MenuItem
-   }
+    label: React.ReactNode,
+    key: React.Key,
+    icon?: React.ReactNode,
+    children?: MenuItem[],
+  ): MenuItem => {
+    return {
+      key,
+      icon,
+      children,
+      label,
+    } as MenuItem
+  }
 
-  
-  const chats = getChatList() 
-
-  const items: MenuItem[] = Object.keys(chats).map(key => getItem(
-    chats[key].messages[0].message, //The first message is the name of the chat
+  const items: MenuItem[] = Object.keys(chatList).map(key => getItem(
+    chatList[key].messages[0].message, //The first message is the name of the chat
     key,
     <UserOutlined />,
   ))
@@ -55,18 +75,22 @@ const Sidebar = () => {
     resetMessages()
   }
 
-  const handleSelect: MenuProps['onSelect'] = (info) => {
+  const handleSelect: MenuProps['onSelect'] = async (info) => {
     console.log('Selected item info --> ', info)
-    const selectedChat = getChatHistory(info.key)
-    if (selectedChat) {
-      console.log('Selected chat history --> ', selectedChat)
-      const {
-        messages,
-        model,
-        uuid
-      } = selectedChat
+    try {
+      const selectedChat = await getChatHistory(info.key)
+      if (selectedChat) {
+        console.log('Selected chat history --> ', selectedChat)
+        const {
+          messages,
+          model,
+          uuid
+        } = selectedChat
 
-      restoreChat(model, messages, uuid)
+        restoreChat(model, messages, uuid)
+      }
+    } catch (error) {
+      console.error('Error loading chat:', error)
     }
   }
 
@@ -85,10 +109,22 @@ const Sidebar = () => {
           {!collapsed && (
             <span>New Chat</span> 
           )}
-          
         </Button>
       </div>
-      <Menu className={styles.Menu} onSelect={handleSelect} theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
+      {loading ? (
+        <div className={styles.LoadingContainer}>
+          <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
+        </div>
+      ) : (
+        <Menu 
+          className={styles.Menu} 
+          onSelect={handleSelect} 
+          theme="dark" 
+          defaultSelectedKeys={['1']} 
+          mode="inline" 
+          items={items} 
+        />
+      )}
     </Sider>
   )
 }

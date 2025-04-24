@@ -3,6 +3,7 @@ import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import { chat } from './slices/chat'
 import { ui } from './slices/ui'
+import { user } from './slices/user'
 import { Store } from './types'
 
 export const useMicioStore: () => Store = create<Store>()(
@@ -10,7 +11,8 @@ export const useMicioStore: () => Store = create<Store>()(
     // @ts-expect-error TODO fix this type error
     withLenses(() => ({
       ui,
-      chat
+      chat,
+      user
     })),
   ),
 )

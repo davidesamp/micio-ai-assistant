@@ -1,5 +1,5 @@
 import { Chat } from '@google/genai'
-import { Message } from '../../../model/chat'
+import { Message, MicioChat } from '../../../model/chat'
 import { Model } from '@/model/ai'
 
 interface Actions {
@@ -14,6 +14,8 @@ interface Actions {
   // eslint-disable-next-line no-unused-vars
   restoreMessages: (messages: Message[]) => void
   resetMessages: () => void
+  // eslint-disable-next-line no-unused-vars
+  updateChatList: (chat: MicioChat) => void
 }
 
 export interface DefaultChatValues {
@@ -21,6 +23,7 @@ export interface DefaultChatValues {
   currentChat: Chat | null
   selectedModel: Model | null
   chatUid: string | null
+  chatList: Record<string, MicioChat>
 }
 
 export interface ChatStoreSlice extends DefaultChatValues {

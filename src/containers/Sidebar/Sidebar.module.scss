@@ -1,4 +1,3 @@
-
 .SidebarHeader {
   display: flex;
   flex-direction: column;
@@ -14,5 +13,13 @@
 }
 
 .Menu {
-  border-top: 1px solid #c1bebe;
+  height: 80%;
+  overflow-y: auto;
+}
+
+.LoadingContainer {
+  display: flex;
+  height: calc(100vh - 64px);
+  align-items: center;
+  justify-content: center;
 }

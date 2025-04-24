@@ -85,11 +85,13 @@ const useOpenAi = () => {
 
     for await (const chunk of completion) {
       const token = chunk.choices[0]?.delta?.content || ''
+      const isLastChunk = chunk.choices[0]?.finish_reason !== undefined
       const response: Message = {
         id: textMessageId,
         sender: 'model',
         message: token,
         type: ContentTypes.TEXT,
+        isLastPart: isLastChunk
       }
       newAddMessage(response)
     }
