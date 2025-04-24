@@ -16,6 +16,10 @@ export const chat = lens<ChatStoreSlice, Store>((set, get, state) => ({
     newAddMessage: (passedMessage) => {
       const currentMessages = get().messages
       const findMessage = currentMessages.find((msg) => msg.id === passedMessage.id)
+      const selectedModel = get().selectedModel
+      const chatUid = get().chatUid
+      const loggedUser = state.getState().user.loggedUser
+
       if (findMessage) {
         let currentText = findMessage.message
         const newText = currentText += passedMessage.message
@@ -25,6 +29,11 @@ export const chat = lens<ChatStoreSlice, Store>((set, get, state) => ({
         set((draft) => {
           draft.messages = updatedMessages
         })
+
+        //TODO refactor this to use a single function
+        if (passedMessage.isLastPart && selectedModel && chatUid && loggedUser) {
+          setChatHistory(selectedModel, updatedMessages, chatUid)
+        }
       } else {
         const newList = [...currentMessages, passedMessage]
         set((draft) => {
@@ -32,9 +41,7 @@ export const chat = lens<ChatStoreSlice, Store>((set, get, state) => ({
         })
 
 
-        const selectedModel = get().selectedModel
-        const chatUid = get().chatUid
-        const loggedUser = state.getState().user.loggedUser
+        
         if (selectedModel && chatUid && loggedUser) setChatHistory(selectedModel, newList, chatUid)
       }
     },

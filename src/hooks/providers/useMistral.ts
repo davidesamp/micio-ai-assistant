@@ -89,11 +89,13 @@ const useMistral = () => {
 
     for await (const chunk of result) {
       const streamText = chunk.data.choices[0].delta.content
+      const isLastChunk = chunk.data.choices[0].finishReason !== undefined
       const response: Message = {
         id: textMessageId,
         sender: 'model',
         message: streamText as string,
         type: ContentTypes.TEXT,
+        isLastPart: isLastChunk
       }
       newAddMessage(response)
     }

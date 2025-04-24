@@ -18,6 +18,7 @@ export interface Message {
   message: string;
   files?: UploadedFile[]
   type: ContentTypes;
+  isLastPart?: boolean;
 }
 
 
