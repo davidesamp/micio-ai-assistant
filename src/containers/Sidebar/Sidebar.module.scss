@@ -15,6 +15,23 @@
 .Menu {
   height: 80%;
   overflow-y: auto;
+
+  .MenuItem {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 0.5rem;
+
+    .DeleteButton {
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    &:hover .DeleteButton {
+      opacity: 1;
+    }
+  }
 }
 
 .LoadingContainer {

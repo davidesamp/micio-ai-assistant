@@ -1,11 +1,13 @@
 import {
-  UserOutlined, PlusOutlined, LoadingOutlined
+  UserOutlined, PlusOutlined, LoadingOutlined, DeleteOutlined
 } from '@ant-design/icons'
-import { Button, Menu, MenuProps, Typography, Spin } from 'antd'
+import { Button, Menu, MenuProps, Typography, Spin, Popconfirm } from 'antd'
 import Sider from 'antd/es/layout/Sider'
+import { deleteDoc, doc } from 'firebase/firestore'
 import React, { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import styles from './Sidebar.module.scss'
+import { db } from '@/firebase/config'
 import useGenerateContent from '@/hooks/useGenerateContent'
 import { useMicioStore } from '@/store'
 import { getChatHistory, getChatList } from '@/utils/localStorage'
@@ -18,7 +20,7 @@ const Sidebar = () => {
   const {
     chat: {
       chatList,
-      actions: { setChatUid, resetMessages, updateChatList }
+      actions: { setChatUid, resetMessages, updateChatList, deleteChat }
     },
     user: {
       loggedUser
@@ -42,11 +44,24 @@ const Sidebar = () => {
     }
 
     loadChats()
-  }, [loggedUser])
+  }, [loggedUser, updateChatList])
 
   type MenuItem = Required<MenuProps>['items'][number]
 
   const { Title } = Typography
+
+  const handleDeleteChat = async (chatId: string, e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation()
+    }
+    try {
+      const chatRef = doc(db, 'chats', chatId)
+      await deleteDoc(chatRef)
+      deleteChat(chatId)
+    } catch (error) {
+      console.error('Error deleting chat:', error)
+    }
+  }
 
   const getItem =(
     label: React.ReactNode,
@@ -58,7 +73,26 @@ const Sidebar = () => {
       key,
       icon,
       children,
-      label,
+      label: (
+        <div className={styles.MenuItem}>
+          <span>{label}</span>
+          <Popconfirm
+            title="Delete chat"
+            description="Are you sure you want to delete this chat?"
+            onConfirm={(e) => handleDeleteChat(key as string, e)}
+            onCancel={(e) => e?.stopPropagation()}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button
+              type="text"
+              icon={<DeleteOutlined />}
+              onClick={(e) => e.stopPropagation()}
+              className={styles.DeleteButton}
+            />
+          </Popconfirm>
+        </div>
+      ),
     } as MenuItem
   }
 

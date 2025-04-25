@@ -94,6 +94,13 @@ export const chat = lens<ChatStoreSlice, Store>((set, get, state) => ({
         }
         draft.chatList[chat.uuid] = chat
       })
+    },
+    deleteChat: (chatId) => {
+      set((draft) => {
+        if (draft.chatList) {
+          delete draft.chatList[chatId]
+        }
+      })
     }
   }
 }))
