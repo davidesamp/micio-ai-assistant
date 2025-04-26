@@ -8,11 +8,19 @@ import { Store } from './types'
 
 export const useMicioStore: () => Store = create<Store>()(
   immer(
-    // @ts-expect-error TODO fix this type error
-    withLenses(() => ({
+    withLenses((set, _, store) => ({
       ui,
       chat,
-      user
+      user,
+      global: {
+        actions: {
+          resetStore: () => {
+            set({
+              ...store.getInitialState(),
+            })
+          }
+        }
+      }
     })),
   ),
 )

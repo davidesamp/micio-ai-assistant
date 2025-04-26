@@ -18,6 +18,7 @@ interface Actions {
   updateChatList: (chat: MicioChat) => void
   // eslint-disable-next-line no-unused-vars
   deleteChat: (chatId: string) => void
+  reset: () => void
 }
 
 export interface DefaultChatValues {

@@ -6,4 +6,9 @@ export interface Store {
   chat: ChatStoreSlice
   user: UserStoreSlice
   ui: UIStoreSlice
+  global: {
+    actions: {
+      resetStore: () => void
+    }
+  }
 }

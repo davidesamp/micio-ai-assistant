@@ -17,10 +17,13 @@ import {  ModelsList } from '@/utils/constants'
 const TopBar = () => {
   const {
     chat: {
-      selectedModel
+      selectedModel,
     },
     user: {
       loggedUser
+    },
+    global: {
+      actions: { resetStore }
     },
     ui: { currentAiProvider },
   } = useMicioStore()
@@ -57,7 +60,7 @@ const TopBar = () => {
   const handleSignOut = async () => {
     try {
       await signOut(auth)
-      console.log('User signed out successfully')
+      resetStore()
     } catch (error) {
       console.error('Error signing out:', error)
     }
