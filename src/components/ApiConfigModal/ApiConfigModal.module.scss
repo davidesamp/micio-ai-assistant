@@ -1,0 +1,15 @@
+.Container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  .ItemGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .ItemGroup + .ItemGroup {
+    margin-top: 1rem;
+  }
+}
