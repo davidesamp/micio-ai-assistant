@@ -10,6 +10,7 @@ export const ApiConfigModal = () => {
   const {
     ui: {
       configModalOpen,
+      actions: { closeConfigModal },
     },
     chat: {
       apisConfig,
@@ -29,8 +30,17 @@ export const ApiConfigModal = () => {
     setApisConfig(apiKeys)
   }
 
+  const handleClose = () => {
+    closeConfigModal()
+  }
+
   return (
-    <Modal className={styles.Container} open={configModalOpen} onOk={handleSaveApis}>
+    <Modal 
+      className={styles.Container} 
+      open={configModalOpen} 
+      onOk={handleSaveApis}
+      onCancel={handleClose}
+      >
       {Object.values(AIProvider).map((provider) => (
         <div className={styles.ItemGroup} key={provider}>
             <label htmlFor={provider}>{provider}</label>

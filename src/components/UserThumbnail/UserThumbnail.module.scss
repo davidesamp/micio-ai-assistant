@@ -14,3 +14,23 @@
     cursor: pointer;
   }
 }
+
+.UserPopoverContent {
+  display: flex;
+  width: 5rem;
+  max-height: 250px;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 1rem;
+  overflow-y: auto;
+
+  li {
+    padding: 0.5rem 0;
+    cursor: pointer;
+    list-style: none;
+
+    &:hover {
+      background-color: #626161;
+    }
+  }
+}

@@ -25,7 +25,10 @@ const TopBar = () => {
     global: {
       actions: { resetStore }
     },
-    ui: { currentAiProvider },
+    ui: { 
+      currentAiProvider,
+      actions: { openConfigModal}
+    },
   } = useMicioStore()
 
   const { changeModel } = useGenerateContent()
@@ -64,6 +67,10 @@ const TopBar = () => {
     } catch (error) {
       console.error('Error signing out:', error)
     }
+  }
+
+  const handleOpenConfigModal = () => {
+    openConfigModal()
   }
 
   const popoverContent = (
@@ -106,9 +113,12 @@ const TopBar = () => {
         {!loggedUser && (
           <Button onClick={handleSignIn}>Sign in</Button>
         )}
-        <Button onClick={handleSignOut}>Sign Out</Button>
         {loggedUser && (
-          <UserThumbnail user={loggedUser} />
+          <UserThumbnail 
+            onApiKeysUpdate={handleOpenConfigModal}
+            onLogout={handleSignOut}
+            user={loggedUser} 
+          />
         )}
       </div>
      

@@ -51,5 +51,5 @@ export const getApisConfig = async (): Promise<Record<AIProvider, string> | null
     console.error('Unauthorized access to apis data')
   }
 
-  return apiData as Record<AIProvider, string>
+  return apiData.config as Record<AIProvider, string>
 }
