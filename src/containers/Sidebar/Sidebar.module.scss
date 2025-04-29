@@ -1,3 +1,19 @@
+.SidebarLogo {
+  display: flex;
+  padding: 1rem 1rem 0 0;
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 2.5px;
+    border: 1px solid white;
+    border-radius: 15%;
+    margin-left: auto;
+    cursor: pointer;
+    fill: white;
+  }
+}
+
 .SidebarHeader {
   display: flex;
   flex-direction: column;

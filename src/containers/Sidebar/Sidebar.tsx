@@ -1,5 +1,5 @@
 import {
-  UserOutlined, PlusOutlined, LoadingOutlined, DeleteOutlined
+  UserOutlined, PlusOutlined, LoadingOutlined, DeleteOutlined, MenuOutlined
 } from '@ant-design/icons'
 import { Button, Menu, MenuProps, Typography, Spin, Popconfirm } from 'antd'
 import Sider from 'antd/es/layout/Sider'
@@ -109,6 +109,10 @@ const Sidebar = () => {
     resetMessages()
   }
 
+  const handleCollapse = () => {
+    setCollapsed(!collapsed)
+  }
+
   const handleSelect: MenuProps['onSelect'] = async (info) => {
     console.log('Selected item info --> ', info)
     try {
@@ -128,12 +132,30 @@ const Sidebar = () => {
     }
   }
 
+  const siderStyle: React.CSSProperties = {
+    overflow: 'auto',
+    height: '100vh',
+    position: 'sticky',
+    insetInlineStart: 0,
+    top: 0,
+    bottom: 0,
+    scrollbarWidth: 'thin',
+    scrollbarGutter: 'stable',
+  }
+
+
   return (
-    <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+    <Sider 
+      trigger={null} 
+      style={siderStyle} 
+      collapsible collapsed={collapsed} 
+      width={300}
+    >
       <div className="demo-logo-vertical" />
+      <MenuOutlined className={styles.SidebarLogo} onClick={handleCollapse} />
       <div className={styles.SidebarHeader}>
         {!collapsed && (
-          <Title level={4}>
+          <Title level={5}>
             Your Chat List
           </Title>
         )}

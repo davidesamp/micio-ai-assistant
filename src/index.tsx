@@ -30,6 +30,7 @@ root.render(
         colorError: '#f5222d', // Keep default error (or customize)
         fontFamily: 'Roboto, sans-serif', // Custom font family
       },
+      hashed: false,
     }}
   > 
   <App />
