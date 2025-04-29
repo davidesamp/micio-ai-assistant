@@ -1,5 +1,6 @@
 import { UserOutlined } from '@ant-design/icons'
-import { Avatar, Popover } from 'antd'
+import { Avatar, Popover, Menu } from 'antd'
+import type { MenuProps } from 'antd'
 import { User } from 'firebase/auth'
 import React from 'react'
 import styles from './UserThumbnail.module.scss'
@@ -11,21 +12,33 @@ interface UserThumbnailProps {
 }
 
 export const UserThumbnail = ({ user, onApiKeysUpdate, onLogout }: UserThumbnailProps) => {
+  const menuItems: MenuProps['items'] = [
+    {
+      key: 'api-keys',
+      label: 'API Keys',
+      onClick: onApiKeysUpdate,
+    },
+    {
+      key: 'logout',
+      label: 'Logout',
+      onClick: onLogout,
+    },
+  ]
+
   const userPopoverContent = (
-    <ul className={styles.UserPopoverContent}>
-      <li onClick={onApiKeysUpdate}>API keys</li>
-      <li onClick={onLogout}>Logout</li>
-    </ul>
-  ) 
+    <Menu items={menuItems} className={styles.Menu} />
+  )
+
   return (
     <Popover placement="bottom" content={userPopoverContent} trigger="click" showArrow={false}>
       <div className={styles.Container}>
         {user.photoURL ? (
           <img src={user.photoURL} alt="User Thumbnail" />
         ) : (
-            <Avatar className={styles.DefaultAvatar} icon={<UserOutlined />} />
+          <Avatar className={styles.DefaultAvatar} icon={<UserOutlined />} />
         )}
       </div>
-    </Popover>  
+    </Popover>
   )
 }
+export default UserThumbnail

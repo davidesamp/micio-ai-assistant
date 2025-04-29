@@ -7,6 +7,7 @@ import { deleteDoc, doc } from 'firebase/firestore'
 import React, { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import styles from './Sidebar.module.scss'
+import { iconsProviderMapping } from './iconsProviderMapping'
 import { db } from '@/firebase/config'
 import useGenerateContent from '@/hooks/useGenerateContent'
 import { useMicioStore } from '@/store'
@@ -86,7 +87,7 @@ const Sidebar = () => {
           >
             <Button
               type="text"
-              icon={<DeleteOutlined />}
+              icon={<DeleteOutlined width="1rem" height="1rem" />}
               onClick={(e) => e.stopPropagation()}
               className={styles.DeleteButton}
             />
@@ -99,7 +100,7 @@ const Sidebar = () => {
   const items: MenuItem[] = Object.keys(chatList).map(key => getItem(
     chatList[key].messages[0].message, //The first message is the name of the chat
     key,
-    <UserOutlined />,
+    iconsProviderMapping[chatList[key].model.provider]?.icon || <UserOutlined />,
   ))
 
   const handleNewChat = () => {
