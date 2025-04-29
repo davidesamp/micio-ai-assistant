@@ -2,6 +2,7 @@ import { Layout, theme } from 'antd'
 import { onAuthStateChanged } from 'firebase/auth'
 import React, { useCallback, useEffect } from 'react'
 import './App.scss'
+import { ApiConfigModal } from './components/ApiConfigModal/ApiConfigModal'
 import Chat from './containers/Chat/Chat'
 import Sidebar from './containers/Sidebar/Sidebar'
 import TopBar from './containers/TopBar/TopBar'
@@ -9,6 +10,7 @@ import { auth } from './firebase/config'
 import useGenerateContent from './hooks/useGenerateContent'
 import { AIProvider } from './model/ui'
 import { useMicioStore } from './store'
+import { getApisConfig } from './utils/localStorage'
 
 
 const App = () => {
@@ -21,29 +23,63 @@ const App = () => {
 
   const {
     user: {
+      loggedUser,
       actions: { setUser },
     },
+    chat: {
+      apisConfig,
+      actions: { setApisConfig },
+    },
+    ui: {
+      configModalOpen,
+      actions: { openConfigModal },
+    },
+
   } = useMicioStore()
 
-  const handleInitCasualModel = useCallback(() => {
-    if (process.env.GOOGLE_GEMINI_KEY) {
+  const handleInitCasualModel = useCallback((config: Record<AIProvider, string>) => {
+    if (config[AIProvider.GEMINI]) {
       changeModel({ name: 'gemini-2.0-flash', provider: AIProvider.GEMINI })
-    } else if (process.env.MISTRAL_KEY) {
+    } else if (config[AIProvider.MISTRAL]) {
       changeModel({ name: 'mistral-small-latest', provider: AIProvider.MISTRAL })
-    } else if (process.env.DEEPSEEK_KEY) {
+    } else if (config[AIProvider.DEEPSEEK]) {
       changeModel({ name: 'deepseek-chat', provider: AIProvider.DEEPSEEK })
+    } else if (config[AIProvider.OPENAI]) {
+      changeModel({ name: 'gpt-4', provider: AIProvider.DEEPSEEK })
     } 
   }, [])
 
   useEffect(() => {
-    handleInitCasualModel()
-  }, [handleInitCasualModel])
+    if (apisConfig) {
+      handleInitCasualModel(apisConfig)
+    }
+  }, [apisConfig, handleInitCasualModel])
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       if(user) setUser(user)
     })
   }, [setUser])
+
+   useEffect(() => {
+      const loadApis = async () => {
+        try {
+          if(loggedUser && !apisConfig) {
+            const apisConfig = await getApisConfig()
+            console.log('APIS CONFIG', apisConfig)
+            if(apisConfig) setApisConfig(apisConfig)
+            else openConfigModal()
+          }
+        } catch (error) {
+          console.error('Error loading apis:', error)
+        } finally {
+          //TODO 
+        }
+      }
+  
+      loadApis()
+   }, [loggedUser, apisConfig, setApisConfig, openConfigModal])
+  
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -54,6 +90,7 @@ const App = () => {
           <TopBar />
         </Header>
         <Content>
+          {configModalOpen && <ApiConfigModal />}
           <Chat />
         </Content>
         <Footer style={{ textAlign: 'center' }}>

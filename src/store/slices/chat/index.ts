@@ -9,7 +9,8 @@ const chatInitialValues: DefaultChatValues = {
   currentChat: null,
   selectedModel: null, 
   chatUid: null,
-  chatList: {}
+  chatList: {},
+  apisConfig: null
 }
 
 export const chat = lens<ChatStoreSlice, Store>((set, get, state) => ({
@@ -100,6 +101,11 @@ export const chat = lens<ChatStoreSlice, Store>((set, get, state) => ({
         if (draft.chatList) {
           delete draft.chatList[chatId]
         }
+      })
+    },
+    setApisConfig: (apisConfig) => {
+      set((draft) => {
+        draft.apisConfig = apisConfig
       })
     },
     reset: () => {
