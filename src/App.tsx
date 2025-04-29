@@ -37,19 +37,23 @@ const App = () => {
 
   } = useMicioStore()
 
-  const handleInitCasualModel = useCallback(() => {
-    if (process.env.GOOGLE_GEMINI_KEY) {
+  const handleInitCasualModel = useCallback((config: Record<AIProvider, string>) => {
+    if (config[AIProvider.GEMINI]) {
       changeModel({ name: 'gemini-2.0-flash', provider: AIProvider.GEMINI })
-    } else if (process.env.MISTRAL_KEY) {
+    } else if (config[AIProvider.MISTRAL]) {
       changeModel({ name: 'mistral-small-latest', provider: AIProvider.MISTRAL })
-    } else if (process.env.DEEPSEEK_KEY) {
+    } else if (config[AIProvider.DEEPSEEK]) {
       changeModel({ name: 'deepseek-chat', provider: AIProvider.DEEPSEEK })
+    } else if (config[AIProvider.OPENAI]) {
+      changeModel({ name: 'gpt-4', provider: AIProvider.DEEPSEEK })
     } 
   }, [])
 
   useEffect(() => {
-    handleInitCasualModel()
-  }, [handleInitCasualModel])
+    if (apisConfig) {
+      handleInitCasualModel(apisConfig)
+    }
+  }, [apisConfig, handleInitCasualModel])
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
