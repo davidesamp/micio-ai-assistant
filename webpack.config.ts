@@ -11,11 +11,11 @@ type ConfigBuilder = (
     argv: { mode: 'production' | 'development' | 'none' | undefined }
 ) => Configuration
 
-const config: ConfigBuilder = (_, _1) => {
-    // const isProduction = argv.mode === 'production'
+const config: ConfigBuilder = (_, argv) => {
+    const isProduction = argv.mode === 'production'
 
     return {
-        mode: "development",
+        mode: argv.mode,
         entry: "./src/index.tsx",
         devtool: "source-map", //TODO remove this in production
         output: {
@@ -82,7 +82,7 @@ const config: ConfigBuilder = (_, _1) => {
         },
         plugins: [
             // initialize plugin to load env variables
-            new Dotenv({ path: '.env' }) as unknown as WebpackPluginInstance,
+            ...!isProduction ? [new Dotenv({ path: '.env' }) as unknown as WebpackPluginInstance] : [],
             new HtmlWebpackPlugin({
                 template: "./public/index.ejs",
             }),
