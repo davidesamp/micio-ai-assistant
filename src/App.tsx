@@ -10,6 +10,7 @@ import { auth } from './firebase/config'
 import useGenerateContent from './hooks/useGenerateContent'
 import { AIProvider } from './model/ui'
 import { useMicioStore } from './store'
+import { ModelsList } from './utils/constants'
 import { getApisConfig } from './utils/localStorage'
 
 
@@ -38,14 +39,18 @@ const App = () => {
   } = useMicioStore()
 
   const handleInitCasualModel = useCallback((config: Record<AIProvider, string>) => {
-    if (config[AIProvider.GEMINI]) {
-      changeModel({ name: 'gemini-2.0-flash', provider: AIProvider.GEMINI })
-    } else if (config[AIProvider.MISTRAL]) {
-      changeModel({ name: 'mistral-small-latest', provider: AIProvider.MISTRAL })
-    } else if (config[AIProvider.DEEPSEEK]) {
-      changeModel({ name: 'deepseek-chat', provider: AIProvider.DEEPSEEK })
-    } else if (config[AIProvider.OPENAI]) {
-      changeModel({ name: 'gpt-4', provider: AIProvider.DEEPSEEK })
+    const geminiDefault = ModelsList.find(model => model.name === 'gemini-2.0-flash')
+    const mistralDefault = ModelsList.find(model => model.name === 'mistral-small-latest')
+    const openAiDefault = ModelsList.find(model => model.name === 'gpt-4')
+    const deepSeekDefault = ModelsList.find(model => model.name === 'deepseek-chat')
+    if (config[AIProvider.GEMINI] && geminiDefault) {
+      changeModel(geminiDefault)
+    } else if (config[AIProvider.MISTRAL] && mistralDefault) {
+      changeModel(mistralDefault)
+    } else if (config[AIProvider.DEEPSEEK] && deepSeekDefault) {
+      changeModel(deepSeekDefault)
+    } else if (config[AIProvider.OPENAI] && openAiDefault) {
+      changeModel(openAiDefault)
     } 
   }, [])
 

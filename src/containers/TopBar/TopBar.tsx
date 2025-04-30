@@ -5,6 +5,7 @@ import { Button, Popover } from 'antd'
 import { Typography } from 'antd'
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth'
 import React from 'react'
+import { iconsProviderMapping } from '../Sidebar/iconsProviderMapping'
 import styles from './TopBar.module.scss'
 import { ModelsPopover } from '@/components/ModelsPopover/ModelsPopover'
 import { UserThumbnail } from '@/components/UserThumbnail/UserThumbnail'
@@ -66,12 +67,11 @@ const TopBar = () => {
           trigger="click" 
           showArrow={false}>
           <div className={styles.SettingsContainer}>
-            <div>
-              <SettingOutlined />
-            </div>
+            <SettingOutlined className={styles.SettingsIcon} />
             <Title level={5} className={styles.ProviderTitle}>
-              {selectedModel?.name || 'Select a model'}
+              {selectedModel?.displayName || 'Select a model'}
             </Title>
+            {selectedModel && iconsProviderMapping[selectedModel.provider]?.icon}
           </div>
         </Popover>
       )}
