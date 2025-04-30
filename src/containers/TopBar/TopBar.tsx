@@ -3,15 +3,12 @@ import {
 } from '@ant-design/icons'
 import { Button, Popover } from 'antd'
 import { Typography } from 'antd'
-import cx from 'classnames'
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth'
 import React from 'react'
 import styles from './TopBar.module.scss'
+import { ModelsPopover } from '@/components/ModelsPopover/ModelsPopover'
 import { UserThumbnail } from '@/components/UserThumbnail/UserThumbnail'
-import useGenerateContent from '@/hooks/useGenerateContent'
-import { AIProvider } from '@/model/ui'
 import { useMicioStore } from '@/store'
-import {  ModelsList } from '@/utils/constants'
 
 
 const TopBar = () => {
@@ -31,24 +28,10 @@ const TopBar = () => {
     },
   } = useMicioStore()
 
-  const { changeModel } = useGenerateContent()
-
   const { Title } = Typography
 
   const auth = getAuth()
   const provider = new GoogleAuthProvider()
-
-  const getModelsListByProvider = (provider: AIProvider) => {
-    const models = ModelsList.filter((model) => model.provider === provider)
-    return models.map((model) => (
-      <p 
-        onClick={() => changeModel(model)} 
-        className={cx(styles.PopoverItem, {[styles.Selected]: selectedModel?.name === model.name})} 
-        key={model.name}>
-          {model.name}
-      </p>
-    ))
-  }
 
   const handleSignIn = async () => {
     try {
@@ -73,32 +56,15 @@ const TopBar = () => {
     openConfigModal()
   }
 
-  const popoverContent = (
-    <div className={styles.PopoverContent}>
-      <Title level={4}>Gemini</Title>
-      <div>
-        {getModelsListByProvider(AIProvider.GEMINI)}
-      </div>
-      <Title level={4}>OpenAI</Title>
-      <div>
-        {getModelsListByProvider(AIProvider.OPENAI)}
-      </div>
-      <Title level={4}>DeepSeek</Title>
-      <div>
-        {getModelsListByProvider(AIProvider.DEEPSEEK)}
-      </div>
-      <Title level={4}>Mistral</Title>
-      <div>
-        {getModelsListByProvider(AIProvider.MISTRAL)}
-      </div>
-    </div>
-  )
-
   return (
     <div className={styles.Container}>
      
       {currentAiProvider && (
-        <Popover placement="bottomLeft" content={popoverContent} trigger="click" showArrow={false}>
+        <Popover 
+          placement="bottomLeft" 
+          content={<ModelsPopover />} 
+          trigger="click" 
+          showArrow={false}>
           <div className={styles.SettingsContainer}>
             <div>
               <SettingOutlined />

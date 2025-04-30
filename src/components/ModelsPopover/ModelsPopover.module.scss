@@ -1,0 +1,38 @@
+.PopoverContent {
+  display: flex;
+  width: 400px;
+  max-height: 300px;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 1.5rem;
+  overflow-y: auto;
+
+  h3 {
+    margin: 0;
+  }
+
+  .ProviderGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .PopoverItem {
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #f0f0f0;
+      color: black;
+    }
+  }
+
+  .Selected {
+    border: 1px solid #1677ff;
+    background-color: #e6f4ff;
+    color: black;
+    font-weight: 600
+  }
+}

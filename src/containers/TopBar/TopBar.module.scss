@@ -24,27 +24,3 @@
     gap: 1rem;
   }
 }
-
-.PopoverContent {
-  display: flex;
-  width: 400px;
-  max-height: 250px;
-  flex-direction: column;
-  padding: 1rem;
-  gap: 1rem;
-  overflow-y: auto;
-
-  .PopoverItem {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-
-    &:hover {
-      background-color: #626161;
-    }
-  }
-
-  .Selected {
-    background-color: #626161;
-  }
-}
