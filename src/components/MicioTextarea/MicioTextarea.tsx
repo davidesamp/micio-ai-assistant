@@ -24,41 +24,52 @@ export const MicioTextarea = ({
   const inputFileRef = useRef<HTMLInputElement>(null)
 
   const handleLoadFile = () => {
-    if (inputFileRef.current) {
-      inputFileRef.current.click()
-    }
+    inputFileRef.current?.click()
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     onChange(e.target.value)
   }
 
-   const handleKeyDown = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-      if (event.key === 'Enter' && !event.shiftKey) {
-        event.preventDefault()
-        onSend()
-      }
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault()
+      onSend()
     }
+  }
 
   return (
     <div className={styles.Container}>
-      <Button className={styles.LeftButton} onClick={handleLoadFile} icon={<PlusOutlined />} />
-      <input accept="image/*" ref={inputFileRef} type="file" className={styles.FileInput} onChange={onFileChange} />
-      <TextArea
-        ref={textAreaRef}
-        className={styles.TextArea}
-        value={statement}
-        onChange={handleChange}
-        onPressEnter={handleKeyDown}
-        autoSize={{ minRows: 2, maxRows: 18 }} // Auto-expands but limits height
-        placeholder="Ask something"
+      <input
+        accept="image/*"
+        ref={inputFileRef}
+        type="file"
+        className={styles.FileInput}
+        onChange={onFileChange}
       />
-      <Button
-        className={styles.RightButton}
-        icon={<SendOutlined />}
-        onClick={onSend}
-      />
+      <div className={styles.InputWrapper}>
+        <Button
+          className={`${styles.IconButton} ${styles.LeftButton}`}
+          icon={<PlusOutlined />}
+          onClick={handleLoadFile}
+        />
+        <TextArea
+          ref={textAreaRef}
+          className={styles.TextArea}
+          value={statement}
+          onChange={handleChange}
+          onPressEnter={handleKeyDown}
+          autoSize={{ minRows: 2, maxRows: 18 }}
+          placeholder="Ask something ..."
+        />
+        <Button
+          className={`${styles.IconButton} ${styles.RightButton}`}
+          icon={<SendOutlined />}
+          onClick={onSend}
+        />
+      </div>
     </div>
   )
 }
+
 

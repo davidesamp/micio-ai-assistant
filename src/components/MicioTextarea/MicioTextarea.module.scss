@@ -1,37 +1,44 @@
 .Container {
   position: relative;
   width: 100%;
+  padding: 1rem 0;
+}
 
-  .LeftButton,
-  .RightButton {
+.InputWrapper {
+  position: relative;
+  width: 100%;
+
+  .TextArea {
+    width: 100%;
+    padding: 0.75rem 3rem; // space for icons
+    resize: none;
+  }
+
+  .IconButton {
     position: absolute;
-    z-index: 2;
+    z-index: 1;
     top: 50%;
     border: none;
     background: transparent;
     color: #888;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 18px;
     transform: translateY(-50%);
+
+    &:hover {
+      color: #1677ff; // Ant Design primary
+    }
   }
 
   .LeftButton {
-    left: 14%;
+    left: 0.75rem;
   }
 
   .RightButton {
-    right: 10%;
+    right: 0.75rem;
   }
+}
 
-  .FileInput {
-    visibility: hidden;
-  }
-
-  .TextArea {
-    width: 80%;
-    padding: 1rem 0 1rem 4rem;
-    margin: 0 10rem 2rem;
-
-  }
-
+.FileInput {
+  display: none;
 }
