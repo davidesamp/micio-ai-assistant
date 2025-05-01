@@ -1,12 +1,12 @@
+import { CopyOutlined } from '@ant-design/icons'
 import { theme, List, Card } from 'antd'
-import { Typography } from 'antd'
 import cx from 'classnames'
 import React, { useEffect, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism'
+import { useCopyToClipboard } from 'usehooks-ts'
 import { v4 as uuidv4 } from 'uuid'
-import PlaceholderImage from '../../icons/micio-ai-pink.png'
 import { useMicioStore } from '../../store'
 import styles from './Chat.module.scss'
 import { FilePreviewContainer } from '@/components/FilePreviewContainer/FilePreviewContainer'
@@ -26,13 +26,11 @@ const Chat = () => {
   const { 
     chat: { 
       messages,
-    },
-    ui: { 
-      currentAiProvider,
+      currentMessageCreatingUid,
     },
   } = useMicioStore()
 
-  const { Title } = Typography
+  const [, copy] = useCopyToClipboard()
 
   const { isGenerating, generate } = useGenerateContent()
   
@@ -79,21 +77,30 @@ const Chat = () => {
     setUploadedFiles((prevFiles) => prevFiles.filter((file) => file.uid !== uid))
   }
 
+  const handleCopy = async (code: string) => {
+    const success = await copy(code)
+    console.log('Copied to clipboard:', success)
+  }
+
   const cardBodyUI = (content: Message) => content.type === ContentTypes.TEXT ? (
     <ReactMarkdown
       children={content.message}
       components={{
         code({ node, className, children, ...props }) {
           const match = /language-(\w+)/.exec(className || '')
+          const code = String(children).replace(/\n$/, '')
           return  match ? (
-            // @ts-ignore
-            <SyntaxHighlighter
-              {...props}
-              language={match[1]}
-              style={dark}
-            >
-              {String(content.message).replace(/\n$/, '')}
-            </SyntaxHighlighter>
+            <div className={styles.CodeBlock}>
+              <CopyOutlined onClick={() => handleCopy(code)}/>
+              {/* @ts-ignore */}
+              <SyntaxHighlighter
+                {...props}
+                language={match[1]}
+                style={dark}
+              >
+                {String(content.message).replace(/\n$/, '')}
+              </SyntaxHighlighter>
+            </div>
           ) : (
             <code className={className} {...props}>
               {children}
@@ -112,7 +119,7 @@ const Chat = () => {
     </div>
   ))
 
-  return currentAiProvider ? (
+  return (
     <div
       style={{        
         background: colorBgContainer,
@@ -123,14 +130,15 @@ const Chat = () => {
       <List
         className={styles.ListContainer}
         dataSource={messages}
+        locale={{ emptyText: <div></div> }}
         renderItem={msg => (
           <div className={styles.ListItemContainer}>
-            {isGenerating && msg.sender === 'model' && (
+            {isGenerating && msg.sender === 'model' && msg.id === currentMessageCreatingUid && (
               <div className={styles.LoaderContainer}>
                 <CatLogoSpin />
               </div>
             )}
-            {!isGenerating && msg.sender === 'model' && (
+            {msg.sender === 'model' && msg.id !== currentMessageCreatingUid && (
               <CatLogo className={styles.CatLogo} />
             )}
             <List.Item 
@@ -170,12 +178,7 @@ const Chat = () => {
           onFileChange={handleFileChange}
         />
       </div>
-    </div> ) : (
-    <div className={styles.EmptyStateContainer}>
-      <img src={PlaceholderImage} alt="Micio" />
-      <Title level={3}>Select an AI provider to start chatting</Title>
-    </div>
-  )
+    </div> )
 }
 
 export default Chat
