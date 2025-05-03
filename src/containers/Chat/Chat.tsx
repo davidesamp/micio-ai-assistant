@@ -1,15 +1,10 @@
-import { CopyOutlined } from '@ant-design/icons'
-import { theme, List, Card, message } from 'antd'
+import { theme, List, Card } from 'antd'
 import cx from 'classnames'
-import React, { ReactNode, useEffect, useRef, useState } from 'react'
-import ReactMarkdown from 'react-markdown'
-import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter'
-import jsx from 'react-syntax-highlighter/dist/esm/languages/prism/jsx'
-import { dark } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { useCopyToClipboard } from 'usehooks-ts'
+import React, { useEffect, useRef, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { useMicioStore } from '../../store'
 import styles from './Chat.module.scss'
+import { CodeViewer } from '@/components/CodeViewer/CodeViewer'
 import { FilePreviewContainer } from '@/components/FilePreviewContainer/FilePreviewContainer'
 import ImageRenderer from '@/components/ImageRenderer/ImageRenderer'
 import { MicioTextarea } from '@/components/MicioTextarea/MicioTextarea'
@@ -32,14 +27,9 @@ const Chat = () => {
     },
   } = useMicioStore()
 
-  const [, copy] = useCopyToClipboard()
-
   const { isGenerating, generate } = useGenerateContent()
-  
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
   const [localIsGenerating, setLocalIsGenerating] = useState(isGenerating)
-
-  const [messageApi, contextHolder] = message.useMessage()
 
   const [statement, setStatement] = useState('')
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
@@ -57,9 +47,6 @@ const Chat = () => {
     }
   }, [isGenerating, localIsGenerating])
 
-  useEffect(() => {
-    SyntaxHighlighter.registerLanguage('jsx', jsx)
-  }, [])
 
   const handleSend = () => {
     generate(statement, uploadedFiles)
@@ -85,39 +72,8 @@ const Chat = () => {
     setUploadedFiles((prevFiles) => prevFiles.filter((file) => file.uid !== uid))
   }
 
-  const handleCopy = async (children: ReactNode) => {
-    const code = String(children).replace(/\n$/, '')
-    const success = await copy(code)
-    if (success) messageApi.success('copied!')
-    else messageApi.error('failed to copy')
-  }
-
   const cardBodyUI = (content: Message) => content.type === ContentTypes.TEXT ? (
-    <ReactMarkdown
-      children={content.message}
-      components={{
-        code({ node, className, children, ...props }) {
-          const match = /language-(\w+)/.exec(className || '')
-          return  match ? (
-            <div className={styles.CodeBlock}>
-              <CopyOutlined onClick={() => handleCopy(children)} />
-              {/* @ts-ignore */}
-              <SyntaxHighlighter
-                {...props}
-                language={match[1]}
-                style={dark}
-              >
-                {String(content.message).replace(/\n$/, '')}
-              </SyntaxHighlighter>
-            </div>
-          ) : (
-            <code className={className} {...props}>
-              {children}
-            </code>
-          )
-        },
-      }}
-    />
+    <CodeViewer message={content.message} />
   ): (
       <ImageRenderer imageDataBase64={content.message}/>
   )
@@ -136,7 +92,6 @@ const Chat = () => {
       }}
       className={styles.Container}
     >
-      {contextHolder}
       <List
         className={styles.ListContainer}
         dataSource={messages}
@@ -145,7 +100,7 @@ const Chat = () => {
           <div className={styles.ListItemContainer}>
             {isGenerating && msg.sender === 'model' && msg.id === currentMessageCreatingUid && (
               <div className={styles.LoaderContainer}>
-                <CatLogoSpin />
+                <CatLogoSpin className={styles.CatLogo} />
               </div>
             )}
             {msg.sender === 'model' && msg.id !== currentMessageCreatingUid && (

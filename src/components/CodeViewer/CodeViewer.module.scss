@@ -1,0 +1,11 @@
+ .CodeBlock {
+   display: flex;
+   flex-direction: column;
+
+   svg {
+     width: 1.5rem;
+     height: 1.5rem;
+     margin-left: auto;
+     cursor: pointer;
+   }
+ }

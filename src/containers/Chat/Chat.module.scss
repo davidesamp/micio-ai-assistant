@@ -21,16 +21,12 @@
         display: flex;
     
         .CatLogo {
-          margin-top: 1rem;
-        }
-    
-        svg {
           width: 3rem;
           height: 3rem;
-          animation: rotate 1s linear infinite;
+          margin-top: 1rem;
           fill: white;
         }
-    
+  
         circle {
           stroke: white;
         }
@@ -59,18 +55,6 @@
             img {
               width: 5rem;
               height: 8rem;
-            }
-          }
-
-          .CodeBlock {
-            display: flex;
-            flex-direction: column;
-
-            svg {
-              width: 1.5rem;
-              height: 1.5rem;
-              margin-left: auto;
-              cursor: pointer;
             }
           }
         }
