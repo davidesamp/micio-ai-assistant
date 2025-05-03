@@ -10,7 +10,8 @@ const chatInitialValues: DefaultChatValues = {
   selectedModel: null, 
   chatUid: null,
   chatList: {},
-  apisConfig: null
+  apisConfig: null,
+  currentMessageCreatingUid: null,
 }
 
 export const chat = lens<ChatStoreSlice, Store>((set, get, state) => ({
@@ -22,6 +23,10 @@ export const chat = lens<ChatStoreSlice, Store>((set, get, state) => ({
       const selectedModel = get().selectedModel
       const chatUid = get().chatUid
       const loggedUser = state.getState().user.loggedUser
+
+      set((draft) => {
+        draft.currentMessageCreatingUid = passedMessage.id
+      })
 
       if (findMessage) {
         let currentText = findMessage.message

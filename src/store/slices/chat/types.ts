@@ -31,6 +31,7 @@ export interface DefaultChatValues {
   chatUid: string | null
   chatList: Record<string, MicioChat>
   apisConfig: Record<AIProvider, string> | null
+  currentMessageCreatingUid: string | null
 }
 
 export interface ChatStoreSlice extends DefaultChatValues {
