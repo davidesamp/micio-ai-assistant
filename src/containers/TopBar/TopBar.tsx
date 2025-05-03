@@ -16,6 +16,7 @@ const TopBar = () => {
   const {
     chat: {
       selectedModel,
+      apisConfig,
     },
     user: {
       loggedUser
@@ -57,13 +58,14 @@ const TopBar = () => {
     openConfigModal()
   }
 
+  console.log('apisConfig', apisConfig)
+
   return (
     <div className={styles.Container}>
-     
-      {currentAiProvider && (
+      {currentAiProvider && apisConfig && (
         <Popover 
           placement="bottomLeft" 
-          content={<ModelsPopover />} 
+          content={<ModelsPopover activeApisConfig={apisConfig}/>} 
           trigger="click" 
           showArrow={false}>
           <div className={styles.SettingsContainer}>
