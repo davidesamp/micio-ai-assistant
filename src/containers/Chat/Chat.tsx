@@ -87,7 +87,7 @@ const Chat = () => {
     const code = String(children).replace(/\n$/, '')
     const success = await copy(code)
     if (success) messageApi.success('copied!')
-    else message.error('failed to copy')
+    else messageApi.error('failed to copy')
   }
 
   const cardBodyUI = (content: Message) => content.type === ContentTypes.TEXT ? (
