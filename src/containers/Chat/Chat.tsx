@@ -34,8 +34,6 @@ const Chat = () => {
 
   const [, copy] = useCopyToClipboard()
 
-  SyntaxHighlighter.registerLanguage('jsx', jsx)
-
   const { isGenerating, generate } = useGenerateContent()
   
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([])
@@ -58,6 +56,10 @@ const Chat = () => {
       scrollToBottom()
     }
   }, [isGenerating, localIsGenerating])
+
+  useEffect(() => {
+    SyntaxHighlighter.registerLanguage('jsx', jsx)
+  }, [])
 
   const handleSend = () => {
     generate(statement, uploadedFiles)
