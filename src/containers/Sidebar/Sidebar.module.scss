@@ -29,7 +29,7 @@
 }
 
 .Menu {
-  height: 80%;
+  height: 70%;
   overflow-y: auto;
 
   svg {
@@ -38,17 +38,21 @@
     }
 
   .MenuItem {
-    overflow: hidden;
-    width: calc(100% - 2rem);
+    display: flex;
+    width: calc(100%);
     align-items: center;
     justify-content: space-between;
     padding-right: 0.5rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
    
 
+    .Label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     .DeleteButton {
+      margin-left: auto;
       opacity: 0;
       transition: opacity 0.2s;
     }

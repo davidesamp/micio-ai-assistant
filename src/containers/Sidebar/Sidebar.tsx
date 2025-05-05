@@ -76,7 +76,7 @@ const Sidebar = () => {
       children,
       label: (
         <div className={styles.MenuItem}>
-          <span>{label}</span>
+          <span className={styles.Label}>{label}</span>
           <Popconfirm
             title="Delete chat"
             description="Are you sure you want to delete this chat?"
@@ -134,7 +134,6 @@ const Sidebar = () => {
   }
 
   const siderStyle: React.CSSProperties = {
-    overflow: 'auto',
     height: '100vh',
     position: 'sticky',
     insetInlineStart: 0,
