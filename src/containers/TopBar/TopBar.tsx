@@ -1,5 +1,5 @@
 import {
-  SettingOutlined,
+  BulbOutlined,
 } from '@ant-design/icons'
 import { Button, Popover } from 'antd'
 import { Typography } from 'antd'
@@ -58,8 +58,6 @@ const TopBar = () => {
     openConfigModal()
   }
 
-  console.log('apisConfig', apisConfig)
-
   return (
     <div className={styles.Container}>
       {currentAiProvider && apisConfig && (
@@ -69,7 +67,7 @@ const TopBar = () => {
           trigger="click" 
           showArrow={false}>
           <div className={styles.SettingsContainer}>
-            <SettingOutlined className={styles.SettingsIcon} />
+            <BulbOutlined className={styles.SettingsIcon} />
             <Title level={5} className={styles.ProviderTitle}>
               {selectedModel?.displayName || 'Select a model'}
             </Title>

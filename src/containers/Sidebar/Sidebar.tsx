@@ -10,8 +10,8 @@ import styles from './Sidebar.module.scss'
 import { iconsProviderMapping } from './iconsProviderMapping'
 import { db } from '@/firebase/config'
 import useGenerateContent from '@/hooks/useGenerateContent'
+import { getChatHistory, getChatList } from '@/services/dataMiddleware'
 import { useMicioStore } from '@/store'
-import { getChatHistory, getChatList } from '@/utils/localStorage'
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false)

@@ -9,9 +9,9 @@ import TopBar from './containers/TopBar/TopBar'
 import { auth } from './firebase/config'
 import useGenerateContent from './hooks/useGenerateContent'
 import { AIProvider } from './model/ui'
+import { getApisConfig } from './services/dataMiddleware'
 import { useMicioStore } from './store'
 import { ModelsList } from './utils/constants'
-import { getApisConfig } from './utils/localStorage'
 
 
 const App = () => {
