@@ -97,11 +97,13 @@ const Sidebar = () => {
     } as MenuItem
   }
 
-  const items: MenuItem[] = Object.keys(chatList).map(key => getItem(
-    chatList[key].messages[0].message, //The first message is the name of the chat
-    key,
-    iconsProviderMapping[chatList[key].model.provider]?.icon || <UserOutlined />,
-  ))
+  const items: MenuItem[] = Object.keys(chatList)
+    .sort((a, b) => chatList[b].createdAt - chatList[a].createdAt) // Sort by createdAt descending
+    .map(key => getItem(
+      chatList[key].messages[0].message, // The first message is the name of the chat
+      key,
+      iconsProviderMapping[chatList[key].model.provider]?.icon || <UserOutlined />,
+    ))
 
   const handleNewChat = () => {
     console.log('New chat button clicked')
@@ -142,7 +144,6 @@ const Sidebar = () => {
     scrollbarWidth: 'thin',
     scrollbarGutter: 'stable',
   }
-
 
   return (
     <Sider 
