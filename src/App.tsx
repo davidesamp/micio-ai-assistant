@@ -1,7 +1,7 @@
-import { Layout, theme } from 'antd'
+import { Layout, Spin, theme } from 'antd'
 import { onAuthStateChanged } from 'firebase/auth'
 import React, { useCallback, useEffect } from 'react'
-import './App.scss'
+import styles from './App.module.scss'
 import { ApiConfigModal } from './components/ApiConfigModal/ApiConfigModal'
 import Chat from './containers/Chat/Chat'
 import Sidebar from './containers/Sidebar/Sidebar'
@@ -20,11 +20,12 @@ const App = () => {
     token: { colorBgContainer },
   } = theme.useToken()
 
+  const [checkedUser, setCheckedUser] = React.useState(false)
+
   const { changeModel } = useGenerateContent()
 
   const {
     user: {
-      loggedUser,
       actions: { setUser },
     },
     chat: {
@@ -62,14 +63,22 @@ const App = () => {
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
-      if(user) setUser(user)
-    })
+      if(user) {
+        setUser(user)
+        
+      }
+      setCheckedUser(true)
+    }, (error) => {
+      setCheckedUser(true)
+      console.error('Error loading user: ', error)
+    }
+  )
   }, [setUser])
 
    useEffect(() => {
       const loadApis = async () => {
         try {
-          if(loggedUser && !apisConfig) {
+          if(checkedUser && !apisConfig) {
             const apisConfig = await getApisConfig()
             console.log('APIS CONFIG', apisConfig)
             if(apisConfig) setApisConfig(apisConfig)
@@ -83,7 +92,7 @@ const App = () => {
       }
   
       loadApis()
-   }, [loggedUser, apisConfig, setApisConfig, openConfigModal])
+   }, [checkedUser, apisConfig, setApisConfig, openConfigModal])
   
 
   return (
@@ -96,7 +105,8 @@ const App = () => {
         </Header>
         <Content>
           {configModalOpen && <ApiConfigModal />}
-          <Chat />
+          {!checkedUser && <Spin className={styles.Spin} size="large" />}
+          <Chat/>
         </Content>
         <Footer style={{ textAlign: 'center' }}>
           Micio AI ©{new Date().getFullYear()} Created by davidesamp
