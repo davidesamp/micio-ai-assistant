@@ -62,7 +62,7 @@ export const transferChats = async () => {
     for (const key in localStorageChats) {
       if (localStorageChats[key]) {
         localStorageChats[key].userId = auth.currentUser?.uid || localStorageChats[key].userId
-        saveChat(localStorageChats[key].model, localStorageChats[key].messages, key)
+        await saveChat(localStorageChats[key].model, localStorageChats[key].messages, key)
       }
     }
 
