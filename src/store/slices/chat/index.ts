@@ -1,4 +1,5 @@
 import { lens } from '@dhmk/zustand-lens'
+import { v4 as uuidv4 } from 'uuid'
 import { ChatStoreSlice, DefaultChatValues } from './types'
 import { MicioChat } from '@/model/chat'
 import { setChatHistory } from '@/services/dataMiddleware'
@@ -38,12 +39,12 @@ export const chat = lens<ChatStoreSlice, Store>((set, get, state) => ({
           draft.messages = updatedMessages
         })
 
-        if (passedMessage.isLastPart && selectedModel && chatUid && loggedUser) {
+        if (passedMessage.isLastPart && selectedModel && chatUid) {
           const chat: MicioChat = {
             uuid: chatUid,
             model: selectedModel,
             messages: updatedMessages,
-            userId: loggedUser.uid,
+            userId: loggedUser ? loggedUser.uid : uuidv4(),
             createdAt: new Date()
           }
           setChatHistory(selectedModel, updatedMessages, chatUid)
@@ -55,12 +56,12 @@ export const chat = lens<ChatStoreSlice, Store>((set, get, state) => ({
           draft.messages = newList
         })
 
-        if (selectedModel && chatUid && loggedUser) {
+        if (selectedModel && chatUid) {
           const chat: MicioChat = {
             uuid: chatUid,
             model: selectedModel,
             messages: newList,
-            userId: loggedUser.uid,
+            userId: loggedUser ? loggedUser.uid : uuidv4(),
             createdAt: new Date()
           }
           setChatHistory(selectedModel, newList, chatUid)

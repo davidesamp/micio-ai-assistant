@@ -31,12 +31,10 @@ const Sidebar = () => {
   useEffect(() => {
     const loadChats = async () => {
       try {
-        if(loggedUser) {
-          const chatList = await getChatList()
-          Object.values(chatList).forEach(chat => {
-            updateChatList(chat)
-          })
-        }
+        const chatList = await getChatList()
+        Object.values(chatList).forEach(chat => {
+          updateChatList(chat)
+        })
       } catch (error) {
         console.error('Error loading chats:', error)
       } finally {
