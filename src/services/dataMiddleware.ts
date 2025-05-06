@@ -52,3 +52,20 @@ export const deleteChat = async (chatUid: string) => {
   if (!auth.currentUser) return deleteLocalStorageChat(chatUid)
   else return await deleteFirebaseChat(chatUid)
 }
+
+/*
+ * Transfer chats from local storage to firebase
+ */
+export const transferChats = async () => {
+  if (auth.currentUser) {
+    const localStoreageChats = await getLocalStorageChatList()
+    for (const key in localStoreageChats) {
+      if (localStoreageChats[key]) {
+        localStoreageChats[key].userId = auth.currentUser?.uid || localStoreageChats[key].userId
+        saveChat(localStoreageChats[key].model, localStoreageChats[key].messages, key)
+      }
+    }
+
+    localStorage.clear()
+  }
+}

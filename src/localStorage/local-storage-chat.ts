@@ -33,11 +33,11 @@ const saveChats = (chats: Record<string, MicioChat>) => {
 /**
  * Save a chat to localStorage by UUID
  */
-export async function saveChat(
+export const saveChat = async(
   model: Model,
   messages: Message[],
   chatUid: string
-): Promise<void> {
+): Promise<void> => {
   const chats = loadChats()
 
   const chat: MicioChat = {
@@ -55,9 +55,9 @@ export async function saveChat(
 /**
  * Retrieve a single chat by UUID from localStorage
  */
-export async function getChat(
+export const getChat = async (
   chatUid: string
-): Promise<MicioChat | null> {
+): Promise<MicioChat | null> => {
   const chats = loadChats()
   return chats[chatUid] || null
 }
@@ -65,7 +65,7 @@ export async function getChat(
 /**
  * Retrieve all chats stored in localStorage, ordered by createdAt desc
  */
-export async function getChatList(): Promise<Record<string, MicioChat>> {
+export const getChatList= async (): Promise<Record<string, MicioChat>> => {
   const chats = loadChats()
   // convert to array, sort, then back to record
   const sortedEntries = Object.entries(chats).sort(([, a], [, b]) => {
@@ -83,7 +83,7 @@ export async function getChatList(): Promise<Record<string, MicioChat>> {
 /**
  * Delete a chat by UUID from localStorage
  */
-export async function deleteChat(chatUid: string): Promise<void> {
+export const deleteChat = async (chatUid: string): Promise<void> => {
   const chats = loadChats()
   delete chats[chatUid]
   saveChats(chats)

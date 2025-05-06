@@ -9,6 +9,7 @@ import { iconsProviderMapping } from '../Sidebar/iconsProviderMapping'
 import styles from './TopBar.module.scss'
 import { ModelsPopover } from '@/components/ModelsPopover/ModelsPopover'
 import { UserThumbnail } from '@/components/UserThumbnail/UserThumbnail'
+import { transferChats } from '@/services/dataMiddleware'
 import { useMicioStore } from '@/store'
 
 
@@ -40,6 +41,7 @@ const TopBar = () => {
       const result = await signInWithPopup(auth, provider)
       const user = result.user
       console.log('User signed in:', user)
+      transferChats()
     } catch (error) {
       console.error('Sign-in error:', error)
     }
@@ -77,7 +79,13 @@ const TopBar = () => {
       )}
       <div className={styles.Right}>
         {!loggedUser && (
-          <Button onClick={handleSignIn}>Sign in</Button>
+            <Button 
+              onClick={handleSignIn} 
+              type="primary" 
+              className={styles.GoogleSignInButton}
+            >
+              Sign in with Google
+            </Button>
         )}
         {loggedUser && (
           <UserThumbnail 
