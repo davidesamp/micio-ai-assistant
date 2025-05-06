@@ -1,3 +1,4 @@
+import { auth } from '../firebase/config'
 import { 
   getApisConfig as getFirebaseApisConfig,
   saveApis as saveFirebaseApisConfig,
@@ -7,26 +8,39 @@ import {
   getChat, 
   getChatList as getFirebaseChatList,
 } from '@/firebase/chatService'
-
+import {
+  getApisConfig as getLocalStorageApisConfig,
+  saveApis as saveLocalStorageApisConfig,
+} from '@/localStorage/local-storage-api'
+import {
+  saveChat as saveLocalStorageChat,
+  getChat as getLocalStorageChat,
+  getChatList as getLocalStorageChatList,
+} from '@/localStorage/local-storage-chat'
 import { Model } from '@/model/ai'
 import { Message, MicioChat } from '@/model/chat'
 import { AIProvider } from '@/model/ui'
 
 export const setChatHistory = async (model: Model, messages: Message[], chatUid: string) => {
-  await saveChat(model, messages, chatUid)
+  if (!auth.currentUser) await saveLocalStorageChat(model, messages, chatUid)
+  else await saveChat(model, messages, chatUid)
 }
 
 export const getChatHistory = async (key: string): Promise<MicioChat | null> => {
-  return await getChat(key)
+  if (!auth.currentUser) return await getLocalStorageChat(key)
+  else return await getChat(key)
 }
 
 export const getChatList = async (): Promise<Record<string, MicioChat>> => {
-  return await getFirebaseChatList()
+  if (!auth.currentUser) return await getLocalStorageChatList()
+  else return await getFirebaseChatList()
 }
 
 export const getApisConfig = async (): Promise<Record<AIProvider, string> | null> => {
-  return await getFirebaseApisConfig()
+  if (!auth.currentUser) return await getLocalStorageApisConfig()
+  else return await getFirebaseApisConfig()
 }
 export const saveApisConfig = async (apiConfig: Record<AIProvider, string>) => {
-  return await saveFirebaseApisConfig(apiConfig)
+  if (!auth.currentUser) return await saveLocalStorageApisConfig(apiConfig)
+  else return await saveFirebaseApisConfig(apiConfig)
 }
