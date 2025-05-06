@@ -5,11 +5,14 @@ interface Actions {
   setAiProvider: (provider: AIProvider) => void
   openConfigModal: () => void
   closeConfigModal: () => void
+  openSettingsModal: () => void
+  closeSettingsModal: () => void
 }
 
 export interface DefaultUIValues {
   currentAiProvider: AIProvider | null
   configModalOpen: boolean
+  settingsModalOpen: boolean
 }
 
 export interface UIStoreSlice extends DefaultUIValues {

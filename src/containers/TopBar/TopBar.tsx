@@ -20,14 +20,14 @@ const TopBar = () => {
       apisConfig,
     },
     user: {
-      loggedUser
+      loggedUser,
     },
     global: {
       actions: { resetStore }
     },
     ui: { 
       currentAiProvider,
-      actions: { openConfigModal}
+      actions: { openConfigModal, openSettingsModal }
     },
   } = useMicioStore()
 
@@ -89,6 +89,7 @@ const TopBar = () => {
         )}
         {loggedUser && (
           <UserThumbnail 
+            onSettingsOpen={openSettingsModal}
             onApiKeysUpdate={handleOpenConfigModal}
             onLogout={handleSignOut}
             user={loggedUser} 

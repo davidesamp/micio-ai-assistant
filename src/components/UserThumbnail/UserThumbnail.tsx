@@ -8,11 +8,17 @@ import styles from './UserThumbnail.module.scss'
 interface UserThumbnailProps {
   user: User
   onApiKeysUpdate: () => void
+  onSettingsOpen: () => void
   onLogout: () => void
 }
 
-export const UserThumbnail = ({ user, onApiKeysUpdate, onLogout }: UserThumbnailProps) => {
+export const UserThumbnail = ({ user, onApiKeysUpdate, onSettingsOpen, onLogout }: UserThumbnailProps) => {
   const menuItems: MenuProps['items'] = [
+    {
+      key: 'Settings',
+      label: 'Settings',
+      onClick: onSettingsOpen,
+    },
     {
       key: 'api-keys',
       label: 'API Keys',

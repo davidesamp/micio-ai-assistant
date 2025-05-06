@@ -5,7 +5,8 @@ import { AIProvider } from '@/model/ui'
 
 const uiInitialValues: DefaultUIValues = {
   currentAiProvider: null,
-  configModalOpen: false
+  configModalOpen: false,
+  settingsModalOpen: false
 }
 
 export const ui = lens<UIStoreSlice, Store>(set => ({
@@ -24,6 +25,16 @@ export const ui = lens<UIStoreSlice, Store>(set => ({
     closeConfigModal: () => {
       set(draft => {
         draft.configModalOpen = false
+      })
+    },
+    openSettingsModal: () => {
+      set(draft => {
+        draft.settingsModalOpen = true
+      })
+    },
+    closeSettingsModal: () => {
+      set(draft => {
+        draft.settingsModalOpen = false
       })
     }
   }
