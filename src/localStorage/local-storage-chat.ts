@@ -7,7 +7,7 @@ const LOCAL_STORAGE_KEY = 'chats'
 /**
  * Helper to load all chats from localStorage
  */
-function loadChats(): Record<string, MicioChat> {
+const loadChats = (): Record<string, MicioChat> => {
   const raw = localStorage.getItem(LOCAL_STORAGE_KEY)
   if (!raw) return {}
 
@@ -22,7 +22,7 @@ function loadChats(): Record<string, MicioChat> {
 /**
  * Helper to persist all chats to localStorage
  */
-function saveChats(chats: Record<string, MicioChat>) {
+const saveChats = (chats: Record<string, MicioChat>) => {
   try {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(chats))
   } catch (err) {
@@ -78,4 +78,13 @@ export async function getChatList(): Promise<Record<string, MicioChat>> {
     acc[key] = chat
     return acc
   }, {} as Record<string, MicioChat>)
+}
+
+/**
+ * Delete a chat by UUID from localStorage
+ */
+export async function deleteChat(chatUid: string): Promise<void> {
+  const chats = loadChats()
+  delete chats[chatUid]
+  saveChats(chats)
 }

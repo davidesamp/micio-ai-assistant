@@ -7,7 +7,8 @@ import {
   query, 
   where,
   orderBy,
-  Timestamp
+  Timestamp,
+  deleteDoc
 } from 'firebase/firestore'
 import { db } from './config'
 import { auth } from './config'
@@ -78,4 +79,14 @@ export const getChatList = async (): Promise<Record<string, MicioChat>> => {
   })
 
   return chats
-} 
+}
+
+export const deleteChat = async (chatId: string): Promise<void> => {
+  const user = auth.currentUser
+  if (!user) {
+    console.error('User must be authenticated to delete chats')
+    return
+  }
+  const chatRef = doc(db, 'chats', chatId)
+  await deleteDoc(chatRef)
+}

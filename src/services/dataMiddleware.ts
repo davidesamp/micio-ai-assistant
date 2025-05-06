@@ -7,6 +7,7 @@ import {
   saveChat, 
   getChat, 
   getChatList as getFirebaseChatList,
+  deleteChat as deleteFirebaseChat,
 } from '@/firebase/chatService'
 import {
   getApisConfig as getLocalStorageApisConfig,
@@ -16,6 +17,7 @@ import {
   saveChat as saveLocalStorageChat,
   getChat as getLocalStorageChat,
   getChatList as getLocalStorageChatList,
+  deleteChat as deleteLocalStorageChat,
 } from '@/localStorage/local-storage-chat'
 import { Model } from '@/model/ai'
 import { Message, MicioChat } from '@/model/chat'
@@ -40,7 +42,13 @@ export const getApisConfig = async (): Promise<Record<AIProvider, string> | null
   if (!auth.currentUser) return await getLocalStorageApisConfig()
   else return await getFirebaseApisConfig()
 }
+
 export const saveApisConfig = async (apiConfig: Record<AIProvider, string>) => {
   if (!auth.currentUser) return await saveLocalStorageApisConfig(apiConfig)
   else return await saveFirebaseApisConfig(apiConfig)
+}
+
+export const deleteChat = async (chatUid: string) => {
+  if (!auth.currentUser) return deleteLocalStorageChat(chatUid)
+  else return await deleteFirebaseChat(chatUid)
 }

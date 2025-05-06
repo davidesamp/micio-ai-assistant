@@ -3,14 +3,13 @@ import {
 } from '@ant-design/icons'
 import { Button, Menu, MenuProps, Typography, Spin, Popconfirm } from 'antd'
 import Sider from 'antd/es/layout/Sider'
-import { deleteDoc, doc } from 'firebase/firestore'
 import React, { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import styles from './Sidebar.module.scss'
 import { iconsProviderMapping } from './iconsProviderMapping'
-import { db } from '@/firebase/config'
 import useGenerateContent from '@/hooks/useGenerateContent'
 import { getChatHistory, getChatList } from '@/services/dataMiddleware'
+import { deleteChat as deleteChatService } from '@/services/dataMiddleware'
 import { useMicioStore } from '@/store'
 
 const Sidebar = () => {
@@ -54,8 +53,7 @@ const Sidebar = () => {
       e.stopPropagation()
     }
     try {
-      const chatRef = doc(db, 'chats', chatId)
-      await deleteDoc(chatRef)
+      deleteChatService(chatId)
       deleteChat(chatId)
     } catch (error) {
       console.error('Error deleting chat:', error)
