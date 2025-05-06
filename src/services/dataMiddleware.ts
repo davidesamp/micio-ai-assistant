@@ -49,7 +49,7 @@ export const saveApisConfig = async (apiConfig: Record<AIProvider, string>) => {
 }
 
 export const deleteChat = async (chatUid: string) => {
-  if (!auth.currentUser) return deleteLocalStorageChat(chatUid)
+  if (!auth.currentUser) return await deleteLocalStorageChat(chatUid)
   else return await deleteFirebaseChat(chatUid)
 }
 
