@@ -58,11 +58,11 @@ export const deleteChat = async (chatUid: string) => {
  */
 export const transferChats = async () => {
   if (auth.currentUser) {
-    const localStoreageChats = await getLocalStorageChatList()
-    for (const key in localStoreageChats) {
-      if (localStoreageChats[key]) {
-        localStoreageChats[key].userId = auth.currentUser?.uid || localStoreageChats[key].userId
-        saveChat(localStoreageChats[key].model, localStoreageChats[key].messages, key)
+    const localStorageChats = await getLocalStorageChatList()
+    for (const key in localStorageChats) {
+      if (localStorageChats[key]) {
+        localStorageChats[key].userId = auth.currentUser?.uid || localStorageChats[key].userId
+        saveChat(localStorageChats[key].model, localStorageChats[key].messages, key)
       }
     }
 
