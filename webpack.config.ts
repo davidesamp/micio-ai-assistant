@@ -1,6 +1,6 @@
 import path from "path";
 import HtmlWebpackPlugin from "html-webpack-plugin";
-import { Configuration, WebpackPluginInstance } from "webpack";
+import { Configuration, DefinePlugin, WebpackPluginInstance } from "webpack";
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
 import Dotenv from 'dotenv-webpack'
 import "webpack-dev-server";
@@ -82,11 +82,15 @@ const config: ConfigBuilder = (_, argv) => {
         },
         plugins: [
             // initialize plugin to load env variables
-            ...!isProduction ? [new Dotenv({ path: '.env' }) as unknown as WebpackPluginInstance] : [],
+            ...!isProduction ? [new Dotenv({ path: '.env' }) as unknown as WebpackPluginInstance] : [
+                new DefinePlugin({
+                    'process.env': JSON.stringify(process.env)
+                })
+            ],
             new HtmlWebpackPlugin({
                 template: "./public/index.ejs",
             }),
-            new MiniCssExtractPlugin()
+            new MiniCssExtractPlugin(),
         ],
         devServer: {
             static: {

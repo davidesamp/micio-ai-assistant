@@ -1,5 +1,5 @@
 import {
-  SettingOutlined,
+  BulbOutlined,
 } from '@ant-design/icons'
 import { Button, Popover } from 'antd'
 import { Typography } from 'antd'
@@ -16,6 +16,7 @@ const TopBar = () => {
   const {
     chat: {
       selectedModel,
+      apisConfig,
     },
     user: {
       loggedUser
@@ -59,15 +60,14 @@ const TopBar = () => {
 
   return (
     <div className={styles.Container}>
-     
-      {currentAiProvider && (
+      {currentAiProvider && apisConfig && (
         <Popover 
           placement="bottomLeft" 
-          content={<ModelsPopover />} 
+          content={<ModelsPopover activeApisConfig={apisConfig}/>} 
           trigger="click" 
           showArrow={false}>
           <div className={styles.SettingsContainer}>
-            <SettingOutlined className={styles.SettingsIcon} />
+            <BulbOutlined className={styles.SettingsIcon} />
             <Title level={5} className={styles.ProviderTitle}>
               {selectedModel?.displayName || 'Select a model'}
             </Title>

@@ -1,8 +1,8 @@
 import { lens } from '@dhmk/zustand-lens'
 import { ChatStoreSlice, DefaultChatValues } from './types'
 import { MicioChat } from '@/model/chat'
+import { setChatHistory } from '@/services/dataMiddleware'
 import { Store } from '@/store/types'
-import { setChatHistory } from '@/utils/localStorage'
 
 const chatInitialValues: DefaultChatValues = {
   messages: [],

@@ -3,8 +3,8 @@ import Input from 'antd/es/input/Input'
 import React, { useState } from 'react'
 import styles from './ApiConfigModal.module.scss'
 import { AIProvider } from '@/model/ui'
+import { saveApisConfig } from '@/services/dataMiddleware'
 import { useMicioStore } from '@/store'
-import { saveApisConfig } from '@/utils/localStorage'
 
 export const ApiConfigModal = () => {
   const {

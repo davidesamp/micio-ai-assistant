@@ -10,8 +10,8 @@ import styles from './Sidebar.module.scss'
 import { iconsProviderMapping } from './iconsProviderMapping'
 import { db } from '@/firebase/config'
 import useGenerateContent from '@/hooks/useGenerateContent'
+import { getChatHistory, getChatList } from '@/services/dataMiddleware'
 import { useMicioStore } from '@/store'
-import { getChatHistory, getChatList } from '@/utils/localStorage'
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false)
@@ -76,7 +76,7 @@ const Sidebar = () => {
       children,
       label: (
         <div className={styles.MenuItem}>
-          <span>{label}</span>
+          <span className={styles.Label}>{label}</span>
           <Popconfirm
             title="Delete chat"
             description="Are you sure you want to delete this chat?"
@@ -97,11 +97,13 @@ const Sidebar = () => {
     } as MenuItem
   }
 
-  const items: MenuItem[] = Object.keys(chatList).map(key => getItem(
-    chatList[key].messages[0].message, //The first message is the name of the chat
-    key,
-    iconsProviderMapping[chatList[key].model.provider]?.icon || <UserOutlined />,
-  ))
+  const items: MenuItem[] = Object.keys(chatList)
+    .sort((a, b) => chatList[b].createdAt - chatList[a].createdAt) // Sort by createdAt descending
+    .map(key => getItem(
+      chatList[key].messages[0].message, // The first message is the name of the chat
+      key,
+      iconsProviderMapping[chatList[key].model.provider]?.icon || <UserOutlined />,
+    ))
 
   const handleNewChat = () => {
     console.log('New chat button clicked')
@@ -134,7 +136,6 @@ const Sidebar = () => {
   }
 
   const siderStyle: React.CSSProperties = {
-    overflow: 'auto',
     height: '100vh',
     position: 'sticky',
     insetInlineStart: 0,
@@ -143,7 +144,6 @@ const Sidebar = () => {
     scrollbarWidth: 'thin',
     scrollbarGutter: 'stable',
   }
-
 
   return (
     <Sider 
