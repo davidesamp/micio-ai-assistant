@@ -23,6 +23,10 @@ export const user = lens<UserStoreSlice, Store>((set,_get, state) => ({
         draft.aiSettings = settings
       })
       state.getState().ui.actions.closeSettingsModal()
-    }
+      state.getState().ui.actions.setNotification({
+        type: 'success',
+        title: 'Settings saved',
+        description: 'Your settings have been saved successfully.',
+      })
   }
-}))
+}}))
