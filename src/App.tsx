@@ -3,6 +3,7 @@ import { onAuthStateChanged } from 'firebase/auth'
 import React, { useCallback, useEffect } from 'react'
 import styles from './App.module.scss'
 import { ApiConfigModal } from './components/ApiConfigModal/ApiConfigModal'
+import { SettingsModal } from './components/SettingsModal/SettingsModal'
 import Chat from './containers/Chat/Chat'
 import Sidebar from './containers/Sidebar/Sidebar'
 import TopBar from './containers/TopBar/TopBar'
@@ -33,7 +34,7 @@ const App = () => {
       actions: { setApisConfig },
     },
     ui: {
-      configModalOpen,
+      configModalOpen, settingsModalOpen,
       actions: { openConfigModal },
     },
 
@@ -105,6 +106,7 @@ const App = () => {
         </Header>
         <Content>
           {configModalOpen && <ApiConfigModal />}
+          {settingsModalOpen && <SettingsModal />}
           {!checkedUser && <Spin className={styles.Spin} size="large" />}
           <Chat/>
         </Content>

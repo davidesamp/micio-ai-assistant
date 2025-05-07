@@ -10,6 +10,9 @@ const useOpenAi = () => {
     chat: {
       selectedModel, messages,
       actions: { setModel, newAddMessage }
+    },
+    user: {
+      aiSettings,
     }
   } = useMicioStore()
 
@@ -73,13 +76,16 @@ const useOpenAi = () => {
       })
     }
 
+    const { prompt, temperature } = aiSettings
+
     const completion = await instance.chat.completions.create({
       messages: [
-        { role: 'system' as 'system', content: `You are a helpful assistant and today is ${new Date()}` },
+        { role: 'system' as 'system', content: prompt },
         ...chatHistory,
         { role: 'user', content },
       ],
       model: selectedModel.name,
+      temperature,
       stream: true,
     })
 
