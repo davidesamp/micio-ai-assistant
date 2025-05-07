@@ -12,6 +12,9 @@ const useGemini = () => {
   chat: {
     currentChat,
     actions: { setCurrentChat, resetMessages, setModel, newAddMessage }
+  },
+  user: {
+    aiSettings,
   }
   } = useMicioStore()
 
@@ -37,6 +40,8 @@ const useGemini = () => {
       instance = geminiInstance
     }
 
+    const { prompt, temperature } = aiSettings
+
     // const currentHistory = currentChat?.getHistory()
     const newChatSession = instance.chats.create({
       history: chatMessages.map((message) => ({
@@ -45,7 +50,8 @@ const useGemini = () => {
       })), 
       model: model.name,
       config: {
-        systemInstruction: `You are a helpful assistant and today is ${new Date()}`,
+        systemInstruction: prompt,
+        temperature,
         //@ts-expect-error type with existing model
         responseModalities: GeminiModalitiesByModel[model],
       },
@@ -79,8 +85,14 @@ const useGemini = () => {
       parts.push({ text: statement })
     }
 
+    const { prompt, temperature } = aiSettings
+
     const resultStream = await currentChat.sendMessageStream({
       message: parts,
+      config: {
+        temperature: temperature,
+        systemInstruction: prompt,
+      },
     })
 
     const textMessageId = uuidv4()

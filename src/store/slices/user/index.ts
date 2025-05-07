@@ -10,7 +10,7 @@ const uiInitialValues: DefaultUserValues = {
   }
 }
 
-export const user = lens<UserStoreSlice, Store>(set => ({
+export const user = lens<UserStoreSlice, Store>((set,_get, state) => ({
   ...uiInitialValues,
   actions: {
     setUser: (user) => {
@@ -22,6 +22,7 @@ export const user = lens<UserStoreSlice, Store>(set => ({
       set(draft => {
         draft.aiSettings = settings
       })
+      state.getState().ui.actions.closeSettingsModal()
     }
   }
 }))

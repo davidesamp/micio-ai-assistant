@@ -49,28 +49,31 @@ export const SettingsModal = () => {
   
   return (
     <Modal
-      className={styles.Container}
       open={settingsModalOpen}
       onOk={handleSaveSettings}
       onCancel={handleClose}
     >
-      <div>
-        Prompt
-        <TextArea
-          value={currentPrompt}
-          onChange={handlePromptChange}
-          autoSize={{ minRows: 2, maxRows: 2 }}
-        />
-      </div>
-      <div>
-        Temperature
-        <Slider
-          min={1.0}
-          defaultValue={currentTemperature}
-          max={2.0} 
-          onChange={handleTemperatureChange}
-          tooltip={{ formatter }} 
-        />
+      <div className={styles.Container}>
+        <div>
+          <label htmlFor='prompt'>Prompt</label>
+          <TextArea
+            name='prompt'
+            value={currentPrompt}
+            onChange={handlePromptChange}
+            autoSize={{ minRows: 2, maxRows: 2 }}
+          />
+        </div>
+        <div>
+          <label>Temperature</label>
+          <Slider
+            min={0.1}
+            step={0.1}
+            defaultValue={currentTemperature}
+            max={2.0} 
+            onChange={handleTemperatureChange}
+            tooltip={{ formatter }} 
+          />
+        </div>
       </div>
     </Modal>
   )

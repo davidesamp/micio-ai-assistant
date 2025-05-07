@@ -8,10 +8,13 @@ import { useMicioStore } from '@/store'
 const useDeepSeek = () => {
 
   const {
-  chat: {
-    selectedModel, messages,
-      actions: { setModel, newAddMessage }
-  }
+    chat: {
+      selectedModel, messages,
+        actions: { setModel, newAddMessage }
+    },
+    user: {
+      aiSettings,
+    }
   } = useMicioStore()
 
 
@@ -73,13 +76,15 @@ const useDeepSeek = () => {
       })
     }
 
+    const { prompt, temperature } = aiSettings
     const completion = await instance.chat.completions.create({
       messages: [
-        { role: 'system', content: `You are a helpful assistant and toady is ${new Date()}` },
+        { role: 'system', content: prompt },
         ...chatHistory,
         { role: 'user', content },
       ],
       model: selectedModel.name,
+      temperature,
       stream: true,
     })
 

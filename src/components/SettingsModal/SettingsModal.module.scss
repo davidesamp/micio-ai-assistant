@@ -1,5 +1,6 @@
 .Container {
   display: flex;
+  min-width: 10rem;
   flex-direction: column;
-  align-items: center;
+  gap: 3rem;
 }

@@ -27,6 +27,9 @@ const useMistral = () => {
     chat: {
       messages, selectedModel,
       actions: { setModel, newAddMessage }
+    },
+    user: {
+      aiSettings,
     }
   } = useMicioStore()
 
@@ -81,9 +84,13 @@ const useMistral = () => {
       content 
     })
 
+    const { temperature } = aiSettings
+
     const result = await instance.chat.stream({
       model: selectedModel.name,
+      temperature: temperature,
       stream: true,
+      
       messages: [...createHistory],
     })
 
