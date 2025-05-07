@@ -24,7 +24,10 @@ const Sidebar = () => {
     },
     user: {
       loggedUser
-    }
+    },
+    ui: {
+      actions: { setNotification }
+    },
   } = useMicioStore()
 
   useEffect(() => {
@@ -55,6 +58,11 @@ const Sidebar = () => {
     try {
       deleteChatService(chatId)
       deleteChat(chatId)
+      setNotification({
+        type: 'success',
+        title: 'Chat deleted',
+        description: 'The chat has been deleted successfully.',
+      })
     } catch (error) {
       console.error('Error deleting chat:', error)
     }

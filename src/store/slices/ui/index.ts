@@ -6,7 +6,8 @@ import { AIProvider } from '@/model/ui'
 const uiInitialValues: DefaultUIValues = {
   currentAiProvider: null,
   configModalOpen: false,
-  settingsModalOpen: false
+  settingsModalOpen: false,
+  notification: null,
 }
 
 export const ui = lens<UIStoreSlice, Store>(set => ({
@@ -36,6 +37,16 @@ export const ui = lens<UIStoreSlice, Store>(set => ({
       set(draft => {
         draft.settingsModalOpen = false
       })
-    }
+    },
+    setNotification: (notification) => {
+      set(draft => {
+        draft.notification = notification
+      })
+    },
+    clearNotification: () => {
+      set(draft => {
+        draft.notification = null
+      })
+    },
   }
 }))

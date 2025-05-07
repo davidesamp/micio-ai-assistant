@@ -1,4 +1,5 @@
 import { Layout, Spin, theme } from 'antd'
+import { notification } from 'antd'
 import { onAuthStateChanged } from 'firebase/auth'
 import React, { useCallback, useEffect } from 'react'
 import styles from './App.module.scss'
@@ -25,6 +26,8 @@ const App = () => {
 
   const { changeModel } = useGenerateContent()
 
+  const [api, contextHolder] = notification.useNotification()
+
   const {
     user: {
       actions: { setUser },
@@ -34,8 +37,8 @@ const App = () => {
       actions: { setApisConfig },
     },
     ui: {
-      configModalOpen, settingsModalOpen,
-      actions: { openConfigModal },
+      configModalOpen, settingsModalOpen, notification: micionotification,
+      actions: { openConfigModal, clearNotification },
     },
 
   } = useMicioStore()
@@ -55,6 +58,34 @@ const App = () => {
       changeModel(openAiDefault)
     } 
   }, [])
+
+  useEffect(() => {
+    if (micionotification) {
+      const options = {
+        message: micionotification.title,
+        description: micionotification.description,
+        placement: 'bottomLeft' as const,
+        duration: 3,
+        onClick: () => {
+          api.destroy()
+          clearNotification()
+        },
+        onClose: () => {
+          api.destroy()
+          clearNotification()
+        },
+      }
+      if (micionotification.type === 'success') {
+        api.success(options)
+      } else if (micionotification.type === 'error') {
+        api.error(options)
+      } else if (micionotification.type === 'info') {
+        api.info(options)
+      } else if (micionotification.type === 'warning') {
+        api.warning(options)
+      }
+    }
+  }, [api, clearNotification, micionotification])
 
   useEffect(() => {
     if (apisConfig) {
@@ -98,6 +129,7 @@ const App = () => {
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
+      {contextHolder}
       <Sidebar />
       <Layout>
         <Header 

@@ -4,3 +4,9 @@ export enum AIProvider {
   MISTRAL = 'MISTRAL',
   OPENAI = 'OPENAI'
 }
+
+export interface Notiication {
+  type: 'success' | 'error' | 'info' | 'warning'
+  title: string
+  description: string
+}
