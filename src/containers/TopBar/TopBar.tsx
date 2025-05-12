@@ -27,7 +27,7 @@ const TopBar = () => {
     },
     ui: { 
       currentAiProvider,
-      actions: { openConfigModal, openSettingsModal }
+      actions: { openConfigModal, openSettingsModal, setNotification }
     },
   } = useMicioStore()
 
@@ -43,7 +43,11 @@ const TopBar = () => {
       console.log('User signed in:', user)
       transferChats()
     } catch (error) {
-      console.error('Sign-in error:', error)
+      setNotification({
+        type: 'error',
+        title: 'Error signing in',
+        description: error instanceof Error ? error.message : 'An unknown error occurred',
+      })
     }
   }
 
@@ -52,7 +56,11 @@ const TopBar = () => {
       await signOut(auth)
       resetStore()
     } catch (error) {
-      console.error('Error signing out:', error)
+      setNotification({
+        type: 'error',
+        title: 'Error signing in',
+        description: error instanceof Error ? error.message : 'An unknown error occurred',
+      })
     }
   }
 
