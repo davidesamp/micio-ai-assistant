@@ -6,11 +6,10 @@
     width: 1.5rem;
     height: 1.5rem;
     padding: 2.5px;
-    border: 1px solid white;
+    border: 1px solid;
     border-radius: 15%;
     margin-left: auto;
     cursor: pointer;
-    fill: white;
   }
 }
 
@@ -29,7 +28,7 @@
 }
 
 .Menu {
-  height: 70%;
+  height: 65%;
   overflow-y: auto;
 
   svg {
@@ -61,6 +60,12 @@
       opacity: 1;
     }
   }
+}
+
+.SwitchContainer {
+  display: flex;
+  justify-content: end;
+  padding: 2rem 3rem;
 }
 
 .LoadingContainer {

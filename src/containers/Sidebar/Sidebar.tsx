@@ -1,7 +1,8 @@
 import {
-  UserOutlined, PlusOutlined, LoadingOutlined, DeleteOutlined, MenuOutlined
+  UserOutlined, PlusOutlined, LoadingOutlined, DeleteOutlined, MenuOutlined,
+  SunOutlined, MoonOutlined
 } from '@ant-design/icons'
-import { Button, Menu, MenuProps, Typography, Spin, Popconfirm } from 'antd'
+import { Button, Menu, MenuProps, Typography, Spin, Popconfirm, Switch, theme } from 'antd'
 import Sider from 'antd/es/layout/Sider'
 import React, { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
@@ -26,9 +27,12 @@ const Sidebar = () => {
       loggedUser
     },
     ui: {
-      actions: { setNotification }
+      currentTheme,
+      actions: { setNotification, setTheme }
     },
   } = useMicioStore()
+
+  const { token: { colorText }} = theme.useToken()
 
   useEffect(() => {
     const loadChats = async () => {
@@ -129,7 +133,6 @@ const Sidebar = () => {
   }
 
   const handleSelect: MenuProps['onSelect'] = async (info) => {
-    console.log('Selected item info --> ', info)
     try {
       const selectedChat = await getChatHistory(info.key)
       if (selectedChat) {
@@ -160,15 +163,33 @@ const Sidebar = () => {
     scrollbarGutter: 'stable',
   }
 
+  const handleFileChange = (checked:boolean) => {
+    if(checked) {
+      setTheme('light')
+      localStorage.setItem('theme', 'light')
+    } else {
+      setTheme('dark')
+      localStorage.setItem('theme', 'dark')
+    }
+  }
+
   return (
     <Sider 
       trigger={null} 
       style={siderStyle} 
+      theme={currentTheme === 'light' ? 'light' : 'dark' }
       collapsible collapsed={collapsed} 
       width={300}
     >
       <div className="demo-logo-vertical" />
-      <MenuOutlined className={styles.SidebarLogo} onClick={handleCollapse} />
+      <MenuOutlined 
+        className={styles.SidebarLogo} 
+        onClick={handleCollapse} 
+        style={{
+          fill: colorText,
+          borderColor: colorText,
+        }}
+      />
       <div className={styles.SidebarHeader}>
         {!collapsed && (
           <Title level={5}>
@@ -191,12 +212,22 @@ const Sidebar = () => {
         <Menu 
           className={styles.Menu} 
           onSelect={handleSelect} 
-          theme="dark" 
+          theme={currentTheme === 'light' ? 'light' : 'dark' } 
           defaultSelectedKeys={['1']} 
           mode="inline" 
           items={items} 
         />
       )}
+      <div className={styles.SwitchContainer}>
+        <Switch
+          style={{ transform: 'scale(1.5)', transformOrigin: '0 0' }}
+          size="default"
+          checkedChildren={<MoonOutlined />}
+          unCheckedChildren={<SunOutlined/>}
+          checked={currentTheme === 'light'}
+          onChange={handleFileChange}
+        />
+      </div>
     </Sider>
   )
 }

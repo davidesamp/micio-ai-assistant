@@ -1,4 +1,4 @@
-import { Layout, Spin, theme } from 'antd'
+import { ConfigProvider, Layout, Spin, theme } from 'antd'
 import { notification } from 'antd'
 import { onAuthStateChanged } from 'firebase/auth'
 import React, { useCallback, useEffect } from 'react'
@@ -13,6 +13,7 @@ import useGenerateContent from './hooks/useGenerateContent'
 import { AIProvider } from './model/ui'
 import { getApisConfig } from './services/dataMiddleware'
 import { useMicioStore } from './store'
+import { darkTheme, lightTheme } from './styles/themes'
 import { ModelsList } from './utils/constants'
 
 
@@ -22,11 +23,19 @@ const App = () => {
     token: { colorBgContainer },
   } = theme.useToken()
 
+  const {
+    ui: {
+      currentTheme
+    }
+  } = useMicioStore()
+
   const [checkedUser, setCheckedUser] = React.useState(false)
 
   const { changeModel } = useGenerateContent()
 
   const [api, contextHolder] = notification.useNotification()
+
+  const setTheme = currentTheme === 'light' ? lightTheme : darkTheme
 
   const {
     user: {
@@ -136,25 +145,29 @@ const App = () => {
   
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      {contextHolder}
-      <Sidebar />
-      <Layout>
-        <Header 
-          style={{ padding: 0, background: colorBgContainer, position: 'sticky', top: 0, zIndex: 3 }} >
-          <TopBar />
-        </Header>
-        <Content>
-          {configModalOpen && <ApiConfigModal />}
-          {settingsModalOpen && <SettingsModal />}
-          {!checkedUser && <Spin className={styles.Spin} size="large" />}
-          <Chat/>
-        </Content>
-        <Footer style={{ textAlign: 'center' }}>
-          Micio AI ©{new Date().getFullYear()} Created by davidesamp
-        </Footer>
+    <ConfigProvider
+        theme={setTheme}
+      > 
+      <Layout style={{ minHeight: '100vh' }}>
+        {contextHolder}
+        <Sidebar />
+        <Layout>
+          <Header 
+            style={{ padding: 0, background: colorBgContainer, position: 'sticky', top: 0, zIndex: 3 }} >
+            <TopBar />
+          </Header>
+          <Content>
+            {configModalOpen && <ApiConfigModal />}
+            {settingsModalOpen && <SettingsModal />}
+            {!checkedUser && <Spin className={styles.Spin} size="large" />}
+            <Chat/>
+          </Content>
+          <Footer style={{ textAlign: 'center' }}>
+            Micio AI ©{new Date().getFullYear()} Created by davidesamp
+          </Footer>
+        </Layout>
       </Layout>
-    </Layout>
+    </ConfigProvider>
   )
 }
 

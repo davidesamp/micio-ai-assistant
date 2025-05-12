@@ -8,6 +8,7 @@ const uiInitialValues: DefaultUIValues = {
   configModalOpen: false,
   settingsModalOpen: false,
   notification: null,
+  currentTheme: localStorage.getItem('theme') === 'light' ? 'light' : 'dark',
 }
 
 export const ui = lens<UIStoreSlice, Store>(set => ({
@@ -46,6 +47,11 @@ export const ui = lens<UIStoreSlice, Store>(set => ({
     clearNotification: () => {
       set(draft => {
         draft.notification = null
+      })
+    },
+    setTheme: (theme) => {
+      set(draft => {
+        draft.currentTheme = theme
       })
     },
   }

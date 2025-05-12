@@ -1,7 +1,7 @@
 import {
   BulbOutlined,
 } from '@ant-design/icons'
-import { Button, Popover } from 'antd'
+import { Button, Popover, theme } from 'antd'
 import { Typography } from 'antd'
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth'
 import React from 'react'
@@ -30,6 +30,10 @@ const TopBar = () => {
       actions: { openConfigModal, openSettingsModal, setNotification }
     },
   } = useMicioStore()
+
+  const {
+    token: { colorFillSecondary },
+  } = theme.useToken()
 
   const { Title } = Typography
 
@@ -69,7 +73,7 @@ const TopBar = () => {
   }
 
   return (
-    <div className={styles.Container}>
+    <div className={styles.Container} style={{ backgroundColor: colorFillSecondary }}>
       {currentAiProvider && apisConfig && (
         <Popover 
           placement="bottomLeft" 
