@@ -38,7 +38,7 @@ const App = () => {
     },
     ui: {
       configModalOpen, settingsModalOpen, notification: micionotification,
-      actions: { openConfigModal, clearNotification },
+      actions: { openConfigModal, clearNotification, setNotification },
     },
 
   } = useMicioStore()
@@ -102,10 +102,14 @@ const App = () => {
       setCheckedUser(true)
     }, (error) => {
       setCheckedUser(true)
-      console.error('Error loading user: ', error)
+      setNotification({
+        type: 'error',
+        title: 'Error loading user',
+        description: error instanceof Error ? error.message : 'An unknown error occurred',
+      })
     }
   )
-  }, [setUser])
+  }, [setNotification, setUser])
 
    useEffect(() => {
       const loadApis = async () => {
@@ -117,14 +121,18 @@ const App = () => {
             else openConfigModal()
           }
         } catch (error) {
-          console.error('Error loading apis:', error)
+          setNotification({
+            type: 'error',
+            title: 'Error loading apis',
+            description: error instanceof Error ? error.message : 'An unknown error occurred',
+          })
         } finally {
           //TODO 
         }
       }
   
       loadApis()
-   }, [checkedUser, apisConfig, setApisConfig, openConfigModal])
+   }, [checkedUser, apisConfig, setApisConfig, openConfigModal, setNotification])
   
 
   return (

@@ -38,14 +38,18 @@ const Sidebar = () => {
           updateChatList(chat)
         })
       } catch (error) {
-        console.error('Error loading chats:', error)
+        setNotification({
+          type: 'error',
+          title: 'Error loading chats',
+          description: error instanceof Error ? error.message : 'An unknown error occurred',
+        })
       } finally {
         setLoading(false)
       }
     }
 
     loadChats()
-  }, [loggedUser, updateChatList])
+  }, [loggedUser, setNotification, updateChatList])
 
   type MenuItem = Required<MenuProps>['items'][number]
 
@@ -64,7 +68,11 @@ const Sidebar = () => {
         description: 'The chat has been deleted successfully.',
       })
     } catch (error) {
-      console.error('Error deleting chat:', error)
+      setNotification({
+        type: 'error',
+        title: 'Error deleting chats',
+        description: error instanceof Error ? error.message : 'An unknown error occurred',
+      })
     }
   }
 
@@ -125,7 +133,6 @@ const Sidebar = () => {
     try {
       const selectedChat = await getChatHistory(info.key)
       if (selectedChat) {
-        console.log('Selected chat history --> ', selectedChat)
         const {
           messages,
           model,
@@ -135,7 +142,11 @@ const Sidebar = () => {
         restoreChat(model, messages, uuid)
       }
     } catch (error) {
-      console.error('Error loading chat:', error)
+      setNotification({
+        type: 'error',
+        title: 'Error loading chats',
+        description: error instanceof Error ? error.message : 'An unknown error occurred',
+      })
     }
   }
 
