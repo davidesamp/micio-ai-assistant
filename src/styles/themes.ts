@@ -1,6 +1,6 @@
 export const darkTheme = {
   token: {
-    colorPrimary: '#D11141', // Dark Pink (Primary)
+    colorPrimary: '#0b892c', // Dark Pink (Primary)
     colorBgBase: '#000000', // Black (Background)
     colorText: '#FFFFFF', // White (Primary Text)
     colorTextSecondary: 'rgba(255, 255, 255, 0.75)', // Slightly transparent white for secondary text.
