@@ -13,6 +13,21 @@
   }
 }
 
+.LightMenu {
+  svg {
+    border-color: black;
+    fill: black;
+  }
+
+}
+
+.DarkMenu {
+  svg {
+    border-color: white;
+    fill: white;
+  }
+}
+
 .SidebarHeader {
   display: flex;
   flex-direction: column;

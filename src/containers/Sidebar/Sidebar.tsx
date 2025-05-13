@@ -2,8 +2,9 @@ import {
   UserOutlined, PlusOutlined, LoadingOutlined, DeleteOutlined, MenuOutlined,
   SunOutlined, MoonOutlined
 } from '@ant-design/icons'
-import { Button, Menu, MenuProps, Typography, Spin, Popconfirm, Switch, theme } from 'antd'
+import { Button, Menu, MenuProps, Typography, Spin, Popconfirm, Switch } from 'antd'
 import Sider from 'antd/es/layout/Sider'
+import cx from 'classnames'
 import React, { useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import styles from './Sidebar.module.scss'
@@ -32,7 +33,6 @@ const Sidebar = () => {
     },
   } = useMicioStore()
 
-  const { token: { colorText }} = theme.useToken()
 
   useEffect(() => {
     const loadChats = async () => {
@@ -183,12 +183,11 @@ const Sidebar = () => {
     >
       <div className="demo-logo-vertical" />
       <MenuOutlined 
-        className={styles.SidebarLogo} 
+        className={cx(styles.SidebarLogo, {
+          [styles.LightMenu]: currentTheme === 'light',
+          [styles.DarkMenu]: currentTheme === 'dark',
+        })} 
         onClick={handleCollapse} 
-        style={{
-          fill: colorText,
-          borderColor: colorText,
-        }}
       />
       <div className={styles.SidebarHeader}>
         {!collapsed && (
