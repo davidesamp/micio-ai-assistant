@@ -10,6 +10,8 @@ interface Actions {
   closeConfigModal: () => void
   openSettingsModal: () => void
   closeSettingsModal: () => void
+  // eslint-disable-next-line no-unused-vars
+  setTheme: (theme: 'light' | 'dark') => void
 }
 
 export interface DefaultUIValues {
@@ -17,6 +19,7 @@ export interface DefaultUIValues {
   configModalOpen: boolean
   settingsModalOpen: boolean
   notification: Notiication | null
+  currentTheme: 'light' | 'dark'
 }
 
 export interface UIStoreSlice extends DefaultUIValues {

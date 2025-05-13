@@ -133,7 +133,7 @@ const Chat = () => {
         )}
       />
       
-      <div className={styles.TextAreaContainer}>
+      <div className={styles.TextAreaContainer} style={{ background: colorBgContainer }}>
         <FilePreviewContainer uploadedFiles={uploadedFiles} onDeleteFile={handleDeleteUploadedFile}/>
         <MicioTextarea
           statement={statement}
