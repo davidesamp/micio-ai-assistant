@@ -9,11 +9,16 @@ import { iconsProviderMapping } from '../Sidebar/iconsProviderMapping'
 import styles from './TopBar.module.scss'
 import { ModelsPopover } from '@/components/ModelsPopover/ModelsPopover'
 import { UserThumbnail } from '@/components/UserThumbnail/UserThumbnail'
+import GoogleIcon from '@/icons/google.svg'
 import { transferChats } from '@/services/dataMiddleware'
 import { useMicioStore } from '@/store'
 
 
-const TopBar = () => {
+interface TopBarProps {
+  checkedUser: boolean
+}
+
+const TopBar = ({ checkedUser }: TopBarProps) => {
   const {
     chat: {
       selectedModel,
@@ -90,13 +95,16 @@ const TopBar = () => {
         </Popover>
       )}
       <div className={styles.Right}>
-        {!loggedUser && (
+        {!loggedUser && checkedUser && (
             <Button 
               onClick={handleSignIn} 
               type="primary" 
               className={styles.GoogleSignInButton}
             >
+            <GoogleIcon />
+            <span>
               Sign in with Google
+            </span>
             </Button>
         )}
         {loggedUser && (

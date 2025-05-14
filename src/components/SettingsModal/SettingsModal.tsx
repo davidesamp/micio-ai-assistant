@@ -51,6 +51,8 @@ export const SettingsModal = () => {
     <Modal
       open={settingsModalOpen}
       onOk={handleSaveSettings}
+      okText='Save'
+      cancelText='Cancel'
       onCancel={handleClose}
     >
       <div className={styles.Container}>

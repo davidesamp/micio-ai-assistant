@@ -151,12 +151,16 @@ const App = () => {
         <Layout>
           <Header 
             style={{ padding: 0, background: colorBgContainer, position: 'sticky', top: 0, zIndex: 3 }} >
-            <TopBar />
+            <TopBar checkedUser={checkedUser} />
           </Header>
           <Content>
             {configModalOpen && <ApiConfigModal />}
             {settingsModalOpen && <SettingsModal />}
-            {!checkedUser && <Spin className={styles.Spin} size="large" />}
+            {!checkedUser && (
+              <div className={styles.SpinContainer}>
+                <Spin size="large" />
+              </div>
+            )}
             <Chat/>
           </Content>
           <Footer style={{ textAlign: 'center' }}>

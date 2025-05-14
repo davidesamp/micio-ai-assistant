@@ -40,6 +40,8 @@ export const ApiConfigModal = () => {
       className={styles.Container} 
       open={configModalOpen} 
       onOk={handleSaveApis}
+      okText='Save'
+      cancelText='Cancel'
       onCancel={handleClose}
       >
       {Object.values(AIProvider).map((provider) => (
