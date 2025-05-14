@@ -3,12 +3,13 @@ import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { Model } from '@/model/ai'
 import { ContentTypes, Message, UploadedFile } from '@/model/chat'
+import { AIProvider } from '@/model/ui'
 import { useMicioStore } from '@/store'
 
 const useOpenAi = () => {
   const {
     chat: {
-      selectedModel, messages,
+      selectedModel, messages, apisConfig,
       actions: { setModel, newAddMessage }
     },
     user: {
@@ -19,7 +20,11 @@ const useOpenAi = () => {
   const [openAiInstance, setOpenAiInstance] = useState<OpenAI | null>(null)
 
   const init = () => {
-    const openAiKey = process.env.OPEN_AI_KEY
+    
+    if (!apisConfig) {
+      throw new Error('API configuration is not set.')
+    }
+    const openAiKey = apisConfig[AIProvider.OPENAI]
     if (!openAiKey) {
       throw new Error('OPENAI_KEY environment variable is not set.')
     }

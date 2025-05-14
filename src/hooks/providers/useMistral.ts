@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { Model } from '@/model/ai'
 import { ContentTypes, Message, UploadedFile } from '@/model/chat'
+import { AIProvider } from '@/model/ui'
 import { useMicioStore } from '@/store'
 
 enum MistralRoles {
@@ -25,7 +26,7 @@ const useMistral = () => {
 
   const {
     chat: {
-      messages, selectedModel,
+      messages, selectedModel, apisConfig,
       actions: { setModel, newAddMessage }
     },
     user: {
@@ -37,7 +38,10 @@ const useMistral = () => {
 
 
   const init = () =>  {
-    const mistralKey = process.env.MISTRAL_KEY
+    if (!apisConfig) {
+      throw new Error('API configuration is missing. Please ensure that the API configuration is properly set.')
+    }
+    const mistralKey = apisConfig[AIProvider.MISTRAL]
     if (!mistralKey) {
         throw new Error('MISTRAL_KEY environment variable is not set.')
     }

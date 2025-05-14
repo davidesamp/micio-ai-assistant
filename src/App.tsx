@@ -1,7 +1,7 @@
 import { ConfigProvider, Layout, Spin, theme } from 'antd'
 import { notification } from 'antd'
 import { onAuthStateChanged } from 'firebase/auth'
-import React, { useCallback, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import styles from './App.module.scss'
 import { ApiConfigModal } from './components/ApiConfigModal/ApiConfigModal'
 import { SettingsModal } from './components/SettingsModal/SettingsModal'
@@ -52,21 +52,23 @@ const App = () => {
 
   } = useMicioStore()
 
-  const handleInitCasualModel = useCallback((config: Record<AIProvider, string>) => {
-    const geminiDefault = ModelsList.find(model => model.name === 'gemini-2.0-flash')
-    const mistralDefault = ModelsList.find(model => model.name === 'mistral-small-latest')
-    const openAiDefault = ModelsList.find(model => model.name === 'gpt-4')
-    const deepSeekDefault = ModelsList.find(model => model.name === 'deepseek-chat')
-    if (config[AIProvider.GEMINI] && geminiDefault) {
-      changeModel(geminiDefault)
-    } else if (config[AIProvider.MISTRAL] && mistralDefault) {
-      changeModel(mistralDefault)
-    } else if (config[AIProvider.DEEPSEEK] && deepSeekDefault) {
-      changeModel(deepSeekDefault)
-    } else if (config[AIProvider.OPENAI] && openAiDefault) {
-      changeModel(openAiDefault)
-    } 
-  }, [])
+  useEffect(() => {
+    if (apisConfig) {
+      const geminiDefault = ModelsList.find(model => model.name === 'gemini-2.0-flash')
+      const mistralDefault = ModelsList.find(model => model.name === 'mistral-small-latest')
+      const openAiDefault = ModelsList.find(model => model.name === 'gpt-4')
+      const deepSeekDefault = ModelsList.find(model => model.name === 'deepseek-chat')
+      if (apisConfig[AIProvider.GEMINI] && geminiDefault) {
+        changeModel(geminiDefault)
+      } else if (apisConfig[AIProvider.MISTRAL] && mistralDefault) {
+        changeModel(mistralDefault)
+      } else if (apisConfig[AIProvider.DEEPSEEK] && deepSeekDefault) {
+        changeModel(deepSeekDefault)
+      } else if (apisConfig[AIProvider.OPENAI] && openAiDefault) {
+        changeModel(openAiDefault)
+      } 
+    }
+  }, [apisConfig])
 
   useEffect(() => {
     if (micionotification) {
@@ -74,7 +76,7 @@ const App = () => {
         message: micionotification.title,
         description: micionotification.description,
         placement: 'bottomLeft' as const,
-        duration: 3,
+        duration: micionotification.type === 'error' ?  6: 3,
         onClick: () => {
           api.destroy()
           clearNotification()
@@ -95,12 +97,6 @@ const App = () => {
       }
     }
   }, [api, clearNotification, micionotification])
-
-  useEffect(() => {
-    if (apisConfig) {
-      handleInitCasualModel(apisConfig)
-    }
-  }, [apisConfig, handleInitCasualModel])
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
@@ -126,7 +122,9 @@ const App = () => {
           if(checkedUser && !apisConfig) {
             const apisConfig = await getApisConfig()
             console.log('APIS CONFIG', apisConfig)
-            if(apisConfig) setApisConfig(apisConfig)
+            if(apisConfig) {
+              setApisConfig(apisConfig, false)
+            }
             else openConfigModal()
           }
         } catch (error) {
@@ -139,7 +137,6 @@ const App = () => {
           //TODO 
         }
       }
-  
       loadApis()
    }, [checkedUser, apisConfig, setApisConfig, openConfigModal, setNotification])
   
