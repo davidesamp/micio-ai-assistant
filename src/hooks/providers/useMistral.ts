@@ -39,7 +39,7 @@ const useMistral = () => {
 
   const init = () =>  {
     if (!apisConfig) {
-      throw new Error('APIS_CONFIG environment variable is not set.')
+      throw new Error('API configuration is missing. Please ensure that the API configuration is properly set.')
     }
     const mistralKey = apisConfig[AIProvider.MISTRAL]
     if (!mistralKey) {
