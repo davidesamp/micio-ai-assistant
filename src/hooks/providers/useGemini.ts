@@ -24,11 +24,11 @@ const useGemini = () => {
 
   const init = () =>  {
     if (!apisConfig) {
-      throw new Error('APIS_CONFIG environment variable is not set.')
+      throw new Error('apisConfig is not defined. Ensure the API configuration is provided.')
     }
     const googleGeminiKey = apisConfig[AIProvider.GEMINI]
     if (!googleGeminiKey) {
-      throw new Error('GOOGLE_GEMINI_KEY environment variable is not set.')
+      throw new Error('GOOGLE_GEMINI_KEY is missing in apisConfig. Ensure the key is correctly configured.')
     }
     const genAI = new GoogleGenAI({ apiKey: googleGeminiKey })
 
