@@ -23,7 +23,7 @@ const useDeepSeek = () => {
 
   const init = () =>  {
     if (!apisConfig) {
-        throw new Error('APIS_CONFIG environment variable is not set.')
+        throw new Error('API configuration is not set.')
       }
     const deepSeekKey = apisConfig[AIProvider.DEEPSEEK]
     const openai = new OpenAI({
