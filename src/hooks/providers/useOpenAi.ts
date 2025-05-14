@@ -22,7 +22,7 @@ const useOpenAi = () => {
   const init = () => {
     
     if (!apisConfig) {
-      throw new Error('APIS_CONFIG environment variable is not set.')
+      throw new Error('API configuration is not set.')
     }
     const openAiKey = apisConfig[AIProvider.OPENAI]
     if (!openAiKey) {
