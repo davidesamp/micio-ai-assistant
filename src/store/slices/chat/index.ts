@@ -109,10 +109,17 @@ export const chat = lens<ChatStoreSlice, Store>((set, get, state) => ({
         }
       })
     },
-    setApisConfig: (apisConfig) => {
+    setApisConfig: (apisConfig, manuallySaved) => {
       set((draft) => {
         draft.apisConfig = apisConfig
       })
+      if (manuallySaved) {
+        state.getState().ui.actions.setNotification({
+          type: 'success',
+          title: 'Api key saved',
+          description: 'Your API keys have been saved successfully.',
+        })
+      }
     },
     reset: () => {
       set((draft) => {

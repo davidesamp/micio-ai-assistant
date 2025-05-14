@@ -3,13 +3,14 @@ import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { Model } from '@/model/ai'
 import { ContentTypes, Message, UploadedFile } from '@/model/chat'
+import { AIProvider } from '@/model/ui'
 import { useMicioStore } from '@/store'
 
 const useDeepSeek = () => {
 
   const {
     chat: {
-      selectedModel, messages,
+      selectedModel, messages, apisConfig,
         actions: { setModel, newAddMessage }
     },
     user: {
@@ -21,7 +22,10 @@ const useDeepSeek = () => {
   const [deepSeekInstance, setDeepSeekInstance] = useState<OpenAI | null>(null)
 
   const init = () =>  {
-    const deepSeekKey = process.env.DEEP_SEEK_KEY
+    if (!apisConfig) {
+        throw new Error('APIS_CONFIG environment variable is not set.')
+      }
+    const deepSeekKey = apisConfig[AIProvider.DEEPSEEK]
     const openai = new OpenAI({
       baseURL: 'https://api.deepseek.com/v1',
       dangerouslyAllowBrowser: true,

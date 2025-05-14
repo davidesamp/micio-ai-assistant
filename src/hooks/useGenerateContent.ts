@@ -18,6 +18,11 @@ const useGenerateContent = () => {
     },
     chat: {
       actions: { resetMessages, newAddMessage, setChatUid, restoreMessages }
+    },
+    ui: {
+      actions: {
+        setNotification
+      }
     }
   } = useMicioStore()
 
@@ -74,7 +79,11 @@ const useGenerateContent = () => {
       console.log('Generating content with provider:', currentAiProvider)
       await generateContentFactory[currentAiProvider](statement, uploadedFiles)
     } catch (error) {
-      console.error('Error generating content:', error)
+      setNotification({
+        type: 'error',
+        title: 'Error generating content',
+        description: error instanceof Error ? error.message : 'An unknown error occurred',
+      })
     } finally {
       setIsGenerating(false)
     }

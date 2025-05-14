@@ -27,7 +27,7 @@ export const ApiConfigModal = () => {
 
   const handleSaveApis = async () => {
     await saveApisConfig(apiKeys)
-    setApisConfig(apiKeys)
+    setApisConfig(apiKeys, true)
     closeConfigModal()
   }
 

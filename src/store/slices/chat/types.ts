@@ -18,7 +18,7 @@ interface Actions {
   // eslint-disable-next-line no-unused-vars
   updateChatList: (chat: MicioChat) => void
   // eslint-disable-next-line no-unused-vars
-  setApisConfig: (apisConfig: Record<AIProvider, string>) => void
+  setApisConfig: (apisConfig: Record<AIProvider, string>, manuallySaved: boolean) => void
   // eslint-disable-next-line no-unused-vars
   deleteChat: (chatId: string) => void
   reset: () => void

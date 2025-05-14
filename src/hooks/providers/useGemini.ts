@@ -3,25 +3,30 @@ import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { Model } from '@/model/ai'
 import { ContentTypes, Message, UploadedFile } from '@/model/chat'
+import { AIProvider } from '@/model/ui'
 import { useMicioStore } from '@/store'
 import { GeminiModalitiesByModel } from '@/utils/restrictions'
 
 const useGemini = () => {
 
   const {
-  chat: {
-    currentChat,
-    actions: { setCurrentChat, resetMessages, setModel, newAddMessage }
-  },
-  user: {
-    aiSettings,
-  }
+    chat: {
+      currentChat, apisConfig,
+      actions: { setCurrentChat, resetMessages, setModel, newAddMessage }
+    },
+    user: {
+      aiSettings,
+    },
+  
   } = useMicioStore()
 
   const [geminiInstance, setGeminiInstance] = useState<GoogleGenAI | null>(null)
 
   const init = () =>  {
-    const googleGeminiKey = process.env.GOOGLE_GEMINI_KEY
+    if (!apisConfig) {
+      throw new Error('APIS_CONFIG environment variable is not set.')
+    }
+    const googleGeminiKey = apisConfig[AIProvider.GEMINI]
     if (!googleGeminiKey) {
       throw new Error('GOOGLE_GEMINI_KEY environment variable is not set.')
     }
