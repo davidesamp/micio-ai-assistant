@@ -184,10 +184,10 @@ const Sidebar = () => {
       trigger={null} 
       style={siderStyle} 
       theme={currentTheme === 'light' ? 'light' : 'dark' }
-      collapsible collapsed={collapsed} 
+      collapsible 
+      collapsed={collapsed} 
       width={300}
     >
-      <div className="demo-logo-vertical" />
       <div className={styles.LogoContainer}>
         {!collapsed && (
           <MicioLogo onClick={onMicioLogoClick} className={cx(styles.MicioLogo, {

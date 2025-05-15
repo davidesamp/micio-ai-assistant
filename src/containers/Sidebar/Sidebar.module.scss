@@ -68,7 +68,7 @@
 }
 
 .Menu {
-  height: 65%;
+  height: 60%;
   overflow-y: auto;
 
   svg {
@@ -106,6 +106,7 @@
   display: flex;
   justify-content: end;
   padding: 2rem 3rem;
+  margin-top: auto;
 }
 
 .LoadingContainer {
