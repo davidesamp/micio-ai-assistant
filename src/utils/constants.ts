@@ -10,9 +10,10 @@ export const ModelsList: Model[] = [
   {name: 'deepseek-reasoner', displayName: 'DeepSeek Reasoner', provider: AIProvider.DEEPSEEK},
   {name: 'mistral-small-latest', displayName: 'Mistral Small', provider: AIProvider.MISTRAL},
   {name: 'open-mistral-nemo', displayName: 'Open Mistral Nemo', provider: AIProvider.MISTRAL},
-  {name: 'gpt-4-turbo-preview', displayName: 'GPT-4 Turbo', provider: AIProvider.OPENAI},
-  {name: 'gpt-4', displayName: 'GPT-4', provider: AIProvider.OPENAI},
-  {name: 'gpt-3.5-turbo', displayName: 'GPT-3.5 Turbo', provider: AIProvider.OPENAI}
+  { name: 'gpt-4o', displayName: 'GPT-4 Omni', provider: AIProvider.OPENAI },
+  { name: 'gpt-4-turbo', displayName: 'GPT-4 Turbo', provider: AIProvider.OPENAI },
+  { name: 'gpt-3.5-turbo', displayName: 'GPT-3.5 Turbo', provider: AIProvider.OPENAI },
+  { name: 'gpt-3.5-turbo-16k', displayName: 'GPT-3.5 Turbo 16K', provider: AIProvider.OPENAI }
 ]
 
 export type GeminiModels = Extract<typeof ModelsList[number], { provider: AIProvider.GEMINI }>;
