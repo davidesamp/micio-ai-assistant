@@ -93,6 +93,7 @@ const config: ConfigBuilder = (_, argv) => {
                 favicon: "./src/icons/logo/micio-ai-favicon.png",
                 meta: {
                     viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
+                    description: 'Micio AI offers a wide range of AI services to enhance your productivity and creativity.',
                 },
             }),
             new MiniCssExtractPlugin(),
