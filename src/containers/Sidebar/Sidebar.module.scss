@@ -1,32 +1,57 @@
-.SidebarLogo {
+.LogoContainer {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 1rem 1rem 0 0;
 
-  svg {
-    width: 1.5rem;
-    height: 1.5rem;
-    padding: 2.5px;
-    border: 1px solid;
-    border-radius: 15%;
-    margin-left: auto;
+  .MicioLogo {
     cursor: pointer;
+
+    
+  }
+
+  .Light {
+    path {
+      border-color: black;
+      fill: black;
+    }
+  }
+  
+  .Dark {
+    path {
+      border-color: white;
+      fill: white;
+    }
+  }
+
+  .SidebarLogo {
+    svg {
+      width: 1.5rem;
+      height: 1.5rem;
+      padding: 2.5px;
+      border: 1px solid;
+      border-radius: 15%;
+      margin-left: auto;
+      cursor: pointer;
+    } 
+  }
+
+  .LightMenu {
+    svg {
+      border-color: black;
+      fill: black;
+    }
+  }
+
+  .DarkMenu {
+    svg {
+      border-color: white;
+      fill: white;
+    }   
   }
 }
 
-.LightMenu {
-  svg {
-    border-color: black;
-    fill: black;
-  }
 
-}
-
-.DarkMenu {
-  svg {
-    border-color: white;
-    fill: white;
-  }
-}
 
 .SidebarHeader {
   display: flex;

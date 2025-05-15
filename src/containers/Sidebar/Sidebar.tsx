@@ -1,6 +1,7 @@
 import {
-  UserOutlined, PlusOutlined, LoadingOutlined, DeleteOutlined, MenuOutlined,
-  SunOutlined, MoonOutlined
+  UserOutlined, PlusOutlined, LoadingOutlined, DeleteOutlined,
+  SunOutlined, MoonOutlined,
+  MenuOutlined
 } from '@ant-design/icons'
 import { Button, Menu, MenuProps, Typography, Spin, Popconfirm, Switch } from 'antd'
 import Sider from 'antd/es/layout/Sider'
@@ -10,6 +11,7 @@ import { v4 as uuidv4 } from 'uuid'
 import styles from './Sidebar.module.scss'
 import { iconsProviderMapping } from './iconsProviderMapping'
 import useGenerateContent from '@/hooks/useGenerateContent'
+import MicioLogo from '@/icons/logo/micio-ai-small.svg'
 import { getChatHistory, getChatList } from '@/services/dataMiddleware'
 import { deleteChat as deleteChatService } from '@/services/dataMiddleware'
 import { useMicioStore } from '@/store'
@@ -173,6 +175,10 @@ const Sidebar = () => {
     }
   }
 
+  const onMicioLogoClick = () => {
+    window.open('https://github.com/davidesamp/micio-ai-assistant', '_blank')
+  }
+
   return (
     <Sider 
       trigger={null} 
@@ -182,13 +188,22 @@ const Sidebar = () => {
       width={300}
     >
       <div className="demo-logo-vertical" />
-      <MenuOutlined 
-        className={cx(styles.SidebarLogo, {
-          [styles.LightMenu]: currentTheme === 'light',
-          [styles.DarkMenu]: currentTheme === 'dark',
-        })} 
-        onClick={handleCollapse} 
-      />
+      <div className={styles.LogoContainer}>
+        {!collapsed && (
+          <MicioLogo onClick={onMicioLogoClick} className={cx(styles.MicioLogo, {
+            [styles.Light]: currentTheme === 'light',
+            [styles.Dark]: currentTheme === 'dark',
+          })} />
+        )}
+        <MenuOutlined
+          className={cx(styles.SidebarLogo, {
+            [styles.LightMenu]: currentTheme === 'light',
+            [styles.DarkMenu]: currentTheme === 'dark',
+          })}
+          onClick={handleCollapse}
+        />
+      </div>
+     
       <div className={styles.SidebarHeader}>
         {!collapsed && (
           <Title level={5}>

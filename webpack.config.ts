@@ -89,6 +89,11 @@ const config: ConfigBuilder = (_, argv) => {
             ],
             new HtmlWebpackPlugin({
                 template: "./public/index.ejs",
+                title: 'Micio AI | Your hub for diverse AI services',
+                favicon: "./src/icons/logo/micio-ai-favicon.png",
+                meta: {
+                    viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
+                },
             }),
             new MiniCssExtractPlugin(),
         ],
