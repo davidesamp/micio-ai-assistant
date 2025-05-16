@@ -4,6 +4,7 @@ import useDeepSeek from './providers/useDeepseek'
 import useGemini from './providers/useGemini'
 import useMistral from './providers/useMistral'
 import useOpenAi from './providers/useOpenAi'
+import usePerplexity from './providers/usePerplexity'
 import { Model } from '@/model/ai'
 import { ContentTypes, Message, UploadedFile } from '@/model/chat'
 import { AIProvider } from '@/model/ui'
@@ -48,18 +49,25 @@ const useGenerateContent = () => {
     changeModel: changeOpenAiModel
   } = useOpenAi()
 
+  const {
+    generateContent: generatePerplexityContent,
+    changeModel: changePerplexityModel
+  } = usePerplexity()
+
   const generateContentFactory = {
     [AIProvider.GEMINI]: generateGeminiContent,
     [AIProvider.DEEPSEEK]: generateDeepSeekContent,
     [AIProvider.MISTRAL]: generateMistralContent,
-    [AIProvider.OPENAI]: generateOpenAiContent
+    [AIProvider.OPENAI]: generateOpenAiContent,
+    [AIProvider.PERPLEXITY]: generatePerplexityContent,
   }
 
   const changeModelFactory = {
     [AIProvider.GEMINI]: changeGeminiModel,
     [AIProvider.DEEPSEEK]: changeDeepSeekModel,
     [AIProvider.MISTRAL]: changeMistralModel,
-    [AIProvider.OPENAI]: changeOpenAiModel
+    [AIProvider.OPENAI]: changeOpenAiModel,
+    [AIProvider.PERPLEXITY]: changePerplexityModel
   }
 
   const generate = async (statement: string, uploadedFiles?: UploadedFile[]) => {
