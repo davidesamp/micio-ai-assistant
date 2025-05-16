@@ -151,17 +151,24 @@ const App = () => {
         <Layout>
           <Header 
             style={{ padding: 0, background: colorBgContainer, position: 'sticky', top: 0, zIndex: 3 }} >
-            <TopBar />
+            <TopBar checkedUser={checkedUser} />
           </Header>
           <Content>
             {configModalOpen && <ApiConfigModal />}
             {settingsModalOpen && <SettingsModal />}
-            {!checkedUser && <Spin className={styles.Spin} size="large" />}
+            {!checkedUser && (
+              <div className={styles.SpinContainer}>
+                <Spin size="large" />
+              </div>
+            )}
             <Chat/>
           </Content>
-          <Footer style={{ textAlign: 'center' }}>
-            Micio AI ©{new Date().getFullYear()} Created by davidesamp
-          </Footer>
+            <Footer style={{ textAlign: 'center' }}>
+            Micio AI ©{new Date().getFullYear()} Created by{' '}
+            <a href="https://github.com/davidesamp" target="_blank" rel="noopener noreferrer">
+              davidesamp
+            </a>
+            </Footer>
         </Layout>
       </Layout>
     </ConfigProvider>

@@ -94,17 +94,42 @@ const useOpenAi = () => {
       stream: true,
     })
 
-    for await (const chunk of completion) {
-      const token = chunk.choices[0]?.delta?.content || ''
-      const isLastChunk = chunk.choices[0]?.finish_reason !== undefined
+    let buffer = ''
+    let timeoutId: number| null = null
+
+    const flushBuffer = (isFinal = false) => {
+      if (!buffer) return
+
       const response: Message = {
         id: textMessageId,
         sender: 'model',
-        message: token,
+        message: buffer,
         type: ContentTypes.TEXT,
-        isLastPart: isLastChunk
+        isLastPart: isFinal,
       }
+
       newAddMessage(response)
+      buffer = ''
+    }
+
+    for await (const chunk of completion) {
+      const token = chunk.choices[0]?.delta?.content || ''
+      const finishReason = chunk.choices[0]?.finish_reason
+      const isLastChunk = !!finishReason
+
+      buffer += token
+
+      if (!timeoutId) {
+        timeoutId = window.setTimeout(() => {
+          flushBuffer()
+          timeoutId = null
+        }, 500) // flush every 500ms
+      }
+
+      if (isLastChunk) {
+        if (timeoutId) window.clearTimeout(timeoutId)
+        flushBuffer(true)
+      }
     }
   }
 

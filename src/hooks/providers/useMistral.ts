@@ -98,19 +98,45 @@ const useMistral = () => {
       messages: [...createHistory],
     })
 
-    for await (const chunk of result) {
-      const streamText = chunk.data.choices[0].delta.content
-      const isLastChunk = chunk.data.choices[0].finishReason !== undefined
+
+    let buffer = ''
+    let timeoutId: number | null = null
+
+    const flushBuffer = (isFinal = false) => {
+      if (!buffer) return
+
       const response: Message = {
         id: textMessageId,
         sender: 'model',
-        message: streamText as string,
+        message: buffer,
         type: ContentTypes.TEXT,
-        isLastPart: isLastChunk
+        isLastPart: isFinal,
       }
+
       newAddMessage(response)
+      buffer = ''
     }
+
+    for await (const chunk of result) {
+      const streamText = chunk.data.choices[0].delta.content
+      const finishReason = chunk.data.choices[0]?.finishReason
+      const isLastChunk = !!finishReason
+
+      buffer += streamText
+
+      if (!timeoutId) {
+        timeoutId = window.setTimeout(() => {
+          flushBuffer()
+          timeoutId = null
+        }, 500) // flush every 500ms
+      }
+
+      if (isLastChunk) {
+        if (timeoutId) window.clearTimeout(timeoutId)
+        flushBuffer(true)
+      }
   }
+}
 
   return {
     generateContent,
