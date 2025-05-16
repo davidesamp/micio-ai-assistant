@@ -6,7 +6,7 @@ import React from 'react'
 import styles from './UserThumbnail.module.scss'
 
 interface UserThumbnailProps {
-  user: User
+  user: User | null
   onApiKeysUpdate: () => void
   onSettingsOpen: () => void
   onLogout: () => void
@@ -24,6 +24,9 @@ export const UserThumbnail = ({ user, onApiKeysUpdate, onSettingsOpen, onLogout 
       label: 'API Keys',
       onClick: onApiKeysUpdate,
     },
+  ]
+
+  const loggedMenuItems: MenuProps['items'] = [
     {
       key: 'logout',
       label: 'Logout',
@@ -32,13 +35,13 @@ export const UserThumbnail = ({ user, onApiKeysUpdate, onSettingsOpen, onLogout 
   ]
 
   const userPopoverContent = (
-    <Menu items={menuItems} className={styles.Menu} />
+    <Menu items={user ? menuItems.concat(loggedMenuItems) : menuItems} className={styles.Menu} />
   )
 
   return (
     <Popover placement="bottom" content={userPopoverContent} trigger="click" showArrow={false}>
       <div className={styles.Container}>
-        {user.photoURL ? (
+        {user && user.photoURL ? (
           <img src={user.photoURL} alt="User Thumbnail" />
         ) : (
           <Avatar className={styles.DefaultAvatar} icon={<UserOutlined />} />

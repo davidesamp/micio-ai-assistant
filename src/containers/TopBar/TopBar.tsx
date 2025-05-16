@@ -107,14 +107,12 @@ const TopBar = ({ checkedUser }: TopBarProps) => {
             </span>
             </Button>
         )}
-        {loggedUser && (
-          <UserThumbnail 
-            onSettingsOpen={openSettingsModal}
-            onApiKeysUpdate={handleOpenConfigModal}
-            onLogout={handleSignOut}
-            user={loggedUser} 
-          />
-        )}
+        <UserThumbnail 
+          onSettingsOpen={openSettingsModal}
+          onApiKeysUpdate={handleOpenConfigModal}
+          onLogout={handleSignOut}
+          user={loggedUser} 
+        />
       </div>
      
     </div>
