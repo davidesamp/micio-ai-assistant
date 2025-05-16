@@ -23,6 +23,7 @@ export const ApiConfigModal = () => {
     [AIProvider.MISTRAL]: apisConfig?.[AIProvider.MISTRAL] || '',
     [AIProvider.DEEPSEEK]: apisConfig?.[AIProvider.DEEPSEEK] || '',
     [AIProvider.OPENAI]: apisConfig?.[AIProvider.OPENAI] || '',    
+    [AIProvider.PERPLEXITY]: apisConfig?.[AIProvider.PERPLEXITY] || '',    
   })
 
   const handleSaveApis = async () => {

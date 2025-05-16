@@ -36,6 +36,7 @@ export const ModelsPopover = ({ activeApisConfig }: ModelsPopoverProps) => {
     [AIProvider.OPENAI]: 'Open AI',
     [AIProvider.DEEPSEEK]: 'DeepSeek',
     [AIProvider.MISTRAL]: 'Mistral',
+    [AIProvider.PERPLEXITY]: 'Perplexity',
   }
 
   /*

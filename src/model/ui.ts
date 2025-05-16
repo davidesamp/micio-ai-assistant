@@ -2,7 +2,8 @@ export enum AIProvider {
   GEMINI = 'GEMINI',
   DEEPSEEK = 'DEEPSEEK',
   MISTRAL = 'MISTRAL',
-  OPENAI = 'OPENAI'
+  OPENAI = 'OPENAI',
+  PERPLEXITY = 'PERPLEXITY'
 }
 
 export interface Notiication {

@@ -3,6 +3,7 @@ import DeepSeekIcon from '@/icons/deepseek.svg'
 import GeminiIcon from '@/icons/gemini.svg'
 import MistralIcon from '@/icons/mistral.svg'
 import OpenAIIcon from '@/icons/openai.svg'
+import PerplexityIcon from '@/icons/perplexity.svg'
 import { AIProvider } from '@/model/ui'
 
 export const iconsProviderMapping = {
@@ -21,6 +22,10 @@ export const iconsProviderMapping = {
   [AIProvider.OPENAI]: {
     icon: <OpenAIIcon />,
     alt: 'OpenAI',
+  },
+  [AIProvider.PERPLEXITY]: {
+    icon: <PerplexityIcon />,
+    alt: 'Perplexity',
   },
 }
 export type IconsProviderMapping = typeof iconsProviderMapping
