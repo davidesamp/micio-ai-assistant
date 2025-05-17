@@ -1,5 +1,4 @@
 import OpenAI from 'openai'
-import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { Model } from '@/model/ai'
 import { ContentTypes, Message, UploadedFile } from '@/model/chat'
@@ -17,7 +16,6 @@ const usePerplexity = () => {
     }
   } = useMicioStore()
 
-  const [perplexityInstance, setPerplexityInstance] = useState<OpenAI | null>(null)
 
   const init = () => {
     
@@ -28,12 +26,8 @@ const usePerplexity = () => {
     if (!perplexityKey) {
       throw new Error('perplexityKey environment variable is not set.')
     }
-    const perplexity = new OpenAI({
-      apiKey: perplexityKey,
-      baseURL: 'https://api.perplexity.ai',
-      dangerouslyAllowBrowser: true
-    })
-    return perplexity
+
+    return perplexityKey
   }
 
   const changeModel = (model: Model) => {
@@ -42,18 +36,10 @@ const usePerplexity = () => {
   }
 
   const generateContent = async (statement: string, uploadedFiles?: UploadedFile[]) => {
-    let instance: OpenAI | null = null
+    const perplexityKey = init()
 
-    if (!perplexityInstance) {
-      instance = init()
-      console.log('Perplexity instance initialized')
-      setPerplexityInstance(instance)
-    } else {
-      instance = perplexityInstance
-    }
-
-    if (!selectedModel) {
-      throw new Error('Perplexity model is not set.')
+    if (!perplexityKey) {
+      throw new Error('perplexityKey environment variable is not set.')
     }
 
     const textMessageId = uuidv4()
@@ -61,6 +47,10 @@ const usePerplexity = () => {
       role: message.sender === 'user' ? 'user' : 'assistant' as 'user' | 'assistant',
       content: message.message,
     }))
+
+    if (!selectedModel) {
+      throw new Error('Perplexity model is not set.')
+    }
 
     const content: OpenAI.Chat.Completions.ChatCompletionContentPart[] = []
 
@@ -84,54 +74,67 @@ const usePerplexity = () => {
 
     const { prompt, temperature } = aiSettings
 
-    const completion = await instance.chat.completions.create({
-      messages: [
-        { role: 'system' as 'system', content: prompt },
-        ...chatHistory,
-        { role: 'user', content },
-      ],
-      model: selectedModel.name,
-      temperature,
-      stream: true,
+    const response = await fetch('https://api.perplexity.ai/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${perplexityKey}`
+      },
+      body: JSON.stringify({
+        messages: [
+          { role: 'system' as 'system', content: prompt },
+          ...chatHistory,
+          { role: 'user', content }
+        ],
+        model: selectedModel.name,
+        temperature,
+        stream: true,
+      })
     })
 
+    if (!response.body) {
+      throw new Error('Response body is null.')
+    }
+    const reader = response.body.getReader()
+    const decoder = new TextDecoder()
+
     let buffer = ''
-    let timeoutId: number| null = null
 
-    const flushBuffer = (isFinal = false) => {
-      if (!buffer) return
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) {
+        const response: Message = {
+          id: textMessageId,
+          sender: 'model',
+          message: buffer,
+          type: ContentTypes.TEXT,
+          isLastPart: true,
+        }
 
-      const response: Message = {
-        id: textMessageId,
-        sender: 'model',
-        message: buffer,
-        type: ContentTypes.TEXT,
-        isLastPart: isFinal,
+        newAddMessage(response)
+        break
       }
 
-      newAddMessage(response)
-      buffer = ''
+      const chunkStr = decoder.decode(value, { stream: true })
+      const lines = chunkStr.split('\n')
+
+      for (const line of lines) {
+        const trimmedLine = line.trim()
+        if (!trimmedLine || !trimmedLine.startsWith('data:')) continue
+
+        const jsonStr = trimmedLine.replace(/^data:\s*/, '')
+        if (jsonStr === '[DONE]') continue // Perplexity may send this at end of stream
+
+        try {
+          const chunkObj = JSON.parse(jsonStr)
+          const token = chunkObj.choices?.[0]?.delta?.content || ''
+          buffer += token
+        } catch (e) {
+          console.error('Error parsing JSON:', e)
+        }
+      }
     }
-
-    for await (const chunk of completion) {
-      const token = chunk.choices[0]?.delta?.content || ''
-      const finishReason = chunk.choices[0]?.finish_reason
-      const isLastChunk = !!finishReason
-
-      buffer += token
-
-      if (!timeoutId) {
-        timeoutId = window.setTimeout(() => {
-          flushBuffer()
-          timeoutId = null
-        }, 500) // flush every 500ms
-      }
-
-      if (isLastChunk) {
-        if (timeoutId) window.clearTimeout(timeoutId)
-        flushBuffer(true)
-      }
-    }
+    
   }
 
   return {
