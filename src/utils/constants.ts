@@ -13,7 +13,8 @@ export const ModelsList: Model[] = [
   { name: 'gpt-4o', displayName: 'GPT-4 Omni', provider: AIProvider.OPENAI },
   { name: 'gpt-4-turbo', displayName: 'GPT-4 Turbo', provider: AIProvider.OPENAI },
   { name: 'gpt-3.5-turbo', displayName: 'GPT-3.5 Turbo', provider: AIProvider.OPENAI },
-  { name: 'gpt-3.5-turbo-16k', displayName: 'GPT-3.5 Turbo 16K', provider: AIProvider.OPENAI }
+  { name: 'gpt-3.5-turbo-16k', displayName: 'GPT-3.5 Turbo 16K', provider: AIProvider.OPENAI },
+  { name: 'sonar', displayName: 'Perplexity Llama 3', provider: AIProvider.PERPLEXITY },
 ]
 
 export type GeminiModels = Extract<typeof ModelsList[number], { provider: AIProvider.GEMINI }>;
