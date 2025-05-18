@@ -1,5 +1,5 @@
 import {
-  BulbOutlined,
+  SwapOutlined,
 } from '@ant-design/icons'
 import { Button, Popover, theme } from 'antd'
 import { Typography } from 'antd'
@@ -40,6 +40,8 @@ const TopBar = ({ checkedUser }: TopBarProps) => {
     token: { colorFillSecondary },
   } = theme.useToken()
 
+  const [popoverOpen, setPopoverOpen] = React.useState(false)
+
   const { Title } = Typography
 
   const auth = getAuth()
@@ -77,20 +79,29 @@ const TopBar = ({ checkedUser }: TopBarProps) => {
     openConfigModal()
   }
 
+  const handleOpenChange = (open: boolean) => {
+    setPopoverOpen(open)
+  }
+
+
   return (
     <div className={styles.Container} style={{ backgroundColor: colorFillSecondary }}>
       {currentAiProvider && apisConfig && (
         <Popover 
+          onOpenChange={handleOpenChange}
+          open={popoverOpen}
           placement="bottomLeft" 
-          content={<ModelsPopover activeApisConfig={apisConfig}/>} 
+          content={<ModelsPopover activeApisConfig={apisConfig} onModelSelected={() => handleOpenChange(false)}/>} 
           trigger="click" 
           showArrow={false}>
           <div className={styles.SettingsContainer}>
-            <BulbOutlined className={styles.SettingsIcon} />
+            <SwapOutlined  className={styles.SettingsIcon} />
             <Title level={5} className={styles.ProviderTitle}>
               {selectedModel?.displayName || 'Select a model'}
             </Title>
-            {selectedModel && iconsProviderMapping[selectedModel.provider]?.icon}
+            <div className={styles.ProviderIcon}>
+              {selectedModel && iconsProviderMapping[selectedModel.provider]?.icon}
+            </div>
           </div>
         </Popover>
       )}

@@ -1,4 +1,4 @@
-import { Modal } from 'antd'
+import { Modal, Typography } from 'antd'
 import Input from 'antd/es/input/Input'
 import React, { useState } from 'react'
 import styles from './ApiConfigModal.module.scss'
@@ -17,6 +17,8 @@ export const ApiConfigModal = () => {
       actions: { setApisConfig },
     },
   } = useMicioStore()
+
+  const { Title, Paragraph } = Typography
 
   const [apiKeys, setApiKeys] = useState<Record<AIProvider, string>>({
     [AIProvider.GEMINI]: apisConfig?.[AIProvider.GEMINI] || '',
@@ -45,6 +47,11 @@ export const ApiConfigModal = () => {
       cancelText='Cancel'
       onCancel={handleClose}
       >
+      <Title level={4} className={styles.Title}>API Configuration</Title>
+      <Paragraph className={styles.Description}>
+        Please enter your API keys for the selected providers. You can find your API keys in your account settings on the respective provider's website.
+      </Paragraph>
+      
       {Object.values(AIProvider).map((provider) => (
         <div className={styles.ItemGroup} key={provider}>
             <label htmlFor={provider}>{provider}</label>

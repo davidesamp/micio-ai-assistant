@@ -17,7 +17,8 @@ import { deleteChat as deleteChatService } from '@/services/dataMiddleware'
 import { useMicioStore } from '@/store'
 
 const Sidebar = () => {
-  const [collapsed, setCollapsed] = useState(false)
+  //start collapsed if the window width is less than or equal to 768px
+  const [collapsed, setCollapsed] = useState(() => window.innerWidth <= 768)
   const [loading, setLoading] = useState(true)
 
   const { restoreChat } = useGenerateContent()
@@ -186,9 +187,10 @@ const Sidebar = () => {
       theme={currentTheme === 'light' ? 'light' : 'dark' }
       collapsible 
       collapsed={collapsed} 
+      className={styles.Sidebar}
       width={300}
     >
-      <div className={styles.LogoContainer}>
+      <div className={cx(styles.LogoContainer, { [styles.LogoContainerCollapsed]: collapsed })}>
         {!collapsed && (
           <MicioLogo onClick={onMicioLogoClick} className={cx(styles.MicioLogo, {
             [styles.Light]: currentTheme === 'light',

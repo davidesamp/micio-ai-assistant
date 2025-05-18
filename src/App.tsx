@@ -1,4 +1,4 @@
-import { ConfigProvider, Layout, Spin, theme } from 'antd'
+import { ConfigProvider, Layout, Spin, theme, Typography } from 'antd'
 import { notification } from 'antd'
 import { onAuthStateChanged } from 'firebase/auth'
 import React, { useEffect } from 'react'
@@ -20,7 +20,7 @@ import { ModelsList } from './utils/constants'
 const App = () => {
   const { Header, Content, Footer } = Layout
   const {
-    token: { colorBgContainer },
+    token: { colorBgContainer, colorPrimary },
   } = theme.useToken()
 
   const {
@@ -51,6 +51,8 @@ const App = () => {
     },
 
   } = useMicioStore()
+
+  const { Link } = Typography
 
   useEffect(() => {
     if (apisConfig) {
@@ -164,10 +166,8 @@ const App = () => {
             <Chat/>
           </Content>
             <Footer style={{ textAlign: 'center' }}>
-            Micio AI ©{new Date().getFullYear()} Created by{' '}
-            <a href="https://github.com/davidesamp" target="_blank" rel="noopener noreferrer">
-              davidesamp
-            </a>
+              Micio AI ©{new Date().getFullYear()} Created by{' '} 
+              <Link target='_blank' style={{ color: colorPrimary }} href='https://github.com/davidesamp'>davidesamp</Link>
             </Footer>
         </Layout>
       </Layout>
