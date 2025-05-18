@@ -20,7 +20,7 @@ import { ModelsList } from './utils/constants'
 const App = () => {
   const { Header, Content, Footer } = Layout
   const {
-    token: { colorBgContainer },
+    token: { colorBgContainer, colorPrimary },
   } = theme.useToken()
 
   const {
@@ -167,7 +167,7 @@ const App = () => {
           </Content>
             <Footer style={{ textAlign: 'center' }}>
               Micio AI ©{new Date().getFullYear()} Created by{' '} 
-              <Link target='_blank' style={{ color: '#d74af2' }} href='https://github.com/davidesamp'>davidesamp</Link>
+              <Link target='_blank' style={{ color: colorPrimary }} href='https://github.com/davidesamp'>davidesamp</Link>
             </Footer>
         </Layout>
       </Layout>

@@ -17,7 +17,8 @@ import { deleteChat as deleteChatService } from '@/services/dataMiddleware'
 import { useMicioStore } from '@/store'
 
 const Sidebar = () => {
-  const [collapsed, setCollapsed] = useState(false)
+  //start collapsed if the window width is less than or equal to 768px
+  const [collapsed, setCollapsed] = useState(() => window.innerWidth <= 768)
   const [loading, setLoading] = useState(true)
 
   const { restoreChat } = useGenerateContent()
