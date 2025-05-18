@@ -1,3 +1,8 @@
+.Sidebar > div {
+  display: flex;
+  flex-direction: column;
+}
+
 .LogoContainer {
   display: flex;
   align-items: center;
@@ -51,7 +56,10 @@
   }
 }
 
-
+.LogoContainerCollapsed {
+  justify-content: center;
+  padding: 1rem;
+}
 
 .SidebarHeader {
   display: flex;

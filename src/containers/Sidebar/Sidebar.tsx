@@ -186,9 +186,10 @@ const Sidebar = () => {
       theme={currentTheme === 'light' ? 'light' : 'dark' }
       collapsible 
       collapsed={collapsed} 
+      className={styles.Sidebar}
       width={300}
     >
-      <div className={styles.LogoContainer}>
+      <div className={cx(styles.LogoContainer, { [styles.LogoContainerCollapsed]: collapsed })}>
         {!collapsed && (
           <MicioLogo onClick={onMicioLogoClick} className={cx(styles.MicioLogo, {
             [styles.Light]: currentTheme === 'light',
