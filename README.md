@@ -80,6 +80,7 @@ If you’d like to add a new feature, improve the UI, fix bugs, or suggest an id
 
 ## 🗺️ Roadmap
 
+* 🔌 Support more AI providers to expand compatibility and flexibility
 * 🧠 Add **reasoning** support where available
 * 🎙️ Enable **speech support** (text-to-speech / speech-to-text)
 * 🧩 Integrate a **Canvas-style editor** for organizing and editing multi-part content/code
