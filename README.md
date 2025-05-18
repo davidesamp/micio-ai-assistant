@@ -1,67 +1,102 @@
-# Micio-AI-Assistant
+# 🐾 Micio-AI-Assistant
 
-Micio-AI-Assistant is a versatile application that allows you to access and utilize multiple AI providers through a single, streamlined interface. Empowering you to leverage the unique strengths of various AI models without the hassle of managing multiple accounts and APIs.
-![Micio Logo](src/icons/micio-ai-pink.png)
+**Micio-AI-Assistant** is a versatile and extensible AI assistant that brings multiple AI providers together into one streamlined, user-friendly interface. Forget juggling between platforms—Micio empowers you to interact with a variety of AI models effortlessly, all while keeping full control over your data.
 
-## Features
+🌐 **Try the live demo:** [https://www.micio-ai.com/](https://www.micio-ai.com/)
 
-* **Unified AI Access:** Seamlessly integrate and switch between different AI providers.
-* **User-Friendly Interface:** An intuitive design for easy interaction with various AI services.
-* **Flexibility:** Use your own API keys to maintain control and security.
-* **Extensibility:** Designed to be easily expandable with support for more AI providers in the future.
+![Micio Logo](src/icons/logo/micio-ai-large.svg)
 
-## Getting Started
+---
 
-To get started with Micio-AI-Assistant, follow these steps:
+## 🚀 Features
 
-### Prerequisites
+* **Unified AI Access:** Seamlessly switch between multiple top-tier AI providers from one central hub.
+* **Native Firebase Support:** Plug in your Firebase credentials to sync data to the cloud—or let Micio fall back to local storage if Firebase is not configured.
+* **User-Friendly Interface:** Clean, modern UI for intuitive use across all supported models.
+* **Extensible by Design:** Architected to easily integrate more providers and features in the future.
 
-* Node.js and Yarn installed on your machine.
+---
 
-### Installation
+## 🤖 Currently Supported AI Providers
 
-1.  Clone the repository:
+* **OpenAI**
+* **Gemini (Google)**
+* **DeepSeek**
+* **Mistral**
+* **Perplexity**
 
-    ```bash
-    git clone https://github.com/davidesamp/micio-ai-assistant.git
-    cd micio-ai-assistant
-    ```
+*More providers will be added in future releases.*
 
-2.  Install dependencies:
+---
 
-    ```bash
-    yarn install
-    ```
+## 🛠 Getting Started
 
-### Configuration
+### 📦 Prerequisites
 
-1.  Create an `.env` file at the root of your project.
+* Node.js
+* Yarn
 
-2.  Add your API keys to the `.env` file:
+### 📥 Installation
 
-    ```
-    GOOGLE_GEMINI_KEY=<your gemini key here>
-    DEEP_SEEK_KEY=<your deepseek key here>
-    MISTRAL_KEY=<your mistral key here>
-    ```
+```bash
+git clone https://github.com/davidesamp/micio-ai-assistant.git
+cd micio-ai-assistant
+yarn install
+```
 
-    * Replace `<your gemini key here>`, `<your deepseek key here>`, and `<your mistral key here>` with your actual API keys.
-    * **Important:** Keep your API keys secure and do not commit them to version control.
+### ⚙️ Configuration
 
-### Running the Application
+Create a `.env` file at the root of the project and include your **Firebase credentials** (optional):
 
-1.  Start the development server:
+```env
+FIREBASE_API_KEY=<your_firebase_api_key>
+FIREBASE_AUTH_DOMAIN=<your_firebase_auth_domain>
+FIREBASE_PROJECT_ID=<your_firebase_project_id>
+FIREBASE_STORAGE_BUCKET=<your_firebase_storage_bucket>
+FIREBASE_MESSAGING_SENDER_ID=<your_firebase_messaging_sender_id>
+FIREBASE_APP_ID=<your_firebase_app_id>
+```
 
-    ```bash
-    yarn start
-    ```
+> 🔒 **Note:** If Firebase credentials are not provided, all data will be stored locally in your browser using local storage.
 
-2.  Open your browser and navigate to `http://localhost:4242` (or the port displayed in your terminal).
+---
 
-## Future Development
+### 🧪 Running the App
 
-This project is actively being developed. Future updates will include the integration of additional AI providers, thorough bug fixes, and the implementation of numerous new features to enhance the user experience and expand the application's capabilities.
+```bash
+yarn start
+```
 
-## License
+Then open your browser and navigate to [http://localhost:4242](http://localhost:4242).
 
-This project is licensed under the Apache 2.0 License - see the `LICENSE` file for details.
+---
+
+## 🌱 Contributing
+
+**Contributions are very welcome!**
+If you’d like to add a new feature, improve the UI, fix bugs, or suggest an idea—feel free to open a pull request or start a discussion in the issues.
+
+---
+
+## 🗺️ Roadmap
+
+* 🧠 Add **reasoning** support where available
+* 🎙️ Enable **speech support** (text-to-speech / speech-to-text)
+* 🧩 Integrate a **Canvas-style editor** for organizing and editing multi-part content/code
+* 💅 Continuously **improve the UI** and user experience
+
+---
+
+## 📄 License
+
+Licensed under the **Apache 2.0 License**. See the [LICENSE](./LICENSE) file for details.
+
+---
+
+## 🔗 Demo
+
+👉 Check out the live app here: [https://www.micio-ai.com/](https://www.micio-ai.com/)
+
+---
+
+Let me know if you'd like a "Screenshots" section or badges to further enhance the README’s visual appeal.
