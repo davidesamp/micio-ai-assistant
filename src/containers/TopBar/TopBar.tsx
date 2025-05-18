@@ -40,6 +40,8 @@ const TopBar = ({ checkedUser }: TopBarProps) => {
     token: { colorFillSecondary },
   } = theme.useToken()
 
+  const [popoverOpen, setPopoverOpen] = React.useState(false)
+
   const { Title } = Typography
 
   const auth = getAuth()
@@ -77,12 +79,19 @@ const TopBar = ({ checkedUser }: TopBarProps) => {
     openConfigModal()
   }
 
+  const handleOpenChange = (open: boolean) => {
+    setPopoverOpen(open)
+  }
+
+
   return (
     <div className={styles.Container} style={{ backgroundColor: colorFillSecondary }}>
       {currentAiProvider && apisConfig && (
         <Popover 
+          onOpenChange={handleOpenChange}
+          open={popoverOpen}
           placement="bottomLeft" 
-          content={<ModelsPopover activeApisConfig={apisConfig}/>} 
+          content={<ModelsPopover activeApisConfig={apisConfig} onModelSelected={() => handleOpenChange(false)}/>} 
           trigger="click" 
           showArrow={false}>
           <div className={styles.SettingsContainer}>

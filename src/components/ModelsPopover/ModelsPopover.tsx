@@ -4,6 +4,7 @@ import React from 'react'
 import styles from './ModelsPopover.module.scss'
 import { iconsProviderMapping } from '@/containers/Sidebar/iconsProviderMapping'
 import useGenerateContent from '@/hooks/useGenerateContent'
+import { Model } from '@/model/ai'
 import { AIProvider } from '@/model/ui'
 import { useMicioStore } from '@/store'
 import { ModelsList } from '@/utils/constants'
@@ -11,9 +12,10 @@ import { ModelsList } from '@/utils/constants'
 
 interface ModelsPopoverProps {
   activeApisConfig: Record<AIProvider, string>
+  onModelSelected: () => void
 }
 
-export const ModelsPopover = ({ activeApisConfig }: ModelsPopoverProps) => {
+export const ModelsPopover = ({ activeApisConfig, onModelSelected }: ModelsPopoverProps) => {
 
     const {
       chat: {
@@ -24,6 +26,11 @@ export const ModelsPopover = ({ activeApisConfig }: ModelsPopoverProps) => {
   const { changeModel } = useGenerateContent()
 
   const { Title } = Typography
+
+  const handleChangeModel = (model: Model) => {
+    changeModel(model)
+    onModelSelected()
+  }
 
   /*
   * This function maps the AIProvider enum to a human-readable label.
@@ -49,7 +56,7 @@ export const ModelsPopover = ({ activeApisConfig }: ModelsPopoverProps) => {
     const models = ModelsList.filter((model) => model.provider === provider)
     return models.map((model) => (
       <p
-        onClick={() => changeModel(model)}
+        onClick={() => handleChangeModel(model)}
         className={cx(styles.PopoverItem, { [styles.Selected]: selectedModel?.name === model.name })}
         key={model.name}>
         {model.displayName}
