@@ -15,16 +15,11 @@ const useGenerateContent = () => {
   const {
     ui: {
       currentAiProvider,
-      actions: { setAiProvider }
+      actions: { setAiProvider, setNotification, openConfigModal }
     },
     chat: {
       actions: { resetMessages, newAddMessage, setChatUid, restoreMessages }
     },
-    ui: {
-      actions: {
-        setNotification
-      }
-    }
   } = useMicioStore()
 
   const [isGenerating, setIsGenerating] = useState(false)
@@ -72,6 +67,7 @@ const useGenerateContent = () => {
 
   const generate = async (statement: string, uploadedFiles?: UploadedFile[]) => {
     if (!currentAiProvider) {
+      openConfigModal()
       throw new Error('AI provider is not initialized.')
     }
     setIsGenerating(true)
