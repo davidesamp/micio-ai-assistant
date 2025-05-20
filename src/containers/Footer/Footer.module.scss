@@ -1,0 +1,21 @@
+.Container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  font-size: 11px;
+
+  .ComplaintsContainer {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  a {
+    font-size: 11px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

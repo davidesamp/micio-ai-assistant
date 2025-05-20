@@ -1,4 +1,4 @@
-import { ConfigProvider, Layout, Spin, theme, Typography } from 'antd'
+import { ConfigProvider, Layout, Spin, theme } from 'antd'
 import { notification } from 'antd'
 import { onAuthStateChanged } from 'firebase/auth'
 import React, { useEffect } from 'react'
@@ -6,6 +6,7 @@ import styles from './App.module.scss'
 import { ApiConfigModal } from './components/ApiConfigModal/ApiConfigModal'
 import { SettingsModal } from './components/SettingsModal/SettingsModal'
 import Chat from './containers/Chat/Chat'
+import { Footer as MicioFooter } from './containers/Footer/Footer'
 import Sidebar from './containers/Sidebar/Sidebar'
 import TopBar from './containers/TopBar/TopBar'
 import { auth } from './firebase/config'
@@ -20,7 +21,7 @@ import { ModelsList } from './utils/constants'
 const App = () => {
   const { Header, Content, Footer } = Layout
   const {
-    token: { colorBgContainer, colorPrimary },
+    token: { colorBgContainer },
   } = theme.useToken()
 
   const {
@@ -51,8 +52,6 @@ const App = () => {
     },
 
   } = useMicioStore()
-
-  const { Link } = Typography
 
   useEffect(() => {
     if (apisConfig) {
@@ -165,9 +164,8 @@ const App = () => {
             )}
             <Chat/>
           </Content>
-            <Footer style={{ textAlign: 'center' }}>
-              Micio AI ©{new Date().getFullYear()} Created by{' '} 
-              <Link target='_blank' style={{ color: colorPrimary }} href='https://github.com/davidesamp'>davidesamp</Link>
+            <Footer>
+              <MicioFooter />
             </Footer>
         </Layout>
       </Layout>
