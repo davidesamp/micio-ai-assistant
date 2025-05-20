@@ -2,6 +2,7 @@ import path from "path";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import { Configuration, DefinePlugin, WebpackPluginInstance } from "webpack";
 import MiniCssExtractPlugin from 'mini-css-extract-plugin'
+import CopyWebpackPlugin from 'copy-webpack-plugin'
 import Dotenv from 'dotenv-webpack'
 import "webpack-dev-server";
 
@@ -87,6 +88,18 @@ const config: ConfigBuilder = (_, argv) => {
                     'process.env': JSON.stringify(process.env)
                 })
             ],
+            new CopyWebpackPlugin({
+                patterns: [
+                    {
+                        from: 'public',
+                        to: 'public',
+                        noErrorOnMissing: true,
+                        info: {
+                            minimized: true,
+                        },
+                    },
+                ],
+            }),
             new HtmlWebpackPlugin({
                 template: "./public/index.ejs",
                 title: 'Micio AI | Your hub for diverse AI services',
